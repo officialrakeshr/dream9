@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
   public AllRoundersCountLimit = 3;
   public captainCountLimit = 1;
   public viseCaptainCountLimit = 1;
-  public teamSizeLimit = 11;
+  public teamSizeLimit = 9;
   public wicketKeeperCountLimit = 1;
   public subCountLimit = null;
 
@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit {
     { value: 'bowler', name: 'Bowler', inactive: false },
     { value: 'captain', name: 'Captain', inactive: false },
     { value: 'vcaptain', name: 'Vice-Captain', inactive: false },
-    { value: 'allrounder', name: 'All-Rounder', inactive: false },
+    // { value: 'allrounder', name: 'All-Rounder', inactive: false },
   ];
   lockTime: Date;
   constructor(
@@ -159,9 +159,9 @@ export class DashboardComponent implements OnInit {
   }
   processDropDown(roleList: any[]): void {
     this.calculateCounts();
-    if (this.AllRoundersCount >= this.AllRoundersCountLimit) {
+/*     if (this.AllRoundersCount >= this.AllRoundersCountLimit) {
       roleList.find((o) => o.value == 'allrounder').inactive = true;
-    }
+    } */
     if (this.captainCount >= this.captainCountLimit) {
       roleList.find((o) => o.value == 'captain').inactive = true;
     }

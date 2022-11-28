@@ -6,8 +6,6 @@
                 <span><b>Match : </b> X-Team vs Y-Team</span>	&#9734;
                 <span><b>Venue : </b> Play Ground, Test</span>	&#9734;
                 <span><b>Time : </b> 19:30</span> &#9734;&nbsp;&nbsp;&nbsp;&nbsp;
-                <span><b style="display: inline-block">Count down : </b></span>
-                <span style="display: inline-block"><app-count-down [time]="lockTime"></app-count-down></span>
             </div>
         </p-card>
     </div>
@@ -91,7 +89,7 @@
                         <td>{{viseCaptainCount}}/{{viseCaptainCountLimit}}</td>
                         <td class="checkbox">{{viseCaptainCount==viseCaptainCountLimit?' &#10003;':''}}</td>
                     </tr>
-                    <tr class="team-summary-tr">
+                    <!-- <tr class="team-summary-tr">
                         <td>All-Rounder</td>
                         <td>{{AllRoundersCount}}/{{AllRoundersCountLimit}}</td>
                         <td class="checkbox">{{AllRoundersCount==AllRoundersCountLimit?' &#10003;':''}}</td>
@@ -101,7 +99,7 @@
                         <td *ngIf="subCountLimit">{{subCountUsed}}/{{subCountLimit}}</td>
                         <td *ngIf="!subCountLimit">&#8734;</td>
                         <td class="checkbox">{{subCountUsed==subCountLimit?' &#10003;':''}}</td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </p-card>
