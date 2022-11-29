@@ -18,14 +18,7 @@ export class RouteGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    return (this.store.select(selectUser) as Observable<User>).pipe(
-      map((u) => u.token != ''),
-      tap((o) => (!o ? window.location.assign('/') : null))
-    );
+  ){
+    return sessionStorage.getItem('token') ? sessionStorage.getItem('token')!=undefined : false ;
   }
 }

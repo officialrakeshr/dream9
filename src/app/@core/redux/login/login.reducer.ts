@@ -6,5 +6,7 @@ export const initialState: Readonly<User> = { username: '', token: '' };
 
 export const loginReducer = createReducer(
   initialState,
-  on(addUser, (state, { payload }) => payload)
+  on(addUser, (state, { payload }) => {
+    return payload;
+  })
 );

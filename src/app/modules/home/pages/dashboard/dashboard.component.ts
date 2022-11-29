@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Player, playerList } from 'src/app/@core/models/Player.model';
+import { Player } from 'src/app/@core/models/Player.model';
 import { FilterService, MessageService } from 'primeng/api';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { ScoreService } from 'src/app/@core/services/score/score.service';
 export interface COLUMN {
   field: string;
   header: string;
@@ -23,7 +24,7 @@ export class DashboardComponent implements OnInit {
   players: Player[] = [];
   selectedPlayers: Player[] = [];
   cols: COLUMN[] = [];
- 
+  playerList :Player[] = []
 
   public AllRoundersCountLimit = 3;
   public captainCountLimit = 1;
@@ -51,7 +52,8 @@ export class DashboardComponent implements OnInit {
   lockTime: Date;
   constructor(
     private filterService: FilterService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private scoreService: ScoreService
   ) {
     this.lockTime=moment("19:30","HH:mm",true).toDate();
     console.log(this.lockTime)
@@ -62,13 +64,14 @@ export class DashboardComponent implements OnInit {
   }
   updateSquadHistory(cur: Player[]) {
     this._history.push(_.cloneDeep(cur));
+    console.log(this._history)
   }
   retrieveHistory() {
     let len = this._history.length;
     if (len == 1 || len == 0) return [];
-    this._history.pop();
+    //this._history.pop();
     let v = this._history.pop() || [];
-    this._history = [];
+    //this._history = [];
     return _.cloneDeep(v);
   }
   undo() {
@@ -77,7 +80,7 @@ export class DashboardComponent implements OnInit {
       this.reset();
       this.calculateCounts();
       if(this.subCountLimit) this.subCountUsed++;
-      this.updateSquadHistory(this.selectedPlayers);
+      //this.updateSquadHistory(this.selectedPlayers);
     }
   }
 
@@ -85,22 +88,29 @@ export class DashboardComponent implements OnInit {
     return this.roleList.find((o) => o.value == value)?.name;
   }
   ngOnInit(): void {
-    this.cols = [
-      { field: 'Player Name', header: 'Player', filter: [] },
-      { field: 'Team', header: 'Team', filter: [] },
-    ];
-    for (let col of this.cols) {
-      let set = new Set<string>();
-      for (let p of playerList) {
-        set.add((p as any)[col.field]);
+    this.getPlayerList();
+  }
+
+  getPlayerList(){
+    this.scoreService.getPlayerList().subscribe((o:any)=>{
+      this.playerList = o;
+      this.cols = [
+        { field: 'name', header: 'Player', filter: [] },
+        { field: 'team', header: 'Team', filter: [] },
+      ];
+      for (let col of this.cols) {
+        let set = new Set<string>();
+        for (let p of this.playerList) {
+          set.add((p as any)[col.field]);
+        }
+        col.filter = Array.from(set).map((value) => {
+          let obj = {} as any;
+          obj[col.field] = value;
+          return value;
+        });
       }
-      col.filter = Array.from(set).map((value) => {
-        let obj = {} as any;
-        obj[col.field] = value;
-        return value;
-      });
-    }
-    this.reset();
+      this.reset();
+    })
   }
 
   selectPlayer(data: Player, index: number) {
@@ -109,12 +119,13 @@ export class DashboardComponent implements OnInit {
 
     if (this.validations(data)) {
       data.roleList = this.roleList;
+      this.updateSquadHistory(this.selectedPlayers);
       this.selectedPlayers.push(data);
       this.dt1.clear();
       this.reset();
       this.calculateCounts();
       if(this.subCountLimit) this.subCountUsed++;
-      this.updateSquadHistory(this.selectedPlayers);
+      
     }
   }
 
@@ -122,7 +133,7 @@ export class DashboardComponent implements OnInit {
     if (
       confirm(
         'Do you want to remove this player :' +
-        this.selectedPlayers[index]["Player Name"]
+        this.selectedPlayers[index]["name"]
       )
     ) {
       this.selectedPlayers.splice(index, 1);
@@ -134,9 +145,9 @@ export class DashboardComponent implements OnInit {
   }
 
   reset() {
-    this.players = playerList.filter((o) => {
+    this.players = this.playerList.filter((o) => {
       return !this.selectedPlayers.find(
-        (b) => b["Player Name"] == o["Player Name"] && b.Team == o.Team
+        (b) => b["name"] == o["name"] && b.team == o.team
       );
     });
   }

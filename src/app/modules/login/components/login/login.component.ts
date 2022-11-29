@@ -6,6 +6,7 @@ import { addUser } from 'src/app/@core/redux/login/login.action';
 import { selectUser } from 'src/app/@core/redux/login/login.selector';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/@shared/services/api.service';
+import { UserService } from 'src/app/@core/services/user/user.service';
 
 @Component({
   selector: 'app-login',
@@ -15,24 +16,20 @@ import { ApiService } from 'src/app/@shared/services/api.service';
 export class LoginComponent implements OnInit {
   private now: string = new Date().toString();
   user$ = this.store.select(selectUser);
-  constructor(private store: Store<AppState>, private route: ActivatedRoute, private router: Router, private api: ApiService) { }
+  constructor(private store: Store<AppState>, private route: ActivatedRoute, private router: Router, private api: UserService) { }
 
   ngOnInit(): void {
     setTimeout(() => {
       this.store.dispatch(addUser({ payload: { username: '', token: '' } }))
     }, 0)
   }
-  validateToken(user: string) {
-    if (this.api.loginUser(user)) {
+  validateToken(user: string, password:string) {
+    this.api.login(user,password).subscribe(o=>{
       this.store.dispatch(
-        addUser({ payload: { username: user, token: btoa(this.now) } })
-      );
-      sessionStorage.clear();
-      sessionStorage.setItem(
-        btoa(btoa(btoa('1'))),
-        CryptoJS.AES.encrypt(user.trim().toString(), this.now).toString()
+        addUser({ payload: { username: user, token: o.accessToken } })
       );
       this.router.navigate(['./home'])
-    } else alert ("Invalid User")
+    })
+
   }
 }

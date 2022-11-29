@@ -6,14 +6,27 @@ import { StatComponent } from './pages/stat/stat.component';
 import { PrimengModule } from 'src/app/@shared/modules/primeng/primeng.module';
 import { CoreModule } from 'src/app/@core/core.module';
 import { CountDownComponent } from './components/count-down/count-down.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtInterceptor } from 'src/app/@core/interceptors/jwt.interceptor';
+import { ScoreService } from 'src/app/@core/services/score/score.service';
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
-  declarations: [DashboardComponent, StatComponent, CountDownComponent],
+  declarations: [DashboardComponent, StatComponent, CountDownComponent, AdminDashboardComponent],
   imports: [
     CommonModule,
     PrimengModule,
     CoreModule,
-    RouterModule.forChild([{ path: '', component: DashboardComponent }]),
+    RouterModule.forChild([{ path: 'playerDashboard', component: DashboardComponent },
+    { path: 'adminDashboard', component: AdminDashboardComponent }]),
   ],
+  providers:[
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
+    ScoreService
+  ]
 })
 export class HomeModule {}

@@ -5,8 +5,10 @@
             <div>
                 <label for="email1" class="block text-900 font-medium mb-2">User Name</label>
                 <input id="email1" type="text" #username pInputText class="w-full mb-3">
+                <label for="password" class="block text-900 font-medium mb-2">Password</label>
+                <input id="password" type="password" #password pInputText class="w-full mb-3">
                 <button pButton pRipple label="Sign In" icon="pi pi-user" class="w-full"
-                    (click)="validateToken(username.value)"></button>
+                    (click)="validateToken(username.value,password.value)"></button>
             </div>
         </div>
     </div>
