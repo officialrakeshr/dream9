@@ -10,15 +10,22 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from 'src/app/@core/interceptors/jwt.interceptor';
 import { ScoreService } from 'src/app/@core/services/score/score.service';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
+import { ScorebookComponent } from './pages/scorebook/scorebook.component';
+import { PlayerGuard } from 'src/app/@core/guards/player-guard';
+import { AdminGuard } from 'src/app/@core/guards/admin-guard';
+import { CanDeactivateGuard } from 'src/app/@core/guards/deactivate-guard';
+import { RankComponent } from './pages/rank/rank.component';
 
 @NgModule({
-  declarations: [DashboardComponent, StatComponent, CountDownComponent, AdminDashboardComponent],
+  declarations: [DashboardComponent, StatComponent, CountDownComponent, AdminDashboardComponent, ScorebookComponent, RankComponent],
   imports: [
     CommonModule,
     PrimengModule,
     CoreModule,
-    RouterModule.forChild([{ path: 'playerDashboard', component: DashboardComponent },
-    { path: 'adminDashboard', component: AdminDashboardComponent }]),
+    RouterModule.forChild([{ path: 'playerDashboard', component: DashboardComponent , canActivate:[PlayerGuard] , canDeactivate: [CanDeactivateGuard] },
+    { path: 'adminDashboard', component: AdminDashboardComponent, canActivate:[AdminGuard], canDeactivate: [CanDeactivateGuard]  },
+    { path: 'scorebook', component: ScorebookComponent ,canActivate:[AdminGuard], canDeactivate: [CanDeactivateGuard]  },
+    { path: 'rank', component: RankComponent ,  canDeactivate: [CanDeactivateGuard] }]),
   ],
   providers:[
     {
@@ -26,7 +33,10 @@ import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard
       useClass: JwtInterceptor,
       multi: true
     },
-    ScoreService
+    ScoreService,
+    PlayerGuard,
+    AdminGuard,
+    CanDeactivateGuard
   ]
 })
 export class HomeModule {}

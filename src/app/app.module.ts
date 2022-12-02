@@ -10,6 +10,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { loginReducer } from './@core/redux/login/login.reducer';
 import { CoreModule } from './@core/core.module';
+import { CanDeactivateGuard } from './@core/guards/deactivate-guard';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,7 +25,7 @@ import { CoreModule } from './@core/core.module';
     !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   exports: [SharedModule, CoreModule],
-  providers: [],
+  providers: [CanDeactivateGuard],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

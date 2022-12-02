@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { MatchDetails, Player, Tournament } from '../../models/Player.model';
+import { InningsSession, MatchDetails, Player, Tournament } from '../../models/Player.model';
+import { Points } from '../../models/points';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ScoreService {
-  updateMatchDetails(matchDetails: MatchDetails) {
+  public updateMatchDetails(matchDetails: MatchDetails) {
     let  url = `${environment.baseUrl}/cricket/updateMatchDetails`
     return this.http.put<any>(url,matchDetails)
     .pipe(
@@ -16,7 +17,27 @@ export class ScoreService {
    );
   }
 
-  updateTournament(tournament: Tournament):Observable<Tournament> {
+  public getDream9Details():Observable<Points> {
+    let  url = `${environment.baseUrl}/cricket/getDream9Details`
+    return this.http.get<Points>(url);
+  }
+
+  public findAllRank():Observable<Points> {
+    let  url = `${environment.baseUrl}/cricket/findAllRank`
+    return this.http.get<Points>(url);
+  }
+
+  public getActiveDream9Tournament():Observable<Tournament> {
+    let  url = `${environment.baseUrl}/cricket/getActiveDream9Tournament`
+    return this.http.get<any>(url);
+  }
+
+  public getStartedTournament():Observable<Tournament> {
+    let  url = `${environment.baseUrl}/cricket/getStartedTournament`
+    return this.http.get<any>(url);
+  }
+
+  public updateTournament(tournament: Tournament):Observable<Tournament> {
     let  url = `${environment.baseUrl}/cricket/updateTournament`
     return this.http.put<any>(url,tournament)
     .pipe(
@@ -32,7 +53,7 @@ export class ScoreService {
     }else url = `${environment.baseUrl}/cricket/players`
     return this.http.get<any>(url)
     .pipe(
-      map((response: any) => response["players"]),
+      map((response: any) => response["players"] as Player[]),
    );
   }
 
@@ -49,5 +70,23 @@ export class ScoreService {
     return this.http.get<any>(url).pipe( catchError(_err => {
       return of({} as any)
     }));
+  }
+
+  public updateInningsSession(a:InningsSession):Observable<Boolean>{
+    let  url = `${environment.baseUrl}/cricket/updateInningsSession`
+    return this.http.post<Boolean>(url,a).pipe( catchError(_err => {
+      return of({} as any)
+    }));
+  }
+
+  public updateDream9Details(a:Points):Observable<Boolean>{
+    let  url = `${environment.baseUrl}/cricket/updateDream9Details`
+    return this.http.post<Boolean>(url,a).pipe( catchError(_err => {
+      return of({} as any)
+    }));
+  }
+
+  public userMatchDetails() {
+    return this.http.get<Tournament>(`${environment.baseUrl}/api/homekeep/userMatchDetails`);
   }
 }

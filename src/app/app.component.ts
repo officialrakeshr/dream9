@@ -11,5 +11,11 @@ import { selectUser } from './@core/redux/login/login.selector';
 export class AppComponent {
   title = 'acl-game';
   user$ = this.store.select(selectUser);
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppState>) {
+    window.addEventListener("beforeunload", (event) => {
+      event.preventDefault();
+      event.returnValue = "Unsaved modifications";
+      return event;
+   });
+  }
 }

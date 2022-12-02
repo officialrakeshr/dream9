@@ -1,0 +1,32 @@
+<div class="grid">
+  <div class="col-12">
+    <p-card header="Fantastic 9 ">
+      <p-table responsiveLayout="stack" [breakpoint]="'400px'"
+        [value]="rank"
+        styleClass="p-datatable-gridlines"
+        [tableStyle]="{ 'min-width': '50rem' }"
+      >
+        <ng-template pTemplate="caption">
+          Match No: {{ tournament?.matchNo }} - {{ tournament?.team1 }} vs {{ tournament?.team2 }} - Prediction Game Ranking <button *ngIf="!tournament?.completed" (click)="refreshScore()">Refresh Score</button>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Name</th>
+            <th>Rank</th>
+            <th>Total Score</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td>{{ product.username }}</td>
+            <td>{{ product.rank_no }}</td>
+            <td>{{ product.total }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          Last updated time : {{lastUpdatedTime}}. Click 'Refresh Score' for latest scores.
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+</div>

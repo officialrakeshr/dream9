@@ -13,6 +13,7 @@ export interface Tournament {
     team2: string;
     completed:boolean;
     enable11:boolean;
+    started:Boolean;
 }
 
 export interface Player {
@@ -25,6 +26,30 @@ export interface Player {
 export interface Team {
     players: Player[];
     name: string;
+}
+
+export interface BattingSession {
+    batterName:string;
+    runs:number;
+    balls:number;
+    fours:number;
+    sixes:number;
+    out:boolean;
+    catchOrStumpedBy:string;
+}
+
+export interface BowlingSession {
+    bowlerName:string;
+    overs:number;
+    dots:number;
+    runs:number;
+    wickets:number;
+}
+
+export interface InningsSession{
+    match:string,
+    bowlingSession:BowlingSession[];
+    battingSession:BattingSession[]
 }
 
 

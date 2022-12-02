@@ -2,19 +2,19 @@
     <div class="col-12">
         <p-card header="Match Details">
             <div class="match-det">
-                <span><b>Match No : </b> 2</span>	&#9734;
-                <span><b>Match : </b> X-Team vs Y-Team</span>	&#9734;
-                <span><b>Venue : </b> Play Ground, Test</span>	&#9734;
-                <span><b>Time : </b> 19:30</span> &#9734;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span><b>Match No : </b> {{tournament.matchNo}}</span>	&#9734;
+                <span><b>Match : </b> {{tournament.team1}} vs {{tournament.team2}}</span>	&#9734;
+                <!-- <span><b>Venue : </b> Play Ground, Test</span>	&#9734;
+                <span><b>Time : </b> 19:30</span> &#9734;&nbsp;&nbsp;&nbsp;&nbsp; -->
             </div>
         </p-card>
     </div>
 </div>
 <div class="grid">
-    <div class="col-4">
+    <div class="col">
         <p-card header="Your XI Players">
-            <p-table #dt1 [value]="selectedPlayers" dataKey="Player" [rows]="5" [showCurrentPageReport]="true"
-                [rowsPerPageOptions]="[5,10,15]" styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="true"
+            <p-table #dt1 [value]="selectedPlayers" dataKey="Player" [rows]="9" [showCurrentPageReport]="true"
+                [rowsPerPageOptions]="[5,9]" styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="true"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                 [globalFilterFields]="['players']">
                 <ng-template pTemplate="caption">
@@ -52,7 +52,7 @@
                                         optionLabel="name" optionValue="value" [style]="{'width':'100%'}"></p-dropdown>
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{codeToName(rowData.assignedRole)}}
+                                    {{rowData.assignedRole != '' ? codeToName(rowData.assignedRole) :''}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
@@ -63,14 +63,14 @@
                 </ng-template>
             </p-table>
             <br>
-            <button [disabled]="selectedPlayers.length==0" pButton pRipple type="button" class="long_btn">Submit</button><br><br>
-            <button  pButton pRipple type="button" class="long_btn">Reset</button><br><br>
+            <button [disabled]="selectedPlayers.length==0 || roleCount!=9" pButton pRipple type="button" class="long_btn" (click)="submitXI(selectedPlayers)">Submit</button><br><br>
+            <!-- <button  pButton pRipple type="button" class="long_btn">Reset</button><br><br> -->
             <button  pButton pRipple type="button" class="long_btn" [disabled]="checkUndo()"
                 (click)="undo()">Undo</button>
 
         </p-card>
     </div>
-    <div class="col-2">
+    <div class="col">
         <p-card header="Team Summary">
             <table class="team-summary-table">
                 <tbody>
@@ -104,7 +104,7 @@
             </table>
         </p-card>
     </div>
-    <div class="col-4">
+    <div class="col">
         <p-card header="Available Players">
             <p-table #dt2 [columns]="cols" [value]="players" responsiveLayout="scroll" dataKey="Player" [rows]="10"
                 [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]"

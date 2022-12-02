@@ -14,8 +14,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ProgressBarModule } from 'primeng/progressbar';
 import {CardModule} from 'primeng/card';
 import { MessageService } from 'primeng/api';
-
-
+import {SelectButtonModule} from 'primeng/selectbutton';
+import {InputSwitchModule} from 'primeng/inputswitch';
+import {InputNumberModule} from 'primeng/inputnumber';
 
 @NgModule({
   exports: [
@@ -36,6 +37,9 @@ import { MessageService } from 'primeng/api';
     InputTextModule,
     ProgressBarModule,
     CardModule,
+    SelectButtonModule,
+    InputSwitchModule,
+    InputNumberModule
   ],
   providers:[MessageService]
 })

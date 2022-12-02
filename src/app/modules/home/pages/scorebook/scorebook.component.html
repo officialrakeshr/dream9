@@ -1,0 +1,445 @@
+<div class="grid">
+  <div class="col-12">
+    <p-card header="Score Book Details"*ngIf="tournament==null || tournament.completed">
+      <div >
+        <h3>No Active Match Found</h3>
+        <p-button label="Admin dashboard" styleClass="p-button-link" [routerLink]="['../adminDashboard']" ></p-button>
+      </div>
+    </p-card>
+    
+    <p-card header="Score Book Details" *ngIf="tournament!=null && !tournament.completed">
+      
+      <p-button label="Admin dashboard" styleClass="p-button-link" [routerLink]="['../adminDashboard']" ></p-button>
+        <h5>Batting Team</h5>
+        <p-selectButton [options]="stateOptions" [(ngModel)]="battingTeam" optionLabel="label" optionValue="value"></p-selectButton>
+        <br>
+      <div
+        class="flex flex-wrap justify-content-center card-container blue-container gap-3"
+      >
+        <ng-container *ngIf="battingTeam=='team1' && matchDetails!=null">
+            <p-table
+            [value]="battingDetailsTeam1"
+            styleClass="p-datatable-gridlines"
+            [tableStyle]="{ 'max-width': '50rem' }"
+          >
+            <ng-template pTemplate="caption"> Batting Side Details </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Batsman Name</th>
+                <th>Runs</th>
+                <th>Balls</th>
+                <th>4's</th>
+                <th>6's</th>
+                <th>Out</th>
+                <th>Catching/Stumping</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product>
+              <tr>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-dropdown [options]="matchDetails.team1.players" [(ngModel)]="product.batterName" optionLabel="name"   [filter]="true"  filterBy="name">
+                              <ng-template pTemplate="filter" let-options="options">
+                                  <div class="flex p-3">
+                                      <div class="p-inputgroup" (click)="$event.stopPropagation()">
+                                          <input type="text" pInputText placeholder="Filter" #search (keyup)="options.filter($event)">
+                                      </div>
+                                      <button pButton icon="pi pi-times" class="ml-3" (click)="product.batterName=null"></button>
+                                  </div>
+                              </ng-template>
+                          </p-dropdown>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.batterName?.name != '-Select-' ? product.batterName?.name :''}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.runs" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.runs}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.balls" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.balls}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.fours" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.fours}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.sixes" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.sixes}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-dropdown [options]="yesOrNo" [(ngModel)]="product.out" optionLabel="name" optionValue="value"></p-dropdown>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.out ? 'Yes':(product.out==false ? 'No':null)}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-dropdown [options]="matchDetails.team2.players" [(ngModel)]="product.catchOrStumpedBy" optionLabel="name"   [filter]="true"  filterBy="name">
+                              <ng-template pTemplate="filter" let-options="options">
+                                  <div class="flex p-3">
+                                      <div class="p-inputgroup" (click)="$event.stopPropagation()">
+                                          <input type="text" pInputText placeholder="Filter" #search (keyup)="options.filter($event)">
+                                      </div>
+                                      <button pButton icon="pi pi-times" class="ml-3" (click)="product.catchOrStumpedBy=null"></button>
+                                  </div>
+                              </ng-template>
+                          </p-dropdown>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.catchOrStumpedBy?.name != '-Select-' ? product.catchOrStumpedBy?.name :''}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <p-table
+            [value]="bowlingDetailsTeam1"
+            styleClass="p-datatable-gridlines"
+            [tableStyle]="{ 'max-width': '50rem' }"
+          >
+            <ng-template pTemplate="caption"> Bowling Side Details </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Bowler Name</th>
+                <th>Overs</th>
+                <th>Dots</th>
+                <th>Runs</th>
+                <th>Wicket</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product>
+              <tr>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-dropdown [options]="matchDetails.team2.players" [(ngModel)]="product.bowlerName" optionLabel="name"   [filter]="true"  filterBy="name">
+                              <ng-template pTemplate="filter" let-options="options">
+                                  <div class="flex p-3">
+                                      <div class="p-inputgroup" (click)="$event.stopPropagation()">
+                                          <input type="text" pInputText placeholder="Filter" #search (keyup)="options.filter($event)">
+                                      </div>
+                                      <button pButton icon="pi pi-times" class="ml-3" (click)="product.bowlerName=null"></button>
+                                  </div>
+                              </ng-template>
+                          </p-dropdown>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.bowlerName?.name != '-Select-' ? product.bowlerName?.name :''}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.overs" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="0.1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.overs}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.dots" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.dots}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.runs" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.runs}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.wickets" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.wickets}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </ng-container>
+        <ng-container *ngIf="battingTeam=='team2' && matchDetails!=null">
+            <p-table
+            [value]="battingDetailsTeam2"
+            styleClass="p-datatable-gridlines"
+            [tableStyle]="{ 'max-width': '50rem' }"
+          >
+            <ng-template pTemplate="caption"> Batting Side Details </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Batsman Name</th>
+                <th>Runs</th>
+                <th>Balls</th>
+                <th>4's</th>
+                <th>6's</th>
+                <th>Out</th>
+                <th>Catching/Stumping</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product>
+              <tr>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-dropdown [options]="matchDetails.team2.players" [(ngModel)]="product.batterName" optionLabel="name"   [filter]="true"  filterBy="name">
+                              <ng-template pTemplate="filter" let-options="options">
+                                  <div class="flex p-3">
+                                      <div class="p-inputgroup" (click)="$event.stopPropagation()">
+                                          <input type="text" pInputText placeholder="Filter" #search (keyup)="options.filter($event)">
+                                      </div>
+                                      <button pButton icon="pi pi-times" class="ml-3" (click)="product.batterName=null"></button>
+                                  </div>
+                              </ng-template>
+                          </p-dropdown>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.batterName?.name != '-Select-' ? product.batterName?.name :''}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.runs" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.runs}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.balls" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.balls}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.fours" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.fours}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.sixes" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.sixes}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-dropdown [options]="yesOrNo" [(ngModel)]="product.out" optionLabel="name" optionValue="value"></p-dropdown>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.out ? 'Yes':(product.out==false ? 'No':null)}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-dropdown [options]="matchDetails.team1.players" [(ngModel)]="product.catchOrStumpedBy" optionLabel="name"   [filter]="true"  filterBy="name">
+                              <ng-template pTemplate="filter" let-options="options">
+                                  <div class="flex p-3">
+                                      <div class="p-inputgroup" (click)="$event.stopPropagation()">
+                                          <input type="text" pInputText placeholder="Filter" #search (keyup)="options.filter($event)">
+                                      </div>
+                                      <button pButton icon="pi pi-times" class="ml-3" (click)="product.catchOrStumpedBy=null"></button>
+                                  </div>
+                              </ng-template>
+                          </p-dropdown>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.catchOrStumpedBy?.name != '-Select-' ? product.catchOrStumpedBy?.name :''}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <p-table
+            [value]="bowlingDetailsTeam2"
+            styleClass="p-datatable-gridlines"
+            [tableStyle]="{ 'max-width': '50rem' }"
+          >
+            <ng-template pTemplate="caption"> Bowling Side Details </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Bowler Name</th>
+                <th>Overs</th>
+                <th>Dots</th>
+                <th>Runs</th>
+                <th>Wicket</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product>
+              <tr>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-dropdown [options]="matchDetails.team1.players" [(ngModel)]="product.bowlerName" optionLabel="name"   [filter]="true"  filterBy="name">
+                              <ng-template pTemplate="filter" let-options="options">
+                                  <div class="flex p-3">
+                                      <div class="p-inputgroup" (click)="$event.stopPropagation()">
+                                          <input type="text" pInputText placeholder="Filter" #search (keyup)="options.filter($event)">
+                                      </div>
+                                      <button pButton icon="pi pi-times" class="ml-3" (click)="product.bowlerName=null"></button>
+                                  </div>
+                              </ng-template>
+                          </p-dropdown>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.bowlerName?.name != '-Select-' ? product.bowlerName?.name :''}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.overs" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="0.1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.overs}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.dots" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.dots}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.runs" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.runs}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td pEditableColumn>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-inputNumber [(ngModel)]="product.wickets" [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1"
+                          decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus">
+                          </p-inputNumber>
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{product.wickets}}
+                      </ng-template>
+                  </p-cellEditor>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </ng-container>
+      </div>
+      <br />
+      <ng-container *ngIf="battingTeam=='team1' && matchDetails!=null">
+        <button pButton pRipple type="button" label="Update" (click)="updateScore(battingTeam)"></button>&nbsp;&nbsp;
+        <button pButton pRipple type="button" label="End Match" (click)="endInnings(tournament)"></button>
+      </ng-container>
+      <ng-container *ngIf="battingTeam=='team2' && matchDetails!=null">
+        <button pButton pRipple type="button" label="Update" (click)="updateScore(battingTeam)"></button>&nbsp;&nbsp;
+        <button pButton pRipple type="button" label="End Match" (click)="endInnings(tournament)"></button>
+      </ng-container>
+    </p-card>
+  </div>
+</div>

@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Player } from 'src/app/@core/models/Player.model';
+import { Player, Tournament } from 'src/app/@core/models/Player.model';
 import { FilterService, MessageService } from 'primeng/api';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ScoreService } from 'src/app/@core/services/score/score.service';
+import { UntilDestroy } from '@ngneat/until-destroy';
 export interface COLUMN {
   field: string;
   header: string;
@@ -13,6 +14,7 @@ export interface FILTER {
   name: any;
 }
 
+@UntilDestroy({checkProperties:true})
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -24,7 +26,8 @@ export class DashboardComponent implements OnInit {
   players: Player[] = [];
   selectedPlayers: Player[] = [];
   cols: COLUMN[] = [];
-  playerList :Player[] = []
+  playerList :Player[] = [];
+  tournament:Tournament={} as any;
 
   public AllRoundersCountLimit = 3;
   public captainCountLimit = 1;
@@ -43,13 +46,20 @@ export class DashboardComponent implements OnInit {
   private _history: Player[][] = [];
 
   roleList = [
-    { value: 'batter', name: 'Batter', inactive: false },
-    { value: 'bowler', name: 'Bowler', inactive: false },
+    { value: '', name: '-Select-', inactive: false },
     { value: 'captain', name: 'Captain', inactive: false },
     { value: 'vcaptain', name: 'Vice-Captain', inactive: false },
+    { value: 'player3', name: 'Player 3', inactive: false },
+    { value: 'player4', name: 'Player 4', inactive: false },
+    { value: 'player5', name: 'Player 5', inactive: false },
+    { value: 'player6', name: 'Player 6', inactive: false },
+    { value: 'player7', name: 'Player 7', inactive: false },
+    { value: 'player8', name: 'Player 8', inactive: false },
+    { value: 'player9', name: 'Player 9', inactive: false },
     // { value: 'allrounder', name: 'All-Rounder', inactive: false },
   ];
   lockTime: Date;
+  roleCount: number =0;
   constructor(
     private filterService: FilterService,
     private messageService: MessageService,
@@ -88,12 +98,16 @@ export class DashboardComponent implements OnInit {
     return this.roleList.find((o) => o.value == value)?.name;
   }
   ngOnInit(): void {
-    this.getPlayerList();
+    
+    this.scoreService.userMatchDetails().subscribe((o)=>{
+      this.tournament = o;
+      this.getPlayerList();
+    })
   }
 
   getPlayerList(){
     this.scoreService.getPlayerList().subscribe((o:any)=>{
-      this.playerList = o;
+      this.playerList = [...o.filter((p:Player)=>p.team==this.tournament.team1),...o.filter((p:Player)=>p.team==this.tournament.team2)].filter(o=>o.active=='active');
       this.cols = [
         { field: 'name', header: 'Player', filter: [] },
         { field: 'team', header: 'Team', filter: [] },
@@ -125,7 +139,11 @@ export class DashboardComponent implements OnInit {
       this.reset();
       this.calculateCounts();
       if(this.subCountLimit) this.subCountUsed++;
-      
+      this.showMessage(
+        'success',
+        'XI Update',
+        `Player ${data.name} added to your XI`
+      );
     }
   }
 
@@ -152,6 +170,7 @@ export class DashboardComponent implements OnInit {
     });
   }
   calculateCounts() {
+    this.roleCount=0;
     this.AllRoundersCount = this.selectedPlayers.filter((o) =>
       this.filterService.filters.equals(o.assignedRole, 'allrounder')
     ).length;
@@ -168,17 +187,58 @@ export class DashboardComponent implements OnInit {
       this.filterService.filters.equals(o.assignedRole, 'wk')
     ).length;
   }
+  processSear(role:string){
+   return this.selectedPlayers.filter((o) =>
+      this.filterService.filters.equals(o.assignedRole, role)
+    ).length>0;
+  }
+  findFirstRolePlayer(role:string){
+    return this.selectedPlayers.find((o) =>
+       this.filterService.filters.equals(o.assignedRole, role)
+     );
+   }
   processDropDown(roleList: any[]): void {
     this.calculateCounts();
+    this.roleCount=0;
 /*     if (this.AllRoundersCount >= this.AllRoundersCountLimit) {
       roleList.find((o) => o.value == 'allrounder').inactive = true;
     } */
-    if (this.captainCount >= this.captainCountLimit) {
+    if (this.processSear('captain')) {
       roleList.find((o) => o.value == 'captain').inactive = true;
-    }
-    if (this.viseCaptainCount >= this.viseCaptainCountLimit) {
+      this.roleCount++;
+    }else roleList.find((o) => o.value == 'captain').inactive = false;
+    if (this.processSear('vcaptain')) {
+      this.roleCount++;
       roleList.find((o) => o.value == 'vcaptain').inactive = true;
-    }
+    } else roleList.find((o) => o.value == 'vcaptain').inactive = false;
+    if (this.processSear('player3')) {
+      this.roleCount++;
+      roleList.find((o) => o.value == 'player3').inactive = true;
+    } else roleList.find((o) => o.value == 'player3').inactive = false;
+    if (this.processSear('player4')) {
+      this.roleCount++;
+      roleList.find((o) => o.value == 'player4').inactive = true;
+    } else roleList.find((o) => o.value == 'player4').inactive = false;
+    if (this.processSear('player5')) {
+      this.roleCount++;
+      roleList.find((o) => o.value == 'player5').inactive = true;
+    }else roleList.find((o) => o.value == 'player5').inactive = false;
+    if (this.processSear('player6')) {
+      this.roleCount++;
+      roleList.find((o) => o.value == 'player6').inactive = true;
+    } else roleList.find((o) => o.value == 'player6').inactive = false;
+    if (this.processSear('player7')) {
+      this.roleCount++;
+      roleList.find((o) => o.value == 'player7').inactive = true;
+    } else roleList.find((o) => o.value == 'player7').inactive = false;
+    if (this.processSear('player8')) {
+      this.roleCount++;
+      roleList.find((o) => o.value == 'player8').inactive = true;
+    } else roleList.find((o) => o.value == 'player8').inactive = false;
+    if (this.processSear('player9')) {
+      this.roleCount++;
+      roleList.find((o) => o.value == 'player9').inactive = true;
+    } else roleList.find((o) => o.value == 'player9').inactive = false;
   }
   validations(data: Player): boolean {
     this.calculateCounts();
@@ -205,4 +265,41 @@ export class DashboardComponent implements OnInit {
       sticky: true,
     });
   }
+  submitXI(selectedPlayers:Player[]){
+    const roles = this.roleList.filter(o=>o.value!='').map(o=>o.value);
+    let data={
+      matchNo: this.tournament.matchNo,
+      username: '',
+      rank_no: 0,
+      total: 0,
+      captain: 0,
+      vcaptain: 0,
+      player3: 0,
+      player4: 0,
+      player5: 0,
+      player6: 0,
+      player7: 0,
+      player8: 0,
+      player9: 0,
+      captainPoint: 0,
+      vcaptainPoint: 0,
+      player3Point: 0,
+      player4Point: 0,
+      player5Point: 0,
+      player6Point: 0,
+      player7Point: 0,
+      player8Point: 0,
+      player9Point: 0
+    } as any;
+    roles.forEach(role=>{
+      data[role] = this.findFirstRolePlayer(role)?.id
+    })
+   this.scoreService.updateDream9Details(data).subscribe(o=>{
+    if(o){
+      alert("Done. Updated")
+    }else alert("Not Updated.")
+   })
+  }
+
+  canDeactivate(){ return false}
 }
