@@ -13,7 +13,7 @@ export interface Tournament {
     team2: string;
     completed:boolean;
     enable11:boolean;
-    started:Boolean;
+    started:boolean;
 }
 
 export interface Player {

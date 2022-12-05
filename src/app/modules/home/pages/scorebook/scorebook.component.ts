@@ -12,7 +12,7 @@ import { ScoreService } from 'src/app/@core/services/score/score.service';
   styleUrls: ['./scorebook.component.scss']
 })
 export class ScorebookComponent implements OnInit {
-  stateOptions = [{label: 'Off', value: 'off'}, {label: 'On', value: 'on'}];
+  stateOptions = [] as any;
   battingTeam = {} as any;
   battingDetailsTeam1:BattingSession[]=[];//Team 1 batting
   battingDetailsTeam2:BattingSession[]=[];//Team 2 batting

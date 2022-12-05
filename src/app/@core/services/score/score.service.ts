@@ -23,7 +23,12 @@ export class ScoreService {
   }
 
   public findAllRank():Observable<Points> {
-    let  url = `${environment.baseUrl}/cricket/findAllRank`
+    let  url = `${environment.baseUrl}/cricket/findAllRankForPlayers`
+    return this.http.get<Points>(url);
+  }
+
+  public findAllRankByMatchAdmin(matchNo:string):Observable<any> {
+    let  url = `${environment.baseUrl}/cricket/findAllRankByMatch?matchNo=${matchNo}`
     return this.http.get<Points>(url);
   }
 
@@ -88,5 +93,9 @@ export class ScoreService {
 
   public userMatchDetails() {
     return this.http.get<Tournament>(`${environment.baseUrl}/api/homekeep/userMatchDetails`);
+  }
+
+  public createNewMatch(tournament:Tournament) {
+    return this.http.post<Tournament>(`${environment.baseUrl}/api/cricket/createNewMatch`, tournament);
   }
 }

@@ -3,6 +3,7 @@
     <p-card header="Match Details">
       <div class="match-det">
         <p-button label="Enrol Dream9 Players" styleClass="p-button-link" (click)="enrolPlayerModal = !enrolPlayerModal" ></p-button>
+        <p-button label="Player Rank" styleClass="p-button-link" *ngIf="selectedMatch!=null && selectedMatch.started" (click)="rankModall = !rankModall" ></p-button>
         <p-button label="Score Book" styleClass="p-button-link" [routerLink]="['../scorebook']" ></p-button>
         <h5>Match Number :</h5>
         <p-dropdown
@@ -155,7 +156,7 @@
   </div>
 </div>
 
-<p-dialog header="New Dream9 Player Creation" [(visible)]="enrolPlayerModal">
+<p-dialog header="New Dream9 Player Creation" [(visible)]="enrolPlayerModal" [modal]="true">
   <label for="password" class="block text-900 font-medium mb-2"
     >Match Number</label
   >
@@ -173,4 +174,35 @@
   <h3>Unique ID: {{newUniqueId}}<button (click)="makeid()">Generate</button></h3>
   <button pButton pRipple label="Enrol User" icon="pi pi-user" class="w-full"
                     (click)="generateUser(selectedMatchNo,username.value,phone.value,newUniqueId)"></button>
+</p-dialog>
+
+<p-dialog header="Rank" [(visible)]="rankModall" [modal]="true">
+  <ng-container *ngIf="currentMatchRankings">
+  <p-table responsiveLayout="stack" [breakpoint]="'400px'" *ngIf="selectedMatch.started"
+  [value]="currentMatchRankings"
+  styleClass="p-datatable-gridlines"
+  [tableStyle]="{ 'min-width': '50rem' }"
+>
+  <ng-template pTemplate="caption">
+    Match No: {{ selectedMatch.matchNo }} - {{ selectedMatch.team1 }} vs {{ selectedMatch.team2 }} - Prediction Game Ranking <button *ngIf="!selectedMatch.completed" (click)="refreshScore()">Refresh Score</button>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Name</th>
+      <th>Rank</th>
+      <th>Total Score</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-product>
+    <tr>
+      <td>{{ product.username }}</td>
+      <td>{{ product.rank_no }}</td>
+      <td>{{ product.total }}</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="summary">
+    Last updated time : {{lastUpdatedTime}}. For the most recent results, click <i>Refresh Score</i> button.
+  </ng-template>
+</p-table>
+</ng-container>
 </p-dialog>

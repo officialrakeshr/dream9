@@ -1,7 +1,9 @@
 <div class="grid">
   <div class="col-12">
-    <p-card header="Fantastic 9 ">
-      <p-table responsiveLayout="stack" [breakpoint]="'400px'"
+    <p-card header="Fantastic 9 " >
+      <a *ngIf="tournament?.enable11" [routerLink]="['../playerDashboard']">Dream 9 Dashboard</a>
+      <h3 *ngIf="!tournament?.started && !tournament?.enable11">Please try again after some time. Contact admin for more assistance.</h3>
+      <p-table responsiveLayout="stack" [breakpoint]="'400px'" *ngIf="tournament?.started"
         [value]="rank"
         styleClass="p-datatable-gridlines"
         [tableStyle]="{ 'min-width': '50rem' }"
@@ -24,7 +26,7 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="summary">
-          Last updated time : {{lastUpdatedTime}}. Click 'Refresh Score' for latest scores.
+          Last updated time : {{lastUpdatedTime}}. For the most recent results, click <i>Refresh Score</i> button.
         </ng-template>
       </p-table>
     </p-card>

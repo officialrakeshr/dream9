@@ -1,8 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { UntilDestroy } from "@ngneat/until-destroy";
-import { Observable } from "rxjs";
+import * as moment from "moment";
+import { Observable, tap } from "rxjs";
 import { MatchDetails, Tournament } from "src/app/@core/models/Player.model";
+import { Points } from "src/app/@core/models/points";
 import { ScoreService } from "src/app/@core/services/score/score.service";
 import { UserService } from "src/app/@core/services/user/user.service";
 
@@ -14,6 +16,7 @@ import { UserService } from "src/app/@core/services/user/user.service";
 })
 export class AdminDashboardComponent implements OnInit {
   enrolPlayerModal: boolean = false;
+  rankModall:boolean = false;
   newUniqueId = "";
   selectedMatchNo = "";
   selectedMatch!: Tournament;
@@ -22,49 +25,85 @@ export class AdminDashboardComponent implements OnInit {
     { name: "Inactive", value: "inactive" },
   ];
   matchDetails$: Observable<MatchDetails> | undefined;
+  currentMatchRankings:any;
+  lastUpdatedTime: string | undefined;
   constructor(
     private scoreService: ScoreService,
     private userService: UserService,
     private router: Router
   ) {}
   tournaments$ = this.scoreService.getTournaments();
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+  }
 
   getMatchDetails(optionValue: any) {
     this.matchDetails$ = this.scoreService.getMatchDetails(optionValue.matchNo);
+    this.refreshScore();
   }
-
+  refreshScore(){
+    this.scoreService.findAllRankByMatchAdmin(this.selectedMatch.matchNo).subscribe((o:Points)=>{
+      this.lastUpdatedTime = moment().format("DD-MM-YYYY HH:mm:ss A");
+      this.currentMatchRankings = o;
+    });
+  }
   updatePlayers(matchDetails: MatchDetails) {
     this.scoreService.updateMatchDetails(matchDetails).subscribe();
   }
 
   enableDream9(selectedMatch: Tournament) {
-    selectedMatch = { ...selectedMatch, enable11: true };
-    this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
-      let currentUrl = this.router.url;
-      this.router.navigateByUrl("/", { skipLocationChange: true }).then(() => {
-        this.router.navigate([currentUrl]);
+    let conf= confirm(`Do yo want to enable Dream 9 for this match ${selectedMatch.matchNo}?`)
+    if(conf){
+      selectedMatch = { ...selectedMatch, enable11: true };
+      this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
+        let currentUrl = this.router.url;
+        this.router.navigate([currentUrl])
       });
-    });
+    }
+    
   }
   closeDream9(selectedMatch: Tournament) {
-    selectedMatch = { ...selectedMatch, enable11: false };
-    this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
-      let currentUrl = this.router.url;
-      this.router.navigateByUrl("/", { skipLocationChange: true }).then(() => {
-        this.router.navigate([currentUrl]);
+    let conf= confirm(`Do yo want to close Dream 9 for this match ${selectedMatch.matchNo}?`)
+    if(conf){
+      selectedMatch = { ...selectedMatch, enable11: false };
+      this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
+        let currentUrl = this.router.url;
+        this.router.navigate([currentUrl])
       });
-    });
+    }
   }
 
   startMatch(selectedMatch: Tournament) {
-    selectedMatch = { ...selectedMatch, enable11: false, started: true };
-    this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
-      let currentUrl = this.router.url;
-      this.router.navigateByUrl("/", { skipLocationChange: true }).then(() => {
-        this.router.navigate([currentUrl]);
+    let conf= confirm(`Do yo want to start this match ${selectedMatch.matchNo}?. This will close Dream9 session of this match.`)
+    if(conf){
+      selectedMatch = { ...selectedMatch, enable11: false, started: true };
+      this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
+        let currentUrl = this.router.url;
+        this.router.navigateByUrl("/", { skipLocationChange: true }).then(() => {
+          this.router.navigate([currentUrl]);
+        });
       });
-    });
+    }
+  }
+
+  createANewMatch(team1:string,team2:string,match:string) {
+    let conf= confirm(`Do yo want to a new match ?`)
+    if(conf){
+      var tournament:Tournament={
+        id: 0,
+        matchNo: match,
+        team1: team1,
+        team2: team2,
+        completed: false,
+        enable11: false,
+        started: false
+      };
+      this.scoreService.createNewMatch(tournament).subscribe((o) => {
+        if(o.id){
+          alert(`${o.matchNo} created with Teams ${o.team1} & ${o.team2}`);
+        }
+      });
+    }
   }
 
   makeid() {

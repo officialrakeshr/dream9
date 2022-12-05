@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { RouteGuard } from './@core/guards/route.guard';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'login' },
   {
     path: 'login',
     loadChildren: () =>
@@ -15,6 +14,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/home/home.module').then((m) => m.HomeModule),
   },
+  { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: '**', pathMatch: 'full', redirectTo: 'login' },
 ];
 

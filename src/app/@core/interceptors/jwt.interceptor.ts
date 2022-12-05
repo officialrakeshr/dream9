@@ -44,7 +44,7 @@ export class JwtInterceptor implements HttpInterceptor {
             if (err instanceof HttpErrorResponse) {
               if (err.status === 401) {
                 sessionStorage.clear();
-                this.router.navigateByUrl(`/login`);
+                this.router.navigateByUrl(`../login`);
                 return of(err.message);
               }
               return of(err.message);

@@ -20,6 +20,8 @@ export class LoginComponent implements OnInit {
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private router: Router, private api: UserService) { }
 
   ngOnInit(): void {
+    sessionStorage.clear();
+    localStorage.clear();
     setTimeout(() => {
       this.store.dispatch(addUser({ payload: { username: '', token: '' } }))
     }, 0)
