@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { InningsSession, MatchDetails, Player, Tournament } from '../../models/Player.model';
+import { InningsSession, MatchDetails, Player, Team, Tournament } from '../../models/Player.model';
 import { Points } from '../../models/points';
 
 @Injectable({
@@ -96,6 +96,11 @@ export class ScoreService {
   }
 
   public createNewMatch(tournament:Tournament) {
-    return this.http.post<Tournament>(`${environment.baseUrl}/api/cricket/createNewMatch`, tournament);
+    return this.http.post<Tournament>(`${environment.baseUrl}/cricket/createNewMatch`, tournament);
   }
+
+  public listTeams() {
+    return this.http.get<any>(`${environment.baseUrl}/cricket/teams`);
+  }
+
 }

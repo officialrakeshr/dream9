@@ -7,7 +7,7 @@ export interface Player {
 }
 
 export interface Tournament {
-    id: number;
+    id?: number;
     matchNo: string;
     team1: string;
     team2: string;
@@ -59,6 +59,10 @@ export interface MatchDetails {
     team1: Team;
     team2: Team;
     matchNo: string;
+}
+
+export interface Team{
+    name:string;
 }
 
 

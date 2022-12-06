@@ -2,8 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { UntilDestroy } from "@ngneat/until-destroy";
 import * as moment from "moment";
-import { Observable, tap } from "rxjs";
-import { MatchDetails, Tournament } from "src/app/@core/models/Player.model";
+import { map, Observable, tap } from "rxjs";
+import { MatchDetails, Team, Tournament } from "src/app/@core/models/Player.model";
 import { Points } from "src/app/@core/models/points";
 import { ScoreService } from "src/app/@core/services/score/score.service";
 import { UserService } from "src/app/@core/services/user/user.service";
@@ -17,6 +17,7 @@ import { UserService } from "src/app/@core/services/user/user.service";
 export class AdminDashboardComponent implements OnInit {
   enrolPlayerModal: boolean = false;
   rankModall:boolean = false;
+  createMatchModal:boolean = false;
   newUniqueId = "";
   selectedMatchNo = "";
   selectedMatch!: Tournament;
@@ -27,6 +28,15 @@ export class AdminDashboardComponent implements OnInit {
   matchDetails$: Observable<MatchDetails> | undefined;
   currentMatchRankings:any;
   lastUpdatedTime: string | undefined;
+  newMatchObj:Tournament={
+    matchNo: '',
+    team1: '',
+    team2: '',
+    completed: false,
+    enable11: false,
+    started: false
+  };
+  listTeams: Team[] = [] as any;
   constructor(
     private scoreService: ScoreService,
     private userService: UserService,
@@ -35,6 +45,9 @@ export class AdminDashboardComponent implements OnInit {
   tournaments$ = this.scoreService.getTournaments();
   ngOnInit(): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+     this.scoreService.listTeams().subscribe(o=>{
+      this.listTeams=o["teams"];
+     });
   }
 
   getMatchDetails(optionValue: any) {
@@ -89,9 +102,11 @@ export class AdminDashboardComponent implements OnInit {
   createANewMatch(team1:string,team2:string,match:string) {
     let conf= confirm(`Do yo want to a new match ?`)
     if(conf){
+      if(team1==team2) return alert("Same teams. Please select correct teams")
+      if(!match) return alert("Match No is mandatory")
       var tournament:Tournament={
         id: 0,
-        matchNo: match,
+        matchNo: String(match),
         team1: team1,
         team2: team2,
         completed: false,
@@ -100,8 +115,11 @@ export class AdminDashboardComponent implements OnInit {
       };
       this.scoreService.createNewMatch(tournament).subscribe((o) => {
         if(o.id){
-          alert(`${o.matchNo} created with Teams ${o.team1} & ${o.team2}`);
+          alert(`Match No: ${o.matchNo} created with Teams ${o.team1} & ${o.team2}`);
+          this.tournaments$ = this.scoreService.getTournaments();
         }
+      },()=>{
+        alert("Please check your match number")
       });
     }
   }

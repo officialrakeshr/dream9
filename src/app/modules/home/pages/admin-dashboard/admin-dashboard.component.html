@@ -2,9 +2,27 @@
   <div class="col-12">
     <p-card header="Match Details">
       <div class="match-det">
-        <p-button label="Enrol Dream9 Players" styleClass="p-button-link" (click)="enrolPlayerModal = !enrolPlayerModal" ></p-button>
-        <p-button label="Player Rank" styleClass="p-button-link" *ngIf="selectedMatch!=null && selectedMatch.started" (click)="rankModall = !rankModall" ></p-button>
-        <p-button label="Score Book" styleClass="p-button-link" [routerLink]="['../scorebook']" ></p-button>
+        <p-button
+          label="Enrol Dream9 Players"
+          styleClass="p-button-link"
+          (click)="enrolPlayerModal = !enrolPlayerModal"
+        ></p-button>
+        <p-button
+          label="Player Rank"
+          styleClass="p-button-link"
+          *ngIf="selectedMatch != null && selectedMatch.started"
+          (click)="rankModall = !rankModall"
+        ></p-button>
+        <p-button
+          label="Score Book"
+          styleClass="p-button-link"
+          [routerLink]="['../scorebook']"
+        ></p-button>
+        <p-button
+          label="Create a match"
+          styleClass="p-button-link"
+          (click)="createMatchModal = !createMatchModal"
+        ></p-button>
         <h5>Match Number :</h5>
         <p-dropdown
           [options]="(tournaments$ | async) || []"
@@ -119,7 +137,11 @@
             pRipple
             type="button"
             label="Update Players"
-            *ngIf="!selectedMatch.started &&!selectedMatch.enable11 && !selectedMatch.completed"
+            *ngIf="
+              !selectedMatch.started &&
+              !selectedMatch.enable11 &&
+              !selectedMatch.completed
+            "
             (click)="updatePlayers(matchDetails)"
             class="p-button-outlined"
           ></button>
@@ -128,7 +150,11 @@
             pRipple
             type="button"
             label="Enable Dream9"
-            *ngIf="!selectedMatch.completed && !selectedMatch.started && !selectedMatch.enable11"
+            *ngIf="
+              !selectedMatch.completed &&
+              !selectedMatch.started &&
+              !selectedMatch.enable11
+            "
             (click)="enableDream9(selectedMatch)"
             class="p-button-outlined"
           ></button>
@@ -137,7 +163,11 @@
             pRipple
             type="button"
             label="Close Dream9"
-            *ngIf="!selectedMatch.started && !selectedMatch.completed && selectedMatch.enable11"
+            *ngIf="
+              !selectedMatch.started &&
+              !selectedMatch.completed &&
+              selectedMatch.enable11
+            "
             (click)="closeDream9(selectedMatch)"
             class="p-button-outlined"
           ></button>
@@ -156,7 +186,11 @@
   </div>
 </div>
 
-<p-dialog header="New Dream9 Player Creation" [(visible)]="enrolPlayerModal" [modal]="true">
+<p-dialog
+  header="New Dream9 Player Creation"
+  [(visible)]="enrolPlayerModal"
+  [modal]="true"
+>
   <label for="password" class="block text-900 font-medium mb-2"
     >Match Number</label
   >
@@ -171,38 +205,105 @@
   <input id="name" type="text" #username pInputText class="w-full mb-3" />
   <label for="phone" class="block text-900 font-medium mb-2">Phone</label>
   <input id="phone" type="number" #phone pInputText class="w-full mb-3" />
-  <h3>Unique ID: {{newUniqueId}}<button (click)="makeid()">Generate</button></h3>
-  <button pButton pRipple label="Enrol User" icon="pi pi-user" class="w-full"
-                    (click)="generateUser(selectedMatchNo,username.value,phone.value,newUniqueId)"></button>
+  <h3>
+    Unique ID: {{ newUniqueId }}<button (click)="makeid()">Generate</button>
+  </h3>
+  <button
+    pButton
+    pRipple
+    label="Enrol User"
+    icon="pi pi-user"
+    class="w-full"
+    (click)="
+      generateUser(selectedMatchNo, username.value, phone.value, newUniqueId)
+    "
+  ></button>
 </p-dialog>
 
 <p-dialog header="Rank" [(visible)]="rankModall" [modal]="true">
   <ng-container *ngIf="currentMatchRankings">
-  <p-table responsiveLayout="stack" [breakpoint]="'400px'" *ngIf="selectedMatch.started"
-  [value]="currentMatchRankings"
-  styleClass="p-datatable-gridlines"
-  [tableStyle]="{ 'min-width': '50rem' }"
+    <p-table
+      responsiveLayout="stack"
+      [breakpoint]="'400px'"
+      *ngIf="selectedMatch.started"
+      [value]="currentMatchRankings"
+      styleClass="p-datatable-gridlines"
+      [tableStyle]="{ 'min-width': '50rem' }"
+    >
+      <ng-template pTemplate="caption">
+        Match No: {{ selectedMatch.matchNo }} - {{ selectedMatch.team1 }} vs
+        {{ selectedMatch.team2 }} - Prediction Game Ranking
+        <button *ngIf="!selectedMatch.completed" (click)="refreshScore()">
+          Refresh Score
+        </button>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Name</th>
+          <th>Rank</th>
+          <th>Total Score</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>{{ product.username }}</td>
+          <td>{{ product.rank_no }}</td>
+          <td>{{ product.total }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        Last updated time : {{ lastUpdatedTime }}. For the most recent results,
+        click <i>Refresh Score</i> button.
+      </ng-template>
+    </p-table>
+  </ng-container>
+</p-dialog>
+
+<p-dialog
+  header="Create A Match"
+  [(visible)]="createMatchModal"
+  [modal]="true"
+  [style]="{ height: '100vh' }"
 >
-  <ng-template pTemplate="caption">
-    Match No: {{ selectedMatch.matchNo }} - {{ selectedMatch.team1 }} vs {{ selectedMatch.team2 }} - Prediction Game Ranking <button *ngIf="!selectedMatch.completed" (click)="refreshScore()">Refresh Score</button>
-  </ng-template>
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Name</th>
-      <th>Rank</th>
-      <th>Total Score</th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-product>
-    <tr>
-      <td>{{ product.username }}</td>
-      <td>{{ product.rank_no }}</td>
-      <td>{{ product.total }}</td>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="summary">
-    Last updated time : {{lastUpdatedTime}}. For the most recent results, click <i>Refresh Score</i> button.
-  </ng-template>
-</p-table>
-</ng-container>
+  <ng-container *ngIf="listTeams && listTeams.length > 0">
+    <div class="grid p-fluid">
+      <div class="field col-12 md:col-4">
+        <label for="integeronly">Team 1*</label>
+        <p-dropdown
+          [options]="listTeams"
+          [(ngModel)]="newMatchObj.team1"
+          optionLabel="name"
+          optionValue="name"
+          [filter]="true"
+          filterBy="name"
+        ></p-dropdown>
+      </div>
+      <div class="field col-12 md:col-4">
+        <label for="withoutgrouping">Team 2*</label>
+        <p-dropdown
+          [options]="listTeams"
+          [(ngModel)]="newMatchObj.team2"
+          optionLabel="name"
+          optionValue="name"
+          [filter]="true"
+          filterBy="name"
+        ></p-dropdown>
+      </div>
+      <div class="field col-12 md:col-4">
+        <label for="minmaxfraction">Match No*</label>
+        <input pInputText type="number" [(ngModel)]="newMatchObj.matchNo" />
+      </div>
+    </div>
+
+    <p-button
+      label="Create"
+      (click)="
+        createANewMatch(
+          newMatchObj.team1,
+          newMatchObj.team2,
+          newMatchObj.matchNo
+        )
+      "
+    ></p-button>
+  </ng-container>
 </p-dialog>
