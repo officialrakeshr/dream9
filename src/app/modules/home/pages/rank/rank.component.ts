@@ -34,4 +34,6 @@ export class RankComponent implements OnInit {
     })
   }
 
+  canDeactivate():boolean { return false}
+
 }
