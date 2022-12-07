@@ -39,15 +39,7 @@
                 <td pEditableColumn>
                   <p-cellEditor>
                       <ng-template pTemplate="input">
-                          <p-dropdown [options]="matchDetails.team1.players" [(ngModel)]="product.batterName" optionLabel="name"   [filter]="true"  filterBy="name">
-                              <ng-template pTemplate="filter" let-options="options">
-                                  <div class="flex p-3">
-                                      <div class="p-inputgroup" (click)="$event.stopPropagation()">
-                                          <input type="text" pInputText placeholder="Filter" #search (keyup)="options.filter($event)">
-                                      </div>
-                                      <button pButton icon="pi pi-times" class="ml-3" (click)="product.batterName=null"></button>
-                                  </div>
-                              </ng-template>
+                          <p-dropdown [options]="matchDetails.team1.players" [(ngModel)]="product.batterName" optionLabel="name"   [filter]="true"  filterBy="name">                          
                           </p-dropdown>
                       </ng-template>
                       <ng-template pTemplate="output">
@@ -117,14 +109,6 @@
                   <p-cellEditor>
                       <ng-template pTemplate="input">
                           <p-dropdown [options]="matchDetails.team2.players" [(ngModel)]="product.catchOrStumpedBy" optionLabel="name"   [filter]="true"  filterBy="name">
-                              <ng-template pTemplate="filter" let-options="options">
-                                  <div class="flex p-3">
-                                      <div class="p-inputgroup" (click)="$event.stopPropagation()">
-                                          <input type="text" pInputText placeholder="Filter" #search (keyup)="options.filter($event)">
-                                      </div>
-                                      <button pButton icon="pi pi-times" class="ml-3" (click)="product.catchOrStumpedBy=null"></button>
-                                  </div>
-                              </ng-template>
                           </p-dropdown>
                       </ng-template>
                       <ng-template pTemplate="output">
@@ -156,14 +140,6 @@
                   <p-cellEditor>
                       <ng-template pTemplate="input">
                           <p-dropdown [options]="matchDetails.team2.players" [(ngModel)]="product.bowlerName" optionLabel="name"   [filter]="true"  filterBy="name">
-                              <ng-template pTemplate="filter" let-options="options">
-                                  <div class="flex p-3">
-                                      <div class="p-inputgroup" (click)="$event.stopPropagation()">
-                                          <input type="text" pInputText placeholder="Filter" #search (keyup)="options.filter($event)">
-                                      </div>
-                                      <button pButton icon="pi pi-times" class="ml-3" (click)="product.bowlerName=null"></button>
-                                  </div>
-                              </ng-template>
                           </p-dropdown>
                       </ng-template>
                       <ng-template pTemplate="output">
@@ -247,14 +223,6 @@
                   <p-cellEditor>
                       <ng-template pTemplate="input">
                           <p-dropdown [options]="matchDetails.team2.players" [(ngModel)]="product.batterName" optionLabel="name"   [filter]="true"  filterBy="name">
-                              <ng-template pTemplate="filter" let-options="options">
-                                  <div class="flex p-3">
-                                      <div class="p-inputgroup" (click)="$event.stopPropagation()">
-                                          <input type="text" pInputText placeholder="Filter" #search (keyup)="options.filter($event)">
-                                      </div>
-                                      <button pButton icon="pi pi-times" class="ml-3" (click)="product.batterName=null"></button>
-                                  </div>
-                              </ng-template>
                           </p-dropdown>
                       </ng-template>
                       <ng-template pTemplate="output">
@@ -324,14 +292,6 @@
                   <p-cellEditor>
                       <ng-template pTemplate="input">
                           <p-dropdown [options]="matchDetails.team1.players" [(ngModel)]="product.catchOrStumpedBy" optionLabel="name"   [filter]="true"  filterBy="name">
-                              <ng-template pTemplate="filter" let-options="options">
-                                  <div class="flex p-3">
-                                      <div class="p-inputgroup" (click)="$event.stopPropagation()">
-                                          <input type="text" pInputText placeholder="Filter" #search (keyup)="options.filter($event)">
-                                      </div>
-                                      <button pButton icon="pi pi-times" class="ml-3" (click)="product.catchOrStumpedBy=null"></button>
-                                  </div>
-                              </ng-template>
                           </p-dropdown>
                       </ng-template>
                       <ng-template pTemplate="output">
@@ -363,14 +323,6 @@
                   <p-cellEditor>
                       <ng-template pTemplate="input">
                           <p-dropdown [options]="matchDetails.team1.players" [(ngModel)]="product.bowlerName" optionLabel="name"   [filter]="true"  filterBy="name">
-                              <ng-template pTemplate="filter" let-options="options">
-                                  <div class="flex p-3">
-                                      <div class="p-inputgroup" (click)="$event.stopPropagation()">
-                                          <input type="text" pInputText placeholder="Filter" #search (keyup)="options.filter($event)">
-                                      </div>
-                                      <button pButton icon="pi pi-times" class="ml-3" (click)="product.bowlerName=null"></button>
-                                  </div>
-                              </ng-template>
                           </p-dropdown>
                       </ng-template>
                       <ng-template pTemplate="output">
