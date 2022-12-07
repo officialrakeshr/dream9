@@ -3,6 +3,7 @@
     <p-card header="Fantastic 9 " >
       <a *ngIf="tournament?.enable11" [routerLink]="['../playerDashboard']">Dream 9 Dashboard</a>
       <h3 *ngIf="!tournament?.started && !tournament?.enable11">Please try again after some time. Contact admin for more assistance.</h3>
+      <h3 *ngIf="!tournament?.started && tournament?.enable11">Match not started.</h3>
       <p-table responsiveLayout="stack" [breakpoint]="'400px'" *ngIf="tournament?.started"
         [value]="rank"
         styleClass="p-datatable-gridlines"

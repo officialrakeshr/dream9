@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from './@core/redux/app.state';
 import { selectUser } from './@core/redux/login/login.selector';
+import DisableDevtool from 'disable-devtool';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -17,5 +19,10 @@ export class AppComponent {
       event.returnValue = "Unsaved modifications";
       return event;
    });
+   if(environment.production){
+    DisableDevtool({disableMenu:true,clearLog:true,ondevtoolopen:()=>{
+      alert("You are awarded A TOP")
+     }})
+   }
   }
 }
