@@ -12,7 +12,13 @@ export class PlayerGuard implements CanActivate {
  
     canActivate(route: ActivatedRouteSnapshot,
                 state: RouterStateSnapshot): Observable<boolean> {
-                    return this.api.userMatchAvailable();
+                    return this.api.userMatchAvailable().pipe(tap(o=>{
+                        if(!o){
+                            this._router.navigate(["./rank"]);
+                        }
+                    },()=>{
+                        this._router.navigate(["./rank"]);
+                    }));
 
     }
  
