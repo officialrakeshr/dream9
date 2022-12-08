@@ -44,7 +44,7 @@
                         <td>
                             {{rowData['name']}}
                         </td>
-                        <td pEditableColumn>
+                       <!--  <td pEditableColumn>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown [options]="rowData.roleList" [(ngModel)]="rowData.assignedRole"
@@ -55,6 +55,11 @@
                                     {{rowData.assignedRole != '' ? codeToName(rowData.assignedRole) :''}}
                                 </ng-template>
                             </p-cellEditor>
+                        </td> -->
+                        <td>
+                            <p-dropdown [options]="rowData.roleList" [(ngModel)]="rowData.assignedRole"
+                                        (onClick)="processDropDown(rowData.roleList)" optionDisabled="inactive"
+                                        optionLabel="name" optionValue="value" [style]="{'width':'100%'}"></p-dropdown>
                         </td>
                         <td>
                             <p-button label="Remove" styleClass="p-button-link" (click)="remove(rowIndex)"></p-button>

@@ -80,8 +80,7 @@ export class AdminDashboardComponent implements OnInit {
     if(conf){
       selectedMatch = { ...selectedMatch, enable11: false };
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
-        let currentUrl = this.router.url;
-        this.router.navigate([currentUrl])
+        window.location.reload();
       });
     }
   }
@@ -91,10 +90,7 @@ export class AdminDashboardComponent implements OnInit {
     if(conf){
       selectedMatch = { ...selectedMatch, enable11: false, started: true };
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
-        let currentUrl = this.router.url;
-        this.router.navigateByUrl("/", { skipLocationChange: true }).then(() => {
-          this.router.navigate([currentUrl]);
-        });
+        window.location.reload();
       });
     }
   }
@@ -126,7 +122,7 @@ export class AdminDashboardComponent implements OnInit {
 
   makeid() {
     this.newUniqueId = "";
-    var text = "DXL";
+    var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     for (var i = 0; i < 6; i++)
