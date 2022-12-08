@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ScoreService } from 'src/app/@core/services/score/score.service';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { Router } from '@angular/router';
 export interface COLUMN {
   field: string;
   header: string;
@@ -63,7 +64,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private filterService: FilterService,
     private messageService: MessageService,
-    private scoreService: ScoreService
+    private scoreService: ScoreService,
+    private router: Router
   ) {
     this.lockTime=moment("19:30","HH:mm",true).toDate();
     console.log(this.lockTime)
@@ -297,7 +299,14 @@ export class DashboardComponent implements OnInit {
    this.scoreService.updateDream9Details(data).subscribe(o=>{
     if(o){
       alert("Done. Updated")
-    }else alert("Not Updated.")
+    }else {
+      this.scoreService.userMatchDetails().subscribe((o)=>{
+        if(o.started || !o.enable11){
+          alert("Not Updated. Either Game started or Dream 9 Session closed.")
+          this.router.navigate(["./rank"])
+        }
+      })
+    }
    })
   }
 
