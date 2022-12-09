@@ -20,6 +20,8 @@ export class AdminDashboardComponent implements OnInit {
   createMatchModal:boolean = false;
   newUniqueId = "";
   selectedMatchNo = "";
+  newUsername ="";
+  newPhone="";
   selectedMatch!: Tournament;
   playerOptions = [
     { name: "Active", value: "active" },
@@ -169,7 +171,10 @@ export class AdminDashboardComponent implements OnInit {
       if (o) {
         this.userService.registerUser(data).subscribe((msg) => {
           if (msg) {
-            this.enrolPlayerModal = false;
+            this.newUniqueId = '';
+            this.newUsername='';
+            this.newPhone='';
+            //this.enrolPlayerModal = false;
             alert("User generated with UniqueID: " + newUniqueId);
           }
         });
