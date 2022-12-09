@@ -202,9 +202,9 @@
     optionValue="matchNo"
   ></p-dropdown>
   <label for="name" class="block text-900 font-medium mb-2">Name</label>
-  <input id="name" type="text" #username pInputText class="w-full mb-3" />
+  <input id="name" [(ngModel)]="newUsername" type="text" #username pInputText class="w-full mb-3" />
   <label for="phone" class="block text-900 font-medium mb-2">Phone</label>
-  <input id="phone" type="number" #phone pInputText class="w-full mb-3" />
+  <input id="phone" [(ngModel)]="newPhone" type="number" #phone pInputText class="w-full mb-3" />
   <h3>
     Unique ID: {{ newUniqueId }}<button (click)="makeid()">Generate</button>
   </h3>
