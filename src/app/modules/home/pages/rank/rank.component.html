@@ -1,7 +1,7 @@
 <div class="grid">
   <div class="col-12">
-    <p-card header="Fantastic 9 " >
-      <a *ngIf="tournament?.enable11" [routerLink]="['../playerDashboard']">Dream 9 Dashboard</a>
+    <p-card header="Fantastic 12 " >
+      <a *ngIf="tournament?.enable11" [routerLink]="['../playerDashboard']">Fantastic 12 Dashboard</a>
       <h3 *ngIf="!tournament?.started && !tournament?.enable11">Please try again after some time. Contact admin for more assistance.</h3>
       <h3 *ngIf="!tournament?.started && tournament?.enable11">Match not started.</h3>
       <p-table responsiveLayout="stack" [breakpoint]="'760px'" *ngIf="tournament?.started"
@@ -10,7 +10,7 @@
         [tableStyle]="{ 'min-width': '50rem' }"
       >
         <ng-template pTemplate="caption">
-          Match No: {{ tournament?.matchNo }} - {{ tournament?.team1 }} vs {{ tournament?.team2 }} - Prediction Game Ranking <button *ngIf="!tournament?.completed" (click)="refreshScore()">Refresh Score</button>
+          Match No: {{ tournament?.matchNo }} - {{ tournament?.team1 }} vs {{ tournament?.team2 }} - Prediction Game Ranking <button id="refreshbtn" *ngIf="!tournament?.completed" (click)="refreshScore()">Refresh Score</button>
         </ng-template>
         <ng-template pTemplate="header">
           <tr>

@@ -67,7 +67,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   enableDream9(selectedMatch: Tournament) {
-    let conf= confirm(`Do yo want to enable Dream 9 for this match ${selectedMatch.matchNo}?`)
+    let conf= confirm(`Do yo want to enable Fantastic 12 for this match ${selectedMatch.matchNo}?`)
     if(conf){
       selectedMatch = { ...selectedMatch, enable11: true };
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
@@ -78,7 +78,7 @@ export class AdminDashboardComponent implements OnInit {
     
   }
   closeDream9(selectedMatch: Tournament) {
-    let conf= confirm(`Do yo want to close Dream 9 for this match ${selectedMatch.matchNo}?`)
+    let conf= confirm(`Do yo want to close Fantastic 12 for this match ${selectedMatch.matchNo}?`)
     if(conf){
       selectedMatch = { ...selectedMatch, enable11: false };
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
@@ -88,7 +88,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   startMatch(selectedMatch: Tournament) {
-    let conf= confirm(`Do yo want to start this match ${selectedMatch.matchNo}?. This will close Dream9 session of this match.`)
+    let conf= confirm(`Do yo want to start this match ${selectedMatch.matchNo}?. This will close Fantastic12 session of this match.`)
     if(conf){
       selectedMatch = { ...selectedMatch, enable11: false, started: true };
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
@@ -138,14 +138,14 @@ export class AdminDashboardComponent implements OnInit {
     phone: any,
     newUniqueId: any
   ): any {
-    if (
+    /* if (
       selectedMatchNo == undefined ||
       selectedMatchNo == null ||
       selectedMatchNo == ""
     ) {
       alert("Select a valid match no.");
       return false;
-    }
+    } */
 
     if (username == undefined || username == null || username == "") {
       alert("Select a valid name.");

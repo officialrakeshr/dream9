@@ -46,13 +46,7 @@ export class LoginComponent implements OnInit {
         addUser({ payload: { username: user, token: o.accessToken } })
       );
       this.api.employeeAccess().subscribe(o=>{
-        this.api.userMatchAvailable().subscribe(o=>{
-          if(o){
-            this.router.navigate(['./home/playerDashboard'])
-          }else {
-            this.router.navigate(['./home/rank'])
-          }
-        })
+        this.router.navigate(['./home/playerDashboard'])
       })
     })
   }

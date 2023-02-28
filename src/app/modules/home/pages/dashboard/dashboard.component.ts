@@ -36,6 +36,8 @@ export class DashboardComponent implements OnInit {
   public teamSizeLimit = 9;
   public wicketKeeperCountLimit = 1;
   public subCountLimit = null;
+  public battingHeroLimit = 1;
+  public bowlingHeroLimit = 1;
 
   public AllRoundersCount = 0;
   public captainCount = 0;
@@ -43,6 +45,10 @@ export class DashboardComponent implements OnInit {
   public teamSize = 0;
   public wicketKeeperCount = 0;
   public subCountUsed = 0;
+  public battingHeroCount=0;
+  public bowlingHeroCount = 0;
+
+
 
   private _history: Player[][] = [];
 
@@ -50,13 +56,16 @@ export class DashboardComponent implements OnInit {
     { value: '', name: '-Select-', inactive: false },
     { value: 'captain', name: 'Captain', inactive: false },
     { value: 'vcaptain', name: 'Vice-Captain', inactive: false },
-    { value: 'player3', name: 'Player 3', inactive: false },
-    { value: 'player4', name: 'Player 4', inactive: false },
+    { value: 'battinghero', name: 'Batting Hero', inactive: false },
+    { value: 'bowlinghero', name: 'Bowling Hero', inactive: false },
     { value: 'player5', name: 'Player 5', inactive: false },
     { value: 'player6', name: 'Player 6', inactive: false },
     { value: 'player7', name: 'Player 7', inactive: false },
     { value: 'player8', name: 'Player 8', inactive: false },
     { value: 'player9', name: 'Player 9', inactive: false },
+    { value: 'player10', name: 'Player 10', inactive: false },
+    { value: 'player11', name: 'Player 11', inactive: false },
+    { value: 'player12', name: 'Player 12', inactive: false },
     // { value: 'allrounder', name: 'All-Rounder', inactive: false },
   ];
   lockTime: Date;
@@ -188,6 +197,12 @@ export class DashboardComponent implements OnInit {
     this.wicketKeeperCount = this.selectedPlayers.filter((o) =>
       this.filterService.filters.equals(o.assignedRole, 'wk')
     ).length;
+    this.battingHeroCount = this.selectedPlayers.filter((o) =>
+      this.filterService.filters.equals(o.assignedRole, 'battinghero')
+    ).length;
+    this.bowlingHeroCount = this.selectedPlayers.filter((o) =>
+      this.filterService.filters.equals(o.assignedRole, 'bowlinghero')
+    ).length;
   }
   processSear(role:string){
    return this.selectedPlayers.filter((o) =>
@@ -213,14 +228,14 @@ export class DashboardComponent implements OnInit {
       this.roleCount++;
       roleList.find((o) => o.value == 'vcaptain').inactive = true;
     } else roleList.find((o) => o.value == 'vcaptain').inactive = false;
-    if (this.processSear('player3')) {
+    if (this.processSear('battinghero')) {
       this.roleCount++;
-      roleList.find((o) => o.value == 'player3').inactive = true;
-    } else roleList.find((o) => o.value == 'player3').inactive = false;
-    if (this.processSear('player4')) {
+      roleList.find((o) => o.value == 'battinghero').inactive = true;
+    } else roleList.find((o) => o.value == 'battinghero').inactive = false;
+    if (this.processSear('bowlinghero')) {
       this.roleCount++;
-      roleList.find((o) => o.value == 'player4').inactive = true;
-    } else roleList.find((o) => o.value == 'player4').inactive = false;
+      roleList.find((o) => o.value == 'bowlinghero').inactive = true;
+    } else roleList.find((o) => o.value == 'bowlinghero').inactive = false;
     if (this.processSear('player5')) {
       this.roleCount++;
       roleList.find((o) => o.value == 'player5').inactive = true;
@@ -241,6 +256,18 @@ export class DashboardComponent implements OnInit {
       this.roleCount++;
       roleList.find((o) => o.value == 'player9').inactive = true;
     } else roleList.find((o) => o.value == 'player9').inactive = false;
+    if (this.processSear('player10')) {
+      this.roleCount++;
+      roleList.find((o) => o.value == 'player10').inactive = true;
+    } else roleList.find((o) => o.value == 'player10').inactive = false;
+    if (this.processSear('player11')) {
+      this.roleCount++;
+      roleList.find((o) => o.value == 'player11').inactive = true;
+    } else roleList.find((o) => o.value == 'player11').inactive = false;
+    if (this.processSear('player12')) {
+      this.roleCount++;
+      roleList.find((o) => o.value == 'player12').inactive = true;
+    } else roleList.find((o) => o.value == 'player12').inactive = false;
   }
   validations(data: Player): boolean {
     this.calculateCounts();
@@ -276,8 +303,8 @@ export class DashboardComponent implements OnInit {
       total: 0,
       captain: 0,
       vcaptain: 0,
-      player3: 0,
-      player4: 0,
+      battinghero: 0,
+      bowlinghero: 0,
       player5: 0,
       player6: 0,
       player7: 0,
@@ -285,8 +312,8 @@ export class DashboardComponent implements OnInit {
       player9: 0,
       captainPoint: 0,
       vcaptainPoint: 0,
-      player3Point: 0,
-      player4Point: 0,
+      battingHeroPoint: 0,
+      bowlingHeroPoint: 0,
       player5Point: 0,
       player6Point: 0,
       player7Point: 0,
@@ -302,7 +329,7 @@ export class DashboardComponent implements OnInit {
     }else {
       this.scoreService.userMatchDetails().subscribe((o)=>{
         if(o.started || !o.enable11){
-          alert("Not Updated. Either Game started or Dream 9 Session closed.")
+          alert("Not Updated. Either Game started or Fantastic 12 Session closed.")
           this.router.navigate(["./rank"])
         }
       })

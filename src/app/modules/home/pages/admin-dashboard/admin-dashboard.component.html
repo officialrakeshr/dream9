@@ -3,7 +3,7 @@
     <p-card header="Match Details">
       <div class="match-det">
         <p-button
-          label="Enrol Dream9 Players"
+          label="Enrol Fantastic12 Players"
           styleClass="p-button-link"
           (click)="enrolPlayerModal = !enrolPlayerModal"
         ></p-button>
@@ -50,8 +50,8 @@
               </ng-template>
               <ng-template pTemplate="header">
                 <tr>
-                  <th>Name</th>
-                  <th>Active</th>
+                  <th>Player</th>
+                  <th>Status</th>
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-product>
@@ -95,8 +95,8 @@
               </ng-template>
               <ng-template pTemplate="header">
                 <tr>
-                  <th>Name</th>
-                  <th>Active</th>
+                  <th>Player</th>
+                  <th>Status</th>
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-product>
@@ -149,7 +149,7 @@
             pButton
             pRipple
             type="button"
-            label="Enable Dream9"
+            label="Enable Fantastic12"
             *ngIf="
               !selectedMatch.completed &&
               !selectedMatch.started &&
@@ -162,7 +162,7 @@
             pButton
             pRipple
             type="button"
-            label="Close Dream9"
+            label="Close Fantastic12"
             *ngIf="
               !selectedMatch.started &&
               !selectedMatch.completed &&
@@ -187,20 +187,20 @@
 </div>
 
 <p-dialog
-  header="New Dream9 Player Creation"
+  header="New Fantastic12 Player Creation"
   [(visible)]="enrolPlayerModal"
   [modal]="true"
 >
-  <label for="password" class="block text-900 font-medium mb-2"
+<!--   <label for="password" class="block text-900 font-medium mb-2"
     >Match Number</label
-  >
-  <p-dropdown
+  > -->
+<!--   <p-dropdown
     [options]="(tournaments$ | async) || []"
     [(ngModel)]="selectedMatchNo"
     placeholder="Select a Match"
     optionLabel="matchNo"
     optionValue="matchNo"
-  ></p-dropdown>
+  ></p-dropdown> -->
   <label for="name" class="block text-900 font-medium mb-2">Name</label>
   <input id="name" [(ngModel)]="newUsername" type="text" #username pInputText class="w-full mb-3" />
   <label for="phone" class="block text-900 font-medium mb-2">Phone</label>
