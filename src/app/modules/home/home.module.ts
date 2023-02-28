@@ -15,9 +15,10 @@ import { PlayerGuard } from 'src/app/@core/guards/player-guard';
 import { AdminGuard } from 'src/app/@core/guards/admin-guard';
 import { CanDeactivateGuard } from 'src/app/@core/guards/deactivate-guard';
 import { RankComponent } from './pages/rank/rank.component';
+import { FixtureComponent } from './components/fixture/fixture.component';
 
 @NgModule({
-  declarations: [DashboardComponent, StatComponent, CountDownComponent, AdminDashboardComponent, ScorebookComponent, RankComponent],
+  declarations: [DashboardComponent, StatComponent, CountDownComponent, AdminDashboardComponent, ScorebookComponent, RankComponent, FixtureComponent],
   imports: [
     CommonModule,
     PrimengModule,
@@ -25,7 +26,8 @@ import { RankComponent } from './pages/rank/rank.component';
     RouterModule.forChild([{ path: 'playerDashboard', component: DashboardComponent , canActivate:[PlayerGuard] , canDeactivate: [CanDeactivateGuard] },
     { path: 'adminDashboard', component: AdminDashboardComponent, canActivate:[AdminGuard], canDeactivate: [CanDeactivateGuard]  },
     { path: 'scorebook', component: ScorebookComponent ,canActivate:[AdminGuard], canDeactivate: [CanDeactivateGuard]  },
-    { path: 'rank', component: RankComponent ,  canDeactivate: [CanDeactivateGuard] }]),
+    { path: 'rank', component: RankComponent ,  canDeactivate: [CanDeactivateGuard] },
+    { path: 'fixture', component: FixtureComponent}]),
   ],
   providers:[
     {
