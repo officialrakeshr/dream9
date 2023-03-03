@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
         addUser({ payload: { username: user, token: o.accessToken } })
       );
       this.api.employeeAccess().subscribe(o=>{
-        this.router.navigate(['./home/playerDashboard'])
+        this.router.navigate(['./home/fixture'])
       })
     })
   }

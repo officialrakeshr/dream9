@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Tournament } from 'src/app/@core/models/Player.model';
 import { ScoreService } from 'src/app/@core/services/score/score.service';
@@ -11,10 +12,17 @@ import { ScoreService } from 'src/app/@core/services/score/score.service';
 export class FixtureComponent implements OnInit {
   tournaments$: Observable<Tournament[]> = null as any;
 
-  constructor(private scoreService: ScoreService) { }
+  constructor(private scoreService: ScoreService, private route: ActivatedRoute, private router: Router,) { }
  
   ngOnInit(): void {
     this.tournaments$ = this.scoreService.getTournaments();
+  }
+  goToPlayerDashboard(matchNo:string,enable11:boolean): void { 
+    if(!enable11){
+      alert("This match is not enabled");
+      return;
+    }
+    this.router.navigateByUrl(`/home/playerDashboard/${matchNo}`)
   }
 
 }

@@ -23,7 +23,7 @@ import { FixtureComponent } from './components/fixture/fixture.component';
     CommonModule,
     PrimengModule,
     CoreModule,
-    RouterModule.forChild([{ path: 'playerDashboard', component: DashboardComponent , canActivate:[PlayerGuard] , canDeactivate: [CanDeactivateGuard] },
+    RouterModule.forChild([{ path: 'playerDashboard/:matchNo', component: DashboardComponent , canActivate:[PlayerGuard] , canDeactivate: [CanDeactivateGuard] },
     { path: 'adminDashboard', component: AdminDashboardComponent, canActivate:[AdminGuard], canDeactivate: [CanDeactivateGuard]  },
     { path: 'scorebook', component: ScorebookComponent ,canActivate:[AdminGuard], canDeactivate: [CanDeactivateGuard]  },
     { path: 'rank', component: RankComponent ,  canDeactivate: [CanDeactivateGuard] },

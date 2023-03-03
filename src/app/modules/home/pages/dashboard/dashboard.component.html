@@ -3,7 +3,7 @@
         <p-card header="Match Details">
             <div class="match-det">
                 <span><b>Match No : </b> {{tournament.matchNo}}</span>	&#9734;
-                <span><b>Match : </b> {{tournament.team1}} vs {{tournament.team2}}</span>	&#9734;
+                <span><img class="team-img" [src]="'./assets/images/team_logos/'+tournament.team1+'.png'" width="50" />&nbsp;<b>{{tournament.team1}}</b> vs <img class="team-img" [src]="'./assets/images/team_logos/'+tournament.team2+'.png'" width="50" />&nbsp;<b>{{tournament.team2}}</b></span>	&#9734;
                 <!-- <span><b>Venue : </b> Play Ground, Test</span>	&#9734;
                 <span><b>Time : </b> 19:30</span> &#9734;&nbsp;&nbsp;&nbsp;&nbsp; -->
             </div>
@@ -68,10 +68,10 @@
                 </ng-template>
             </p-table>
             <br>
-            <button [disabled]="selectedPlayers.length==0 || roleCount!=9" pButton pRipple type="button" class="long_btn" (click)="submitXI(selectedPlayers)">Submit</button><br><br>
-            <!-- <button  pButton pRipple type="button" class="long_btn">Reset</button><br><br> -->
-            <button  pButton pRipple type="button" class="long_btn" [disabled]="checkUndo()"
-                (click)="undo()">Undo</button>
+            <button [disabled]="selectedPlayers.length==0 || roleCount!=12" pButton pRipple type="button" class="long_btn" (click)="submitXI(selectedPlayers)">Submit</button><br><br>
+            <button  pButton pRipple type="button" class="long_btn">Reset</button><br><br>
+            <!-- <button  pButton pRipple type="button" class="long_btn" [disabled]="checkUndo()"
+                (click)="undo()">Undo</button> -->
 
         </p-card>
     </div>
@@ -93,6 +93,16 @@
                         <td>Vice Captain</td>
                         <td>{{viseCaptainCount}}/{{viseCaptainCountLimit}}</td>
                         <td class="checkbox">{{viseCaptainCount==viseCaptainCountLimit?' &#10003;':''}}</td>
+                    </tr>
+                    <tr class="team-summary-tr">
+                        <td>Batting Hero</td>
+                        <td>{{battingHeroCount}}/{{battingHeroLimit}}</td>
+                        <td class="checkbox">{{battingHeroCount==battingHeroLimit?' &#10003;':''}}</td>
+                    </tr>
+                    <tr class="team-summary-tr">
+                        <td>Bowling Hero</td>
+                        <td>{{bowlingHeroCount}}/{{bowlingHeroLimit}}</td>
+                        <td class="checkbox">{{bowlingHeroCount==bowlingHeroLimit?' &#10003;':''}}</td>
                     </tr>
                     <!-- <tr class="team-summary-tr">
                         <td>All-Rounder</td>

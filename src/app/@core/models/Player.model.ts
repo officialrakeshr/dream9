@@ -14,6 +14,9 @@ export interface Tournament {
     completed:boolean;
     enable11:boolean;
     started:boolean;
+    matchdate: string;
+    venue: string;
+    matchtime:string;
 }
 
 export interface Player {

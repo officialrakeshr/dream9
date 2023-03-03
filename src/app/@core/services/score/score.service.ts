@@ -91,10 +91,17 @@ export class ScoreService {
     }));
   }
 
+  public getDream9playerConfig(matchNo:string):Observable<Player[]>{
+    let  url = `${environment.baseUrl}/cricket/getDream9playerConfig/${matchNo}`;
+    return this.http.get<Player[]>(url);
+  }
+
   public userMatchDetails() {
     return this.http.get<Tournament>(`${environment.baseUrl}/api/homekeep/userMatchDetails`);
   }
-
+  public getMatchDetailsByMatchNo(matchNo:string):Observable<Tournament> {
+    return this.http.get<Tournament>(`${environment.baseUrl}/cricket/tournaments/${matchNo}`);
+  }
   public createNewMatch(tournament:Tournament) {
     return this.http.post<Tournament>(`${environment.baseUrl}/cricket/createNewMatch`, tournament);
   }

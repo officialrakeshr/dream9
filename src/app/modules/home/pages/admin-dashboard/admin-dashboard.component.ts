@@ -37,7 +37,7 @@ export class AdminDashboardComponent implements OnInit {
     completed: false,
     enable11: false,
     started: false
-  };
+  } as any;
   listTeams: Team[] = [] as any;
   constructor(
     private scoreService: ScoreService,
@@ -110,7 +110,7 @@ export class AdminDashboardComponent implements OnInit {
         completed: false,
         enable11: false,
         started: false
-      };
+      } as any;
       this.scoreService.createNewMatch(tournament).subscribe((o) => {
         if(o.id){
           alert(`Match No: ${o.matchNo} created with Teams ${o.team1} & ${o.team2}`);

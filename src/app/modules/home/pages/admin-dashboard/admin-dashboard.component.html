@@ -23,7 +23,7 @@
           styleClass="p-button-link"
           (click)="createMatchModal = !createMatchModal"
         ></p-button>
-        <h5>Match Number :</h5>
+        <h5>Match Number : {{selectedMatch? selectedMatch.matchNo : ''}}</h5>
         <p-dropdown
           [options]="(tournaments$ | async) || []"
           [(ngModel)]="selectedMatch"
@@ -31,12 +31,20 @@
           (onChange)="getMatchDetails(match.value)"
           placeholder="Select a Match"
           optionLabel="matchNo"
-        ></p-dropdown>
+        >
+        <ng-template pTemplate="selectedItem">
+          <div class="country-item country-item-value"  *ngIf="selectedMatch">
+              <div><img class="team-img" [src]="'./assets/images/team_logos/'+selectedMatch.team1+'.png'" width="50" /> VS <img class="team-img" [src]="'./assets/images/team_logos/'+selectedMatch.team2+'.png'" width="50" /></div>
+          </div>
+        </ng-template>
+        <ng-template let-country pTemplate="item">
+            <div class="country-item">
+              <div>{{country.matchNo +' : '+ country.team1 +' VS '+ country.team2}}</div>
+            </div>
+        </ng-template>
+      </p-dropdown>
         <ng-container *ngIf="matchDetails$ | async as matchDetails">
-          <h5>
-            {{ matchDetails.team1.name }} vs {{ matchDetails.team2.name }}
-          </h5>
-
+          <br>
           <div
             class="flex flex-wrap justify-content-center card-container blue-container gap-3"
           >

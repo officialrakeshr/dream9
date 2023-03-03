@@ -39,7 +39,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
-                    <tr>
+                    <tr [ngClass]="{'enable11': rowData['enable11']}" (click)="goToPlayerDashboard(rowData['matchNo'],rowData['enable11'])">
                         <td>
                             {{rowData['matchNo']}}
                         </td>
@@ -65,4 +65,3 @@
             
         </p-card>
     </div>
-{{tournaments$|async|json}}

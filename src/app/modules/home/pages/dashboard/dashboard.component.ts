@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ScoreService } from 'src/app/@core/services/score/score.service';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 export interface COLUMN {
   field: string;
   header: string;
@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
   public AllRoundersCountLimit = 3;
   public captainCountLimit = 1;
   public viseCaptainCountLimit = 1;
-  public teamSizeLimit = 9;
+  public teamSizeLimit = 12;
   public wicketKeeperCountLimit = 1;
   public subCountLimit = null;
   public battingHeroLimit = 1;
@@ -74,7 +74,8 @@ export class DashboardComponent implements OnInit {
     private filterService: FilterService,
     private messageService: MessageService,
     private scoreService: ScoreService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.lockTime=moment("19:30","HH:mm",true).toDate();
     console.log(this.lockTime)
@@ -109,16 +110,39 @@ export class DashboardComponent implements OnInit {
     return this.roleList.find((o) => o.value == value)?.name;
   }
   ngOnInit(): void {
-    
-    this.scoreService.userMatchDetails().subscribe((o)=>{
+    let matchNo=this.route.snapshot.paramMap.get('matchNo') || '1';
+    this.scoreService.getMatchDetailsByMatchNo(matchNo).subscribe((o)=>{
       this.tournament = o;
       this.getPlayerList();
+    })
+    this.scoreService.getDream9playerConfig(matchNo).subscribe((o)=>{
+      if(o!=null){
+        this.selectedPlayers=[];
+        this.teamSize = this.selectedPlayers.length;
+        this.selectedPlayers = o.map(p=>{
+          p.roleList = this.roleList;
+          return p;
+        }).sort((a,b)=>{
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
+        
+        this.dt1.clear();
+        this.reset();
+        this.calculateCounts();
+        this.roleCount=this.selectedPlayers.filter(o=>o.assignedRole!=null).length||0;
+      }
     })
   }
 
   getPlayerList(){
-    this.scoreService.getPlayerList().subscribe((o:any)=>{
-      this.playerList = [...o.filter((p:Player)=>p.team==this.tournament.team1),...o.filter((p:Player)=>p.team==this.tournament.team2)].filter(o=>o.active=='active');
+    this.scoreService.getPlayerList().subscribe((o:Player[])=>{
+      this.playerList = o.filter(p=>p.active=='active');
       this.cols = [
         { field: 'name', header: 'Player', filter: [] },
         { field: 'team', header: 'Team', filter: [] },
@@ -146,6 +170,15 @@ export class DashboardComponent implements OnInit {
       data.roleList = this.roleList;
       this.updateSquadHistory(this.selectedPlayers);
       this.selectedPlayers.push(data);
+      this.selectedPlayers.sort((a,b)=>{
+        if (a.name < b.name) {
+          return -1;
+        }
+        if (a.name > b.name) {
+          return 1;
+        }
+        return 0;
+      });
       this.dt1.clear();
       this.reset();
       this.calculateCounts();
@@ -310,6 +343,9 @@ export class DashboardComponent implements OnInit {
       player7: 0,
       player8: 0,
       player9: 0,
+      player10: 0,
+      player11: 0,
+      player12: 0,
       captainPoint: 0,
       vcaptainPoint: 0,
       battingHeroPoint: 0,
@@ -318,7 +354,10 @@ export class DashboardComponent implements OnInit {
       player6Point: 0,
       player7Point: 0,
       player8Point: 0,
-      player9Point: 0
+      player9Point: 0,
+      player10Point: 0,
+      player11Point: 0,
+      player12Point: 0
     } as any;
     roles.forEach(role=>{
       data[role] = this.findFirstRolePlayer(role)?.id
