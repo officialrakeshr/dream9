@@ -18,11 +18,11 @@
           styleClass="p-button-link"
           [routerLink]="['../scorebook']"
         ></p-button>
-        <p-button
+<!--         <p-button
           label="Create a match"
           styleClass="p-button-link"
           (click)="createMatchModal = !createMatchModal"
-        ></p-button>
+        ></p-button> -->
         <h5>Match Number : {{selectedMatch? selectedMatch.matchNo : ''}}</h5>
         <p-dropdown
           [options]="(tournaments$ | async) || []"

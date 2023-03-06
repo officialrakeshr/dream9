@@ -91,9 +91,21 @@ export class ScoreService {
     }));
   }
 
+  public updateSubstitutionsAndConfig(a:Points):Observable<Boolean>{
+    let  url = `${environment.baseUrl}/cricket/updateSubstitutionsAndConfig`
+    return this.http.post<Boolean>(url,a).pipe( catchError(_err => {
+      return of({} as any)
+    }));
+  }
+
   public getDream9playerConfig(matchNo:string):Observable<Player[]>{
     let  url = `${environment.baseUrl}/cricket/getDream9playerConfig/${matchNo}`;
     return this.http.get<Player[]>(url);
+  }
+
+  public getSubstitutionStatus(matchNo:string):Observable<any>{
+    let  url = `${environment.baseUrl}/cricket/getSubstitutionStatus/${matchNo}`;
+    return this.http.get<any>(url);
   }
 
   public userMatchDetails() {

@@ -68,4 +68,12 @@ export interface Team{
     name:string;
 }
 
+export interface Substitute {
+    lookUp: string;
+    matchNo: string;
+    username: string;
+    total: number;
+    free: number;
+    used: number;
+}
 
