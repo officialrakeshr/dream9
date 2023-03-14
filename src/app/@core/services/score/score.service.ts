@@ -13,7 +13,7 @@ export class ScoreService {
     let  url = `${environment.baseUrl}/cricket/updateMatchDetails`
     return this.http.put<any>(url,matchDetails)
     .pipe(
-      tap(() => alert("Success")),
+      tap(() => alert("Done.")),
    );
   }
 
@@ -22,9 +22,9 @@ export class ScoreService {
     return this.http.get<Points>(url);
   }
 
-  public findAllRank():Observable<Points> {
-    let  url = `${environment.baseUrl}/cricket/findAllRankForPlayers`
-    return this.http.get<Points>(url);
+  public findAllRank():Observable<Points[]> {
+    let  url = `${environment.baseUrl}/cricket/findLeagueRankForPlayers`
+    return this.http.get<Points[]>(url);
   }
 
   public findAllRankByMatchAdmin(matchNo:string):Observable<any> {
@@ -46,7 +46,7 @@ export class ScoreService {
     let  url = `${environment.baseUrl}/cricket/updateTournament`
     return this.http.put<any>(url,tournament)
     .pipe(
-      tap(() => alert("Success")),
+      tap(() => alert("Done.")),
    );
   }
 
@@ -122,4 +122,7 @@ export class ScoreService {
     return this.http.get<any>(`${environment.baseUrl}/cricket/teams`);
   }
 
+  public resetToPreviousDay(matchNo:string):Observable<Boolean> {
+    return this.http.get<Boolean>(`${environment.baseUrl}/cricket/resetToPreviousDay/${matchNo}`);
+  }
 }

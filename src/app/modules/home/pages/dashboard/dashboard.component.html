@@ -266,7 +266,7 @@
       >
         Submit</button
       ><br /><br />
-      <button pButton pRipple type="button" class="long_btn">Reset</button
+      <button pButton pRipple type="button" class="long_btn" *ngIf="enableReset" (click)="resetToPreviousDay(matchNo)">Reset</button
       ><br /><br />
       <!-- <button  pButton pRipple type="button" class="long_btn" [disabled]="checkUndo()"
                 (click)="undo()">Undo</button> -->

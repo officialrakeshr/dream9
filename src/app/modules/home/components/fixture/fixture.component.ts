@@ -25,4 +25,8 @@ export class FixtureComponent implements OnInit {
     this.router.navigateByUrl(`/home/playerDashboard/${matchNo}`)
   }
 
+  canDeactivate() {
+    return true;
+  }
+
 }

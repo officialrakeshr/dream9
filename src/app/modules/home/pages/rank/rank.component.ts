@@ -28,12 +28,19 @@ export class RankComponent implements OnInit {
   }
 
   refreshScore(){
-    this.scoreService.findAllRank().subscribe((o:Points)=>{
+    let i=0;
+    this.scoreService.findAllRank().subscribe((o:Points[])=>{
+      o.sort((a,b)=>{
+        return b.total - a.total;
+      }).map((p:Points)=>{
+        p.rank_no = ++i;
+        return p;
+      })
       this.rank = o;
       this.lastUpdatedTime = moment().format("DD-MM-YYYY HH:mm:ss A")
     })
   }
 
-  canDeactivate():boolean { return false}
+  canDeactivate():boolean { return true}
 
 }

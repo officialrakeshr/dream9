@@ -14,13 +14,15 @@ export class PlayerGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, 
                 state: RouterStateSnapshot): Observable<boolean> {             
                     if (state.url.indexOf('/playerDashboard') > -1) {
-                        return this.score.getMatchDetailsByMatchNo(route.url[1].path).pipe(map(o=>o.enable11),tap(o=>{
-                            if (!o) {
-                                this._router.navigateByUrl('./fixture')
-                            }
+                        return this.api.employeeAccess().pipe(tap(o=>{
+                            this.score.getMatchDetailsByMatchNo(route.url[1].path).pipe(map(o=>o.enable11),tap(o=>{
+                                if (!o) {
+                                    this._router.navigateByUrl('./fixture')         
+                                }
+                            }))
                         }))
                       }
-                    return of(true)
+                    return this.api.employeeAccess();
 
     }
  

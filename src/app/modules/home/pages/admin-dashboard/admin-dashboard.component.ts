@@ -39,6 +39,7 @@ export class AdminDashboardComponent implements OnInit {
     started: false
   } as any;
   listTeams: Team[] = [] as any;
+  rank: Points[] = null as any;
   constructor(
     private scoreService: ScoreService,
     private userService: UserService,
@@ -50,17 +51,24 @@ export class AdminDashboardComponent implements OnInit {
      this.scoreService.listTeams().subscribe(o=>{
       this.listTeams=o["teams"];
      });
+     this.refreshScore();
   }
 
   getMatchDetails(optionValue: any) {
     this.matchDetails$ = this.scoreService.getMatchDetails(optionValue.matchNo);
-    this.refreshScore();
   }
   refreshScore(){
-    this.scoreService.findAllRankByMatchAdmin(this.selectedMatch.matchNo).subscribe((o:Points)=>{
-      this.lastUpdatedTime = moment().format("DD-MM-YYYY HH:mm:ss A");
-      this.currentMatchRankings = o;
-    });
+    let i=0;
+    this.scoreService.findAllRank().subscribe((o:Points[])=>{
+      o.sort((a,b)=>{
+        return b.total - a.total;
+      }).map((p:Points)=>{
+        p.rank_no = ++i;
+        return p;
+      })
+      this.rank = o;
+      this.lastUpdatedTime = moment().format("DD-MM-YYYY HH:mm:ss A")
+    })
   }
   updatePlayers(matchDetails: MatchDetails) {
     this.scoreService.updateMatchDetails(matchDetails).subscribe();
@@ -71,8 +79,7 @@ export class AdminDashboardComponent implements OnInit {
     if(conf){
       selectedMatch = { ...selectedMatch, enable11: true };
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
-        let currentUrl = this.router.url;
-        this.router.navigate([currentUrl])
+        window.location.reload();
       });
     }
     

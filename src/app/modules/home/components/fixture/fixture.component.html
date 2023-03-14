@@ -1,67 +1,91 @@
 <div class="grid">
-    <div class="col">
-        <p-card header="Game Fixture" *ngIf="tournaments$|async as tournaments">
-            <p-table #dt1 [value]="tournaments" dataKey="Player" [rows]="12" [showCurrentPageReport]="true"
-                [rowsPerPageOptions]="[5,12]" styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="true"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                [globalFilterFields]="['players']">
-                <ng-template pTemplate="caption">
-                    <div class="p-d-flex">
-                        <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
-                            (click)="dt1.clear();search.value=''"></button>&nbsp;
-                        <span class="p-input-icon-left p-ml-auto">
-                            <i class="pi pi-search"></i>
-                            <input pInputText #search type="text" (input)="dt1.filterGlobal(search.value, 'contains')"
-                                placeholder="Search keyword" />
-                        </span>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>
-                            Match No
-                        </th>
-                        <th>
-                            Team 1
-                        </th>
-                        <th>
-                            Team 2
-                        </th>
-                        <th>
-                            Date
-                        </th>
-                        <th>
-                            Venue
-                        </th>
-                        <th>
-                            Time
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
-                    <tr [ngClass]="{'enable11': rowData['enable11']}" (click)="goToPlayerDashboard(rowData['matchNo'],rowData['enable11'])">
-                        <td>
-                            {{rowData['matchNo']}}
-                        </td>
-                        <td>
-                           <img class="team-img" [src]="'./assets/images/team_logos/'+rowData['team1']+'.png'" width="50" />&nbsp;<span>{{rowData['team1']}}</span>
-                        </td>
-                        <td>
-                            <img class="team-img" [src]="'./assets/images/team_logos/'+rowData['team2']+'.png'" width="50"  />&nbsp;<span>{{rowData['team2']}}</span>
-                        </td>
-                        <td>
-                            {{rowData['matchdate']}}
-                        </td>
-                        <td>
-                            {{rowData['venue']}}
-                        </td>
-                        <td>
-                            {{rowData['matchtime']}}
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-            <br>
-            
-        </p-card>
-    </div>
+  <div class="col">
+    <p-card header="Game Fixture" *ngIf="tournaments$ | async as tournaments">
+      <p-table
+        #dt1
+        [value]="tournaments"
+        dataKey="Player"
+        [rows]="12"
+        [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[5, 12]"
+        styleClass="p-datatable-sm p-datatable-gridlines"
+        [paginator]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['players']"
+      >
+        <ng-template pTemplate="caption">
+          <div class="p-d-flex">
+            <button
+              pButton
+              label="Clear"
+              class="p-button-outlined"
+              icon="pi pi-filter-slash"
+              (click)="dt1.clear(); search.value = ''"
+            ></button
+            >&nbsp;
+            <span class="p-input-icon-left p-ml-auto">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                #search
+                type="text"
+                (input)="dt1.filterGlobal(search.value, 'contains')"
+                placeholder="Search keyword"
+              />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Match No</th>
+            <th>Team 1</th>
+            <th>Team 2</th>
+            <th>Date</th>
+            <th>Venue</th>
+            <th>Time</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+          <tr
+            [ngClass]="{ enable11: rowData['enable11'] }"
+            (click)="
+              goToPlayerDashboard(rowData['matchNo'], rowData['enable11'])
+            "
+          >
+            <td>
+              {{ rowData["matchNo"] }}
+            </td>
+            <td>
+              <img
+                class="team-img"
+                [src]="
+                  './assets/images/team_logos/' + rowData['team1'] + '.png'
+                "
+                width="50"
+              />&nbsp;<span>{{ rowData["team1"] }}</span>
+            </td>
+            <td>
+              <img
+                class="team-img"
+                [src]="
+                  './assets/images/team_logos/' + rowData['team2'] + '.png'
+                "
+                width="50"
+              />&nbsp;<span>{{ rowData["team2"] }}</span>
+            </td>
+            <td>
+              {{ rowData["matchdate"] }}
+            </td>
+            <td>
+              {{ rowData["venue"] }}
+            </td>
+            <td>
+              {{ rowData["matchtime"] }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <br />
+    </p-card>
+  </div>
+</div>

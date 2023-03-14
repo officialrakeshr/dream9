@@ -6,7 +6,7 @@ import * as _ from "lodash";
 import { ScoreService } from "src/app/@core/services/score/score.service";
 import { UntilDestroy } from "@ngneat/until-destroy";
 import { ActivatedRoute, Router } from "@angular/router";
-import { interval, map, Observable } from "rxjs";
+import { interval, map, Observable, tap } from "rxjs";
 import * as moment from "moment-timezone";
 export interface COLUMN {
   field: string;
@@ -75,6 +75,8 @@ export class DashboardComponent implements OnInit {
   matchNo: string = "";
   substititions$: Observable<Substitute> = null as any;
   countDownTime$: Observable<any> = null as any;
+  enableReset: any;
+  reloadOk: boolean = false;
   constructor(
     private filterService: FilterService,
     private messageService: MessageService,
@@ -115,7 +117,14 @@ export class DashboardComponent implements OnInit {
   }
 
   getSubstitution(matchNo:string){
-    return this.scoreService.getSubstitutionStatus(matchNo);
+    return this.scoreService.getSubstitutionStatus(matchNo).pipe(tap(o=>this.enableReset= o.total < 10));
+  }
+
+  resetToPreviousDay(matchNo:string){
+    return this.scoreService.resetToPreviousDay(matchNo).subscribe(o=>{
+      this.reloadOk =true;
+      window.location.reload();
+    })
   }
   ngOnInit(): void {
     let matchNo = this.route.snapshot.paramMap.get("matchNo") || "1";
@@ -123,9 +132,9 @@ export class DashboardComponent implements OnInit {
     this.substititions$ = this.getSubstitution(matchNo);
     this.scoreService.getMatchDetailsByMatchNo(matchNo).subscribe((o) => {
       this.tournament = o;
-      this.lockTime = moment(`${o.matchdate}<>${o.matchtime}`,"MMMM DD, YYYY<>h:mm A", true).tz("Asia/Calcutta").toDate();
+      this.lockTime = moment(`${o.matchdate}<>${o.matchtime}`,"MMMM D, YYYY<>h:mm A", true).tz("Asia/Calcutta").toDate();
       this.countDownTime$ = interval(1000).pipe(map(d=>{
-        return moment(moment(moment(`${o.matchdate}<>${o.matchtime}`,"MMMM DD, YYYY<>h:mm A", true).tz("Asia/Calcutta")).diff(moment().tz("Asia/Calcutta"))).format("D::H::m::s").split("::");
+        return moment(moment(moment(`${o.matchdate}<>${o.matchtime}`,"MMMM D, YYYY<>h:mm A", true).tz("Asia/Calcutta")).diff(moment().tz("Asia/Calcutta"))).format("D::H::m::s").split("::");
       }))
       this.getPlayerList();
     });
@@ -182,9 +191,10 @@ export class DashboardComponent implements OnInit {
 
   selectPlayer(data: Player, index: number) {
     if (this.selectedPlayers.includes(data)) return;
+    let confirm = window.confirm(`Are you sure you want to add this player ( ${data.name} - ${data.team} ) to your league ?`);
     this.teamSize = this.selectedPlayers.length;
 
-    if (this.validations(data)) {
+    if (confirm && this.validations(data)) {
       data.roleList = this.roleList;
       this.updateSquadHistory(this.selectedPlayers);
       this.selectedPlayers.push(data);
@@ -386,14 +396,14 @@ export class DashboardComponent implements OnInit {
     });
     this.scoreService.updateDream9Details(data).subscribe((o) => {
       if (o) {
-        alert("Done. Updated");
+        this.showMessage("success","Block","Done.");
         this.substititions$ = this.getSubstitution(this.matchNo);
       }
     });
   }
   substitute(rowIndex: number) {
     if(this.selectedPlayers.some(o=> o.assignedRole == "")){
-      alert("You can't substitute a player. Please assign a role first.");
+      this.showMessage("error","Block","You can't substitute a player. Please assign a role first.");
       return;
     }
     this.substitutePopup = true;
@@ -469,13 +479,13 @@ export class DashboardComponent implements OnInit {
       });
       this.scoreService.updateSubstitutionsAndConfig(data).subscribe((o) => {
         if (o) {
-          alert("Done. Updated");
+          this.showMessage("success","Block","Done.");
           this.substititions$ = this.getSubstitution(this.matchNo);
         } 
       });
     }
   }
   canDeactivate() {
-    return false;
+    return this.reloadOk;
   }
 }
