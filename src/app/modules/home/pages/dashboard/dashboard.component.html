@@ -4,7 +4,8 @@
       <div class="match-det">
         Match Date: {{ lockTime | date : "dd-MMMM-yyyy h:mm a" }}
         <br />
-        <div id="happyNewYear-div" *ngIf="countDownTime$ | async as date">
+        <ng-container  *ngIf="countDownTime$ | async as date">
+        <div id="happyNewYear-div">
           <div>
             <span class="days">{{ date[0] }}</span>
             <div class="smalltext">Days</div>
@@ -22,8 +23,9 @@
             <div class="smalltext">Seconds</div>
           </div>
         </div>
-        <!-- <span><b>Venue : </b> Play Ground, Test</span>	&#9734;
-                <span><b>Time : </b> 19:30</span> &#9734;&nbsp;&nbsp;&nbsp;&nbsp; -->
+        <br>
+        <span *ngIf="saveWarning" style="color:red"><b>Please save your team changes before the timer runs out. Only {{ date[3] }} seconds remaining.</b></span>
+       </ng-container>
       </div>
     </p-card>
   </div>

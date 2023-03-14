@@ -76,7 +76,8 @@ export class DashboardComponent implements OnInit {
   substititions$: Observable<Substitute> = null as any;
   countDownTime$: Observable<any> = null as any;
   enableReset: any;
-  reloadOk: boolean = false;
+
+  saveWarning: boolean = false;
   constructor(
     private filterService: FilterService,
     private messageService: MessageService,
@@ -122,7 +123,6 @@ export class DashboardComponent implements OnInit {
 
   resetToPreviousDay(matchNo:string){
     return this.scoreService.resetToPreviousDay(matchNo).subscribe(o=>{
-      this.reloadOk =true;
       window.location.reload();
     })
   }
@@ -132,9 +132,23 @@ export class DashboardComponent implements OnInit {
     this.substititions$ = this.getSubstitution(matchNo);
     this.scoreService.getMatchDetailsByMatchNo(matchNo).subscribe((o) => {
       this.tournament = o;
-      this.lockTime = moment(`${o.matchdate}<>${o.matchtime}`,"MMMM D, YYYY<>h:mm A", true).tz("Asia/Calcutta").toDate();
+      this.lockTime = moment(`${o.matchdate}<>${o.matchtime}`,"MMMM D, YYYY<>h:mm A", true).toDate();
+      
+      if(moment(moment(`${o.matchdate}<>${o.matchtime}`,"MMMM D, YYYY<>h:mm A", true)).diff(moment(),'seconds')<0){
+        alert("Match Started...")
+        this.router.navigate(['./home/fixture'])
+      }
       this.countDownTime$ = interval(1000).pipe(map(d=>{
-        return moment(moment(moment(`${o.matchdate}<>${o.matchtime}`,"MMMM D, YYYY<>h:mm A", true).tz("Asia/Calcutta")).diff(moment().tz("Asia/Calcutta"))).format("D::H::m::s").split("::");
+        let inseconds = moment(moment(`${o.matchdate}<>${o.matchtime}`,"MMMM D, YYYY<>h:mm A", true)).diff(moment(),'seconds');
+      if(inseconds<60){
+        this.saveWarning = true;
+      }else  this.saveWarning = false;
+        if(inseconds<0){
+          alert("Match Started...")
+          this.router.navigate(['./home/fixture'])
+        }
+        let duration = moment.duration(moment(`${o.matchdate}<>${o.matchtime}`,"MMMM D, YYYY<>h:mm A", true).diff(moment())) as any;
+        return [duration._data.days, duration._data.hours, duration._data.minutes, duration._data.seconds];
       }))
       this.getPlayerList();
     });
@@ -485,7 +499,8 @@ export class DashboardComponent implements OnInit {
       });
     }
   }
+
   canDeactivate() {
-    return this.reloadOk;
+    return false;
   }
 }
