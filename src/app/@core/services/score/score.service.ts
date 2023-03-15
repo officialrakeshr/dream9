@@ -125,4 +125,8 @@ export class ScoreService {
   public resetToPreviousDay(matchNo:string):Observable<Boolean> {
     return this.http.get<Boolean>(`${environment.baseUrl}/cricket/resetToPreviousDay/${matchNo}`);
   }
+
+  public broadcastMessage(message:string) {
+    return this.http.get<any>(`${environment.baseUrl}/websocket/pushMessage?msg=${message}`);
+  }
 }

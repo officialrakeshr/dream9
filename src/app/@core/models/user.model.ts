@@ -3,4 +3,5 @@ export interface User {
   token: string;
   displayname?:string;
   role?:string;
+  pushmessages?:string;
 }

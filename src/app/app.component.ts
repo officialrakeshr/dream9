@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from './@core/redux/app.state';
 import { selectUser } from './@core/redux/login/login.selector';
@@ -7,20 +7,26 @@ import { environment } from 'src/environments/environment';
 import { tap } from 'rxjs';
 import { User } from './@core/models/user.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { WebSocketAPI } from './WebSocketAPI';
+import { WebsocketComponent } from './websocket/websocket.component';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
+  webSocketAPI:any;
+  greeting: any;
+  name: string='';
   title = 'acl-game';
   user: User = null as any
   user$ = this.store.select(selectUser).pipe(tap(o=>{
     this.user = o;
   }));
   
-  constructor(private store: Store<AppState>,private route: ActivatedRoute, private router: Router) {
+  constructor(private store: Store<AppState>,private route: ActivatedRoute, private router: Router,private messageService: MessageService,) {
     window.addEventListener("beforeunload", (event) => {
       event.preventDefault();
       event.returnValue = "Unsaved modifications";
@@ -31,6 +37,11 @@ export class AppComponent {
       alert("You are awarded A TOP")
      }})
    }
+   this.webSocketAPI = new WebSocketAPI(new WebsocketComponent(store));
+   this.connect();
+  }
+  ngOnDestroy(): void {
+    this.disconnect();
   }
   gotoHomePage(){
     if(this.user.role=='player'){
@@ -39,5 +50,30 @@ export class AppComponent {
       this.router.navigate(['./home/adminDashboard']);
     }
     this.store.select(selectUser)
+  }
+
+  
+  connect(){
+    try {
+      this.webSocketAPI._connect();
+    } catch (error) {
+      console.log("Websocket connection error: " + error);
+    }
+  }
+
+  disconnect(){
+    try {
+      this.webSocketAPI._disconnect();
+    } catch (error) {
+      console.log("Websocket connection error: " + error);
+    } 
+  }
+
+  sendMessage(){
+    try {
+      this.webSocketAPI._send(this.name);
+    } catch (error) {
+      console.log("Websocket send message error: " + error);
+    }
   }
 }

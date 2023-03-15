@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { UntilDestroy } from "@ngneat/until-destroy";
 import * as moment from "moment";
+import { MessageService } from "primeng/api";
 import { map, Observable, tap } from "rxjs";
 import { MatchDetails, Team, Tournament } from "src/app/@core/models/Player.model";
 import { Points } from "src/app/@core/models/points";
@@ -18,6 +19,8 @@ export class AdminDashboardComponent implements OnInit {
   enrolPlayerModal: boolean = false;
   rankModall:boolean = false;
   createMatchModal:boolean = false;
+  broadcastMsg:boolean = false;
+  pushMessage:string = "";
   newUniqueId = "";
   selectedMatchNo = "";
   newUsername ="";
@@ -43,7 +46,8 @@ export class AdminDashboardComponent implements OnInit {
   constructor(
     private scoreService: ScoreService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService
   ) {}
   tournaments$ = this.scoreService.getTournaments();
   ngOnInit(): void {
@@ -79,6 +83,7 @@ export class AdminDashboardComponent implements OnInit {
     if(conf){
       selectedMatch = { ...selectedMatch, enable11: true };
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
+        this.sendMessage(`Fantastic 12 enabled for the match no: ${selectedMatch.matchNo}`);
         window.location.reload();
       });
     }
@@ -89,6 +94,7 @@ export class AdminDashboardComponent implements OnInit {
     if(conf){
       selectedMatch = { ...selectedMatch, enable11: false };
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
+        this.sendMessage(`Fantastic 12 closed for the match no: ${selectedMatch.matchNo}`);
         window.location.reload();
       });
     }
@@ -99,6 +105,7 @@ export class AdminDashboardComponent implements OnInit {
     if(conf){
       selectedMatch = { ...selectedMatch, enable11: false, started: true };
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
+        this.sendMessage(`Match ${selectedMatch.matchNo} started!`);
         window.location.reload();
       });
     }
@@ -186,8 +193,31 @@ export class AdminDashboardComponent implements OnInit {
           }
         });
       } else {
-        alert("Please generate a new Unique ID");
+        this.showMessage("error","","Please generate a new Unique ID");
       }
+    });
+  }
+
+  sendMessage(message: string) {
+    this.scoreService.broadcastMessage(message).subscribe((o) => {
+      if(o>1){
+        this.pushMessage = ""
+        this.showMessage("success","","Message Broadcasted successfully.");
+      }else this.showMessage("error","","No active users.");
+    })
+  }
+
+  private showMessage(
+    severity: string = "success",
+    summary: string,
+    detail: string
+  ) {
+    this.messageService.clear();
+    this.messageService.add({
+      severity: severity,
+      summary: summary,
+      detail: detail,
+      sticky: true,
     });
   }
   canDeactivate(): boolean {

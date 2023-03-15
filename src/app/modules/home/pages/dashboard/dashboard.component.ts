@@ -8,6 +8,9 @@ import { UntilDestroy } from "@ngneat/until-destroy";
 import { ActivatedRoute, Router } from "@angular/router";
 import { interval, map, Observable, tap } from "rxjs";
 import * as moment from "moment-timezone";
+import { AppState } from "src/app/@core/redux/app.state";
+import { Store } from "@ngrx/store";
+import { selectMsg } from "src/app/@core/redux/login/login.selector";
 export interface COLUMN {
   field: string;
   header: string;
@@ -83,7 +86,8 @@ export class DashboardComponent implements OnInit {
     private messageService: MessageService,
     private scoreService: ScoreService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public store: Store<AppState>
   ) {
 
   }
@@ -151,6 +155,14 @@ export class DashboardComponent implements OnInit {
         return [duration._data.days, duration._data.hours, duration._data.minutes, duration._data.seconds];
       }))
       this.getPlayerList();
+      this.store.select(selectMsg).subscribe(o=>{
+        if(o=='') return
+        this.showMessage(
+          "success",
+          "Message from Admin",
+          o
+        );
+      })
     });
     this.scoreService.getDream9playerConfig(matchNo).subscribe((o) => {
       if (o != null) {

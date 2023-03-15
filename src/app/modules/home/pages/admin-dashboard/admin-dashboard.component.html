@@ -7,6 +7,7 @@
         <p-button label="Player Rank" styleClass="p-button-link"
           (click)="rankModall = !rankModall"></p-button>
         <p-button label="Score Book" styleClass="p-button-link" [routerLink]="['../scorebook']"></p-button>
+        <p-button label="Broadcast" styleClass="p-button-link" (click)="broadcastMsg = !broadcastMsg"></p-button>
         <!--         <p-button
           label="Create a match"
           styleClass="p-button-link"
@@ -201,3 +202,9 @@
       "></p-button>
   </ng-container>
 </p-dialog>
+<p-dialog header="Broadcast a Message" [(visible)]="broadcastMsg">
+  <textarea [rows]="5" [cols]="50" pInputTextarea [(ngModel)]="pushMessage"></textarea>
+  <br>
+  <button pButton pRipple label="Send"  style="margin:auto" (click)="sendMessage(pushMessage)"></button>
+</p-dialog>
+<p-toast></p-toast>
