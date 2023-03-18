@@ -158,7 +158,7 @@ export class DashboardComponent implements OnInit {
       }))
       this.getPlayerList();
       (this.store.select(selectMsg) as Observable<any>).subscribe(o=>{
-        if(o["read"]==true) return;
+        if(o["msg"] == '' || o["read"]==true) return;
         this.showMessage(
           "success",
           "Message from Admin",
