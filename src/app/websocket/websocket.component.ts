@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { MessageService } from 'primeng/api';
 import { AppState } from '../@core/redux/app.state';
 import { addPushMessage } from '../@core/redux/login/login.action';
 
@@ -16,6 +15,6 @@ export class WebsocketComponent implements OnInit {
   ngOnInit(): void {
   }
   alertThis(msg:string){
-    this.store.dispatch(addPushMessage({payload:msg}));
+    this.store.dispatch(addPushMessage({payload:{'msg':msg,read:false}}));
   }
 }

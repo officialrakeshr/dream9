@@ -8,5 +8,5 @@ export const addUser = createAction(
 
 export const addPushMessage = createAction(
   '[App] addPushMessage',
-  props<{ payload: string }>()
+  props<{ payload: any }>()
 );

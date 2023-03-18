@@ -11,6 +11,8 @@ import * as moment from "moment-timezone";
 import { AppState } from "src/app/@core/redux/app.state";
 import { Store } from "@ngrx/store";
 import { selectMsg } from "src/app/@core/redux/login/login.selector";
+import { addPushMessage } from "src/app/@core/redux/login/login.action";
+import { filter } from "lodash";
 export interface COLUMN {
   field: string;
   header: string;
@@ -155,13 +157,14 @@ export class DashboardComponent implements OnInit {
         return [duration._data.days, duration._data.hours, duration._data.minutes, duration._data.seconds];
       }))
       this.getPlayerList();
-      this.store.select(selectMsg).subscribe(o=>{
-        if(o=='') return
+      (this.store.select(selectMsg) as Observable<any>).subscribe(o=>{
+        if(o["read"]==true) return;
         this.showMessage(
           "success",
           "Message from Admin",
-          o
+          o["msg"]
         );
+        this.store.dispatch(addPushMessage({payload:{'msg':o["msg"],read:true}}));
       })
     });
     this.scoreService.getDream9playerConfig(matchNo).subscribe((o) => {
