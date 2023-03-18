@@ -34,7 +34,9 @@ export class AppComponent implements OnDestroy {
    });
    if(environment.production){
     DisableDevtool({disableMenu:true,clearLog:true,ondevtoolopen:()=>{
-      alert("You are awarded A TOP")
+      window.location.assign(
+        "https://developer.mozilla.org/en-US/docs/Web/API/Location/reload"
+      );
      }})
    }
    this.webSocketAPI = new WebSocketAPI(new WebsocketComponent(store));
