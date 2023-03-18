@@ -1,7 +1,7 @@
 <div class="grid">
   <div class="col">
     <p-card header="Game Fixture" *ngIf="tournaments$ | async as tournaments">
-      <p-table
+<!--       <p-table
         #dt1
         [value]="tournaments"
         dataKey="Player"
@@ -12,8 +12,14 @@
         [paginator]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
         [globalFilterFields]="['players']"
+      > -->
+      <p-table
+        #dt1
+        [value]="tournaments"
+        dataKey="Player"
+        styleClass="p-datatable-sm p-datatable-gridlines"
       >
-        <ng-template pTemplate="caption">
+<!--         <ng-template pTemplate="caption">
           <div class="p-d-flex">
             <button
               pButton
@@ -34,7 +40,7 @@
               />
             </span>
           </div>
-        </ng-template>
+        </ng-template> -->
         <ng-template pTemplate="header">
           <tr>
             <th>Match No</th>

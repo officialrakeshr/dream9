@@ -25,7 +25,7 @@ export class WebSocketAPI {
                 _this.onMessageReceived2(sdkEvent);
             });
             //_this.stompClient.reconnect_delay = 2000;
-        }, this.errorCallBack);
+        }, this.errorCallBack.bind(this));
     };
 
     _disconnect() {
@@ -37,11 +37,10 @@ export class WebSocketAPI {
 
     // on error, schedule a reconnection attempt
     errorCallBack(error: string) {
-        alert("Service Down.Please Logout and try again later");
-       /*  console.log("errorCallBack -> " + error)
+        alert("Server Down / Internet connectivity issues. Reconnecting...");
         setTimeout(() => {
             this._connect();
-        }, 5000); */
+        }, 5000);
     }
 
 	/**
@@ -49,7 +48,6 @@ export class WebSocketAPI {
 	 * @param {*} message 
 	 */
     _send(message: string) {
-        console.log("calling logout api via web socket");
         this.stompClient.send("/webSocket/hello", {}, JSON.stringify(message));
     }
 
