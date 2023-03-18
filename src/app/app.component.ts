@@ -33,11 +33,11 @@ export class AppComponent implements OnDestroy {
       return event;
    });
    if(environment.production){
-    // DisableDevtool({disableMenu:true,clearLog:true,ondevtoolopen:()=>{
-    //   window.location.assign(
-    //     "https://developer.mozilla.org/en-US/docs/Web/API/Location/reload"
-    //   );
-    //  }})
+    DisableDevtool({disableMenu:true,clearLog:true,ondevtoolopen:()=>{
+      window.location.assign(
+        "https://en.wikipedia.org/wiki/Anonymous_(hacker_group)"
+      );
+     }})
    }
    this.webSocketAPI = new WebSocketAPI(new WebsocketComponent(store));
    this.connect();
