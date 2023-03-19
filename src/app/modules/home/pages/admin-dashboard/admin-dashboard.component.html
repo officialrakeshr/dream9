@@ -33,8 +33,7 @@
         <ng-container *ngIf="matchDetails$ | async as matchDetails">
           <br>
           <div class="flex flex-wrap justify-content-center card-container blue-container gap-3">
-            <p-table [value]="matchDetails.team1.players" styleClass="p-datatable-gridlines"
-              [tableStyle]="{ 'max-width': '50rem' }">
+            <p-table [value]="matchDetails.team1.players" styleClass="p-datatable-gridlines">
               <ng-template pTemplate="caption">
                 Team 1: {{ matchDetails.team1.name }}
               </ng-template>
