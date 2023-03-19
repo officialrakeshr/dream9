@@ -6,7 +6,6 @@
           (click)="enrolPlayerModal = !enrolPlayerModal"></p-button>
         <p-button label="Player Rank" styleClass="p-button-link"
           (click)="rankModall = !rankModall"></p-button>
-        <p-button label="Score Book" styleClass="p-button-link" [routerLink]="['../scorebook']"></p-button>
         <p-button label="Broadcast" styleClass="p-button-link" (click)="broadcastMsg = !broadcastMsg"></p-button>
         <!--         <p-button
           label="Create a match"
@@ -29,6 +28,7 @@
             </div>
           </ng-template>
         </p-dropdown>
+        <br>
         <ng-container *ngIf="matchDetails$ | async as matchDetails">
           <br>
           <div class="flex flex-wrap justify-content-center card-container blue-container gap-3">

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { switchMap } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 import { BattingSession, BowlingSession, MatchDetails, Player, Tournament } from 'src/app/@core/models/Player.model';
 import { ScoreService } from 'src/app/@core/services/score/score.service';
 
@@ -61,15 +61,17 @@ export class ScorebookComponent implements OnInit {
     this.scoreService
       .getStartedTournament()
       .pipe(
+        filter(p=>p!=null),
         switchMap((o: Tournament) => {
           this.tournament = o;
           this.stateOptions = [
-            { label: o.team1, value: "team1" },
-            { label: o.team2, value: "team2" },
+            { label: o?.team1, value: "team1" },
+            { label: o?.team2, value: "team2" },
           ];
-          return this.scoreService.getMatchDetails(o.matchNo);
+          return this.scoreService.getMatchDetails(o?.matchNo);
         })
       )
+      .pipe(filter(o=>o!=null))
       .subscribe((match) => {
         match.team1.players = [
           ...this.dummyPlayer,
