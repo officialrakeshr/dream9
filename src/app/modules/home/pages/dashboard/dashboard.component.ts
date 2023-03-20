@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit {
   private _history: Player[][] = [];
 
   roleList = [
-    { value: "", name: "-Select-", inactive: false },
+    // { value: "", name: "-Select-", inactive: false },
     { value: "captain", name: "Captain", inactive: false },
     { value: "vcaptain", name: "Vice-Captain", inactive: false },
     { value: "battinghero", name: "Batting Hero", inactive: false },
@@ -83,6 +83,9 @@ export class DashboardComponent implements OnInit {
   enableReset: any;
 
   saveWarning: boolean = false;
+  subLimitReached: boolean = false;
+  openBonusRolePopup: boolean = false;
+  bonusRoles: any[] = [];
   constructor(
     private filterService: FilterService,
     private messageService: MessageService,
@@ -124,7 +127,10 @@ export class DashboardComponent implements OnInit {
   }
 
   getSubstitution(matchNo:string){
-    return this.scoreService.getSubstitutionStatus(matchNo).pipe(tap(o=>this.enableReset= o.total < 10));
+    return this.scoreService.getSubstitutionStatus(matchNo).pipe(tap(o=>{
+      this.enableReset= o.total < 10;
+      this.subLimitReached = o.total <= o.used;
+    }));
   }
 
   resetToPreviousDay(matchNo:string){
@@ -225,6 +231,9 @@ export class DashboardComponent implements OnInit {
 
     if (confirm && this.validations(data)) {
       data.roleList = this.roleList;
+      let eligibleRole= data.roleList.find(o=>!o.inactive);
+      data.assignedRole = eligibleRole?.value;
+      if(eligibleRole) eligibleRole.inactive = true;
       this.updateSquadHistory(this.selectedPlayers);
       this.selectedPlayers.push(data);
       this.selectedPlayers.sort((a, b) => {
@@ -447,7 +456,7 @@ export class DashboardComponent implements OnInit {
         item.name +
         "' with '" +
         copyRow.name +
-        "' ?"
+        "' ? "+  (this.subLimitReached ? "( This substitution will cost you 25points from your total points. )" :'')
     );
     if (c) {
       this.selectedPlayers.splice(this.substituteIndex, 1);
@@ -508,13 +517,35 @@ export class DashboardComponent implements OnInit {
       });
       this.scoreService.updateSubstitutionsAndConfig(data).subscribe((o) => {
         if (o) {
-          this.showMessage("success","Block","Done.");
+          this.showMessage("success","","Done.");
           this.substititions$ = this.getSubstitution(this.matchNo);
         } 
       });
     }
   }
-
+  assignBonusRoles(){
+    this.openBonusRolePopup = true;
+    this.bonusRoles = [];
+    this.bonusRoles.push({role: "Captain", value: "captain" , playerList: this.selectedPlayers , selectedPlayer : this.selectedPlayers.find(o=>o.assignedRole == "captain")?.id});
+    this.bonusRoles.push({role: "Vice captain", value: "vcaptain", playerList: this.selectedPlayers, selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "vcaptain")?.id});
+    this.bonusRoles.push({role: "Batting hero", value: "battinghero", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "battinghero")?.id});
+    this.bonusRoles.push({role: "Bowling hero", value: "bowlinghero", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "bowlinghero")?.id});
+  }
+  changeRole(role: any){
+    let selectedPlayerIndex = this.selectedPlayers.findIndex(o=>o.id == role.selectedPlayer)
+    let curRolePlayerIndex = this.selectedPlayers.findIndex(o=>o.assignedRole == role.value);
+    if(selectedPlayerIndex!=-1 && curRolePlayerIndex!= -1){
+      let curPlayerRole = this.selectedPlayers[curRolePlayerIndex].assignedRole;
+      this.selectedPlayers[curRolePlayerIndex].assignedRole = this.selectedPlayers[selectedPlayerIndex].assignedRole;
+      this.selectedPlayers[selectedPlayerIndex].assignedRole = curPlayerRole;
+      this.bonusRoles = [];
+    this.bonusRoles.push({role: "Captain", value: "captain" , playerList: this.selectedPlayers , selectedPlayer : this.selectedPlayers.find(o=>o.assignedRole == "captain")?.id});
+    this.bonusRoles.push({role: "Vice captain", value: "vcaptain", playerList: this.selectedPlayers, selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "vcaptain")?.id});
+    this.bonusRoles.push({role: "Batting hero", value: "battinghero", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "battinghero")?.id});
+    this.bonusRoles.push({role: "Bowling hero", value: "bowlinghero", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "bowlinghero")?.id});
+    }
+    
+  }
   canDeactivate() {
     return false;
   }

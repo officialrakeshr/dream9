@@ -4,45 +4,38 @@
       <div class="match-det">
         Match Date: {{ lockTime | date : "dd-MMMM-yyyy h:mm a" }}
         <br />
-        <ng-container  *ngIf="countDownTime$ | async as date">
-        <div id="happyNewYear-div">
-          <div>
-            <span class="days">{{ date[0] }}</span>
-            <div class="smalltext">Days</div>
+        <ng-container *ngIf="countDownTime$ | async as date">
+          <div id="happyNewYear-div">
+            <div>
+              <span class="days">{{ date[0] }}</span>
+              <div class="smalltext">Days</div>
+            </div>
+            <div>
+              <span class="hours">{{ date[1] }}</span>
+              <div class="smalltext">Hours</div>
+            </div>
+            <div>
+              <span class="minutes">{{ date[2] }}</span>
+              <div class="smalltext">Minutes</div>
+            </div>
+            <div>
+              <span class="seconds">{{ date[3] }}</span>
+              <div class="smalltext">Seconds</div>
+            </div>
           </div>
-          <div>
-            <span class="hours">{{ date[1] }}</span>
-            <div class="smalltext">Hours</div>
-          </div>
-          <div>
-            <span class="minutes">{{ date[2] }}</span>
-            <div class="smalltext">Minutes</div>
-          </div>
-          <div>
-            <span class="seconds">{{ date[3] }}</span>
-            <div class="smalltext">Seconds</div>
-          </div>
-        </div>
-        <br>
-        <span *ngIf="saveWarning" style="color:red"><b>Please save your team changes before the timer runs out. Only {{ date[3] }} seconds remaining.</b></span>
-       </ng-container>
+          <br>
+          <span *ngIf="saveWarning" style="color:red"><b>Please save your team changes before the timer runs out. Only
+              {{ date[3] }} seconds remaining.</b></span>
+        </ng-container>
       </div>
     </p-card>
   </div>
   <div class="col-12 md:col-6 lg:col-6">
     <p-card header="Team Summary">
-      <span
-        ><img
-          class="team-img"
-          [src]="'./assets/images/team_logos/' + tournament.team1 + '.png'"
-          width="50"
-        />&nbsp;<b>{{ tournament.team1 }}</b> vs
-        <img
-          class="team-img"
-          [src]="'./assets/images/team_logos/' + tournament.team2 + '.png'"
-          width="50"
-        />&nbsp;<b>{{ tournament.team2 }}</b></span
-      >
+      <span><img class="team-img" [src]="'./assets/images/team_logos/' + tournament.team1 + '.png'"
+          width="50" />&nbsp;<b>{{ tournament.team1 }}</b> vs
+        <img class="team-img" [src]="'./assets/images/team_logos/' + tournament.team2 + '.png'" width="50" />&nbsp;<b>{{
+          tournament.team2 }}</b></span>
       <table class="team-summary-table">
         <tbody>
           <tr class="team-summary-tr">
@@ -52,7 +45,7 @@
               {{ teamSize == teamSizeLimit ? " &#10003;" : "" }}
             </td>
           </tr>
-          <tr class="team-summary-tr">
+          <!-- <tr class="team-summary-tr">
             <td>Captain</td>
             <td>{{ captainCount }} / {{ captainCountLimit }}</td>
             <td class="checkbox">
@@ -79,7 +72,7 @@
             <td class="checkbox">
               {{ bowlingHeroCount == bowlingHeroLimit ? " &#10003;" : "" }}
             </td>
-          </tr>
+          </tr> -->
           <tr class="team-summary-tr" *ngIf="substititions$ | async as sub">
             <td>Substitutions</td>
             <td>
@@ -103,39 +96,19 @@
 <div class="grid">
   <div class="col" *ngIf="!(teamSize == teamSizeLimit)">
     <p-card header="Available Players">
-      <p-table
-        #dt2
-        [columns]="cols"
-        [value]="players"
-        responsiveLayout="scroll"
-        dataKey="Player"
-        [rows]="10"
-        [showCurrentPageReport]="true"
-        [rowsPerPageOptions]="[10, 25, 50]"
-        styleClass="p-datatable-sm p-datatable-gridlines"
-        [paginator]="true"
+      <p-table #dt2 [columns]="cols" [value]="players" responsiveLayout="scroll" dataKey="Player" [rows]="10"
+        [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
+        styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [globalFilterFields]="['name', 'team']"
-      >
+        [globalFilterFields]="['name', 'team']">
         <ng-template pTemplate="caption">
           <div class="p-d-flex">
-            <button
-              pButton
-              label="Clear"
-              class="p-button-outlined"
-              icon="pi pi-filter-slash"
-              (click)="dt2.clear(); search.value = ''"
-            ></button
-            >&nbsp;
+            <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+              (click)="dt2.clear(); search.value = ''"></button>&nbsp;
             <span class="p-input-icon-left p-ml-auto">
               <i class="pi pi-search"></i>
-              <input
-                pInputText
-                #search
-                type="text"
-                (input)="dt2.filterGlobal(search.value, 'contains')"
-                placeholder="Search keyword"
-              />
+              <input pInputText #search type="text" (input)="dt2.filterGlobal(search.value, 'contains')"
+                placeholder="Search keyword" />
             </span>
           </div>
         </ng-template>
@@ -144,21 +117,12 @@
             <th *ngFor="let col of columns">
               <div class="p-d-flex p-jc-between p-ai-center">
                 {{ col.header }}
-                <p-columnFilter
-                  type="text"
-                  [field]="col.header"
-                  display="menu"
-                ></p-columnFilter>
+                <p-columnFilter type="text" [field]="col.header" display="menu"></p-columnFilter>
               </div>
             </th>
           </tr>
         </ng-template>
-        <ng-template
-          pTemplate="body"
-          let-rowData
-          let-column="columns"
-          let-rowIndex="rowIndex"
-        >
+        <ng-template pTemplate="body" let-rowData let-column="columns" let-rowIndex="rowIndex">
           <tr (click)="selectPlayer(rowData, rowIndex)">
             <td *ngFor="let col of column">
               <!-- <div *ngIf="col.field=='Team'"><img width="50" alt="{{rowData[col.field]}}roundbig.png" src="../../../../../assets/images/team_logos/{{rowData[col.field]}}roundbig.png"/></div> -->
@@ -171,45 +135,27 @@
   </div>
   <div class="col">
     <p-card header="Your Fantastic 12 Players">
-      <p-table
-        #dt1
-        [value]="selectedPlayers"
-        dataKey="Player"
-        [rows]="12"
-        [showCurrentPageReport]="true"
-        [rowsPerPageOptions]="[5, 12]"
-        styleClass="p-datatable-sm p-datatable-gridlines"
-        [paginator]="true"
+      <p-table #dt1 [value]="selectedPlayers" dataKey="Player" [rows]="12" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[5, 12]" styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [globalFilterFields]="['name', 'team']"
-      >
+        [globalFilterFields]="['name', 'team']">
         <ng-template pTemplate="caption">
           <div class="p-d-flex">
-            <button
-              pButton
-              label="Clear"
-              class="p-button-outlined"
-              icon="pi pi-filter-slash"
-              (click)="dt1.clear(); search.value = ''"
-            ></button
-            >&nbsp;
+            <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+              (click)="dt1.clear(); search.value = ''"></button>&nbsp;
             <span class="p-input-icon-left p-ml-auto">
               <i class="pi pi-search"></i>
-              <input
-                pInputText
-                #search
-                type="text"
-                (input)="dt1.filterGlobal(search.value, 'contains')"
-                placeholder="Search keyword"
-              />
+              <input pInputText #search type="text" (input)="dt1.filterGlobal(search.value, 'contains')"
+                placeholder="Search keyword" />
             </span>
           </div>
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
             <th>Player</th>
-            <th>Role</th>
-            <th *ngIf="!(selectedPlayers.length == 0 || roleCount != 12)">
+            <th>Team</th>
+            <!-- <th>Role</th> -->
+            <th *ngIf="(selectedPlayers.length == 12 )">
               Action
             </th>
           </tr>
@@ -217,8 +163,9 @@
         <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
           <tr>
             <td>
-              {{ rowData["name"] }}
+              {{ rowData["name"] }}&nbsp;<b>{{rowData["assignedRole"]=='captain' ? "(C)" : (rowData["assignedRole"]=='vcaptain' ? "(VC)" : (rowData["assignedRole"]=='battinghero' ? "(Bat-Hero)" : (rowData["assignedRole"]=='bowlinghero' ? "(Bowl-Hero)" : "")) )}}</b>
             </td>
+            <td>{{ rowData["team"] }}</td>
             <!--  <td pEditableColumn>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
@@ -231,8 +178,8 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td> -->
-            <td>
-              <p-dropdown
+            <!-- <td>
+              <p-dropdown [disabled]="true"
                 [options]="rowData.roleList"
                 [(ngModel)]="rowData.assignedRole"
                 (onClick)="processDropDown(rowData.roleList)"
@@ -241,78 +188,64 @@
                 optionValue="value"
                 [style]="{ width: '100%' }"
               ></p-dropdown>
-            </td>
-            <td *ngIf="!(selectedPlayers.length == 0 || roleCount != 12)">
-              <p-button
-                label="Substitute"
-                [disabled]="selectedPlayers.length == 0 || roleCount != 12"
-                styleClass="p-button-link"
+            </td> -->
+            <td *ngIf="(selectedPlayers.length ==  12)">
+              <p-button label="Substitute" [disabled]="!(selectedPlayers.length ==  12)" styleClass="p-button-link"
                 (click)="
-                  !(selectedPlayers.length == 0 || roleCount != 12)
+                  (selectedPlayers.length ==  12)
                     ? substitute(rowIndex)
                     : null
-                "
-              ></p-button>
+                "></p-button>
             </td>
           </tr>
         </ng-template>
       </p-table>
       <br />
-      <button
-        [disabled]="selectedPlayers.length == 0 || roleCount != 12"
-        pButton
-        pRipple
-        type="button"
-        class="long_btn"
-        (click)="submitXI(selectedPlayers)"
-      >
-        Submit</button
-      ><br /><br />
-      <button pButton pRipple type="button" class="long_btn" *ngIf="enableReset" (click)="resetToPreviousDay(matchNo)">Reset</button
-      ><br /><br />
+      <button [disabled]="selectedPlayers.length != 12" pButton pRipple type="button" class="long_btn"
+        (click)="assignBonusRoles()">
+        Choose Roles & Continue</button><br /><br />
+      <button pButton pRipple type="button" class="long_btn" *ngIf="enableReset"
+        (click)="resetToPreviousDay(matchNo)">Reset</button><br /><br />
       <!-- <button  pButton pRipple type="button" class="long_btn" [disabled]="checkUndo()"
                 (click)="undo()">Undo</button> -->
     </p-card>
   </div>
 </div>
 <p-toast></p-toast>
-<p-dialog
-  header="Available Players: Substitution"
-  [(visible)]="substitutePopup"
->
-  <p-table
-    #dt2
-    [columns]="cols"
-    [value]="players"
-    responsiveLayout="scroll"
-    dataKey="Player"
-    [rows]="10"
-    [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[10, 25, 50]"
-    styleClass="p-datatable-sm p-datatable-gridlines"
-    [paginator]="true"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    [globalFilterFields]="['name', 'team']"
-  >
+<p-dialog header="Pick Roles" [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false"
+  [(visible)]="openBonusRolePopup">
+  <p-table [value]="bonusRoles">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Role</th>
+        <th>Player</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-role>
+      <tr>
+        <td>{{role.role}}</td>
+        <td> <p-dropdown appendTo="body" [options]="role.playerList" [(ngModel)]="role.selectedPlayer"
+            optionDisabled="!active" optionLabel="name" optionValue="id" (onChange)="changeRole(role)"
+            [style]="{ width: '100%' }"></p-dropdown></td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <button pButton pRipple type="button" class="long_btn" (click)="openBonusRolePopup=false;submitXI(selectedPlayers)">
+    Continue</button>
+</p-dialog>
+<p-dialog header="Available Players: Substitution" [(visible)]="substitutePopup">
+  <p-table #dt2 [columns]="cols" [value]="players" responsiveLayout="scroll" dataKey="Player" [rows]="10"
+    [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" styleClass="p-datatable-sm p-datatable-gridlines"
+    [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [globalFilterFields]="['name', 'team']">
     <ng-template pTemplate="caption">
       <div class="p-d-flex">
-        <button
-          pButton
-          label="Clear"
-          class="p-button-outlined"
-          icon="pi pi-filter-slash"
-          (click)="dt2.clear(); search.value = ''"
-        ></button
-        >&nbsp;
+        <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+          (click)="dt2.clear(); search.value = ''"></button>&nbsp;
         <span class="p-input-icon-left p-ml-auto">
           <i class="pi pi-search"></i>
-          <input
-            pInputText
-            #search
-            type="text"
-            (input)="dt2.filterGlobal(search.value, 'contains')"
-            placeholder="Search keyword"
-          />
+          <input pInputText #search type="text" (input)="dt2.filterGlobal(search.value, 'contains')"
+            placeholder="Search keyword" />
         </span>
       </div>
     </ng-template>
@@ -321,21 +254,12 @@
         <th *ngFor="let col of columns">
           <div class="p-d-flex p-jc-between p-ai-center">
             {{ col.header }}
-            <p-columnFilter
-              type="text"
-              [field]="col.header"
-              display="menu"
-            ></p-columnFilter>
+            <p-columnFilter type="text" [field]="col.header" display="menu"></p-columnFilter>
           </div>
         </th>
       </tr>
     </ng-template>
-    <ng-template
-      pTemplate="body"
-      let-rowData
-      let-column="columns"
-      let-rowIndex="rowIndex"
-    >
+    <ng-template pTemplate="body" let-rowData let-column="columns" let-rowIndex="rowIndex">
       <tr (click)="substitutePlayer(rowData, rowIndex)">
         <td *ngFor="let col of column">
           <!-- <div *ngIf="col.field=='Team'"><img width="50" alt="{{rowData[col.field]}}roundbig.png" src="../../../../../assets/images/team_logos/{{rowData[col.field]}}roundbig.png"/></div> -->
