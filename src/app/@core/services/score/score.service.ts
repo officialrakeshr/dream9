@@ -50,6 +50,14 @@ export class ScoreService {
    );
   }
 
+  public abandonMatch(tournament: Tournament):Observable<Tournament> {
+    let  url = `${environment.baseUrl}/cricket/abandonMatch`
+    return this.http.put<any>(url,tournament)
+    .pipe(
+      tap(() => alert("Done.")),
+   );
+  }
+
   constructor(private http:HttpClient) { }
   public getPlayerList(team?:string):Observable<Player[]>{
     let url = ''
@@ -128,5 +136,9 @@ export class ScoreService {
 
   public broadcastMessage(message:string) {
     return this.http.get<any>(`${environment.baseUrl}/websocket/pushMessage?msg=${message}`);
+  }
+
+  public reloadPlayerScreen() {
+    return this.http.get<any>(`${environment.baseUrl}/websocket/reloadPage`);
   }
 }

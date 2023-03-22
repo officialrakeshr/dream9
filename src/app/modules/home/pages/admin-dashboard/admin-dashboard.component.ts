@@ -84,7 +84,7 @@ export class AdminDashboardComponent implements OnInit {
       selectedMatch = { ...selectedMatch, enable11: true };
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
         this.sendMessage(`Fantastic 12 enabled for the match no: ${selectedMatch.matchNo}`);
-        window.location.reload();
+        this.reloadUser();
       });
     }
     
@@ -95,7 +95,7 @@ export class AdminDashboardComponent implements OnInit {
       selectedMatch = { ...selectedMatch, enable11: false };
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
         this.sendMessage(`Fantastic 12 closed for the match no: ${selectedMatch.matchNo}`);
-        window.location.reload();
+        this.reloadUser();
       });
     }
   }
@@ -106,8 +106,29 @@ export class AdminDashboardComponent implements OnInit {
       selectedMatch = { ...selectedMatch, enable11: false, started: true };
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
         this.sendMessage(`Match ${selectedMatch.matchNo} started!`);
-        window.location.reload();
+        this.reloadUser();
       });
+    }
+  }
+
+  abandonMatch(selectedMatch: Tournament) {
+    let conf= confirm(`Do yo want to abandon this match ${selectedMatch.matchNo}?. This will close Fantastic12 session of this match.`)
+    if(conf){
+      selectedMatch = { ...selectedMatch, enable11: false, started: false , completed: true };
+      this.scoreService.abandonMatch(selectedMatch).subscribe((o) => {
+        this.sendMessage(`Match ${selectedMatch.matchNo} abandoned!`);
+        this.reloadUser();
+      });
+    }
+  }
+  reloadUser(propt?:boolean){
+    if(propt){
+      let conf= confirm(`Do yo want to reload user screens ?`)
+      if(conf==true){
+        this.scoreService.reloadPlayerScreen().subscribe();
+      }
+    }else{
+      this.scoreService.reloadPlayerScreen().subscribe();
     }
   }
 
@@ -202,8 +223,7 @@ export class AdminDashboardComponent implements OnInit {
     this.scoreService.broadcastMessage(message).subscribe((o) => {
       if(o>1){
         this.pushMessage = ""
-        this.showMessage("success","","Message Broadcasted successfully.");
-      }else this.showMessage("error","","No active users.");
+      }
     })
   }
 

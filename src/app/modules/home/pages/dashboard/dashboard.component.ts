@@ -142,7 +142,9 @@ export class DashboardComponent implements OnInit {
     let matchNo = this.route.snapshot.paramMap.get("matchNo") || "1";
     this.matchNo = matchNo;
     this.substititions$ = this.getSubstitution(matchNo);
-    this.scoreService.getMatchDetailsByMatchNo(matchNo).subscribe((o) => {
+    this.scoreService.getMatchDetailsByMatchNo(matchNo).pipe(tap(p=>{
+      if(!p.enable11) this.router.navigate(['./home/fixture']);
+    })).subscribe((o) => {
       this.tournament = o;
       this.lockTime = moment(`${o.matchdate}<>${o.matchtime}`,"MMMM D, YYYY<>h:mm A", true).toDate();
       
@@ -434,14 +436,14 @@ export class DashboardComponent implements OnInit {
     });
     this.scoreService.updateDream9Details(data).subscribe((o) => {
       if (o) {
-        this.showMessage("success","Block","Done.");
+        this.showMessage("success","","Done.");
         this.substititions$ = this.getSubstitution(this.matchNo);
       }
     });
   }
   substitute(rowIndex: number) {
     if(this.selectedPlayers.some(o=> o.assignedRole == "")){
-      this.showMessage("error","Block","You can't substitute a player. Please assign a role first.");
+      this.showMessage("error","","You can't substitute a player. Please assign a role first.");
       return;
     }
     this.substitutePopup = true;
@@ -547,6 +549,6 @@ export class DashboardComponent implements OnInit {
     
   }
   canDeactivate() {
-    return false;
+    return true;
   }
 }

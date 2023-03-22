@@ -17,6 +17,7 @@ export interface Tournament {
     matchdate: string;
     venue: string;
     matchtime:string;
+    abandoned:boolean;
 }
 
 export interface Player {

@@ -8,6 +8,7 @@
           (click)="rankModall = !rankModall"></p-button>
         <p-button label="Score Book" styleClass="p-button-link" [routerLink]="['../scorebook']"></p-button>
         <p-button label="Broadcast" styleClass="p-button-link" (click)="broadcastMsg = !broadcastMsg"></p-button>
+        <p-button label="Reload Users" styleClass="p-button-link" (click)="reloadUser(true)"></p-button>
         <!--         <p-button
           label="Create a match"
           styleClass="p-button-link"
@@ -118,6 +119,11 @@
           <button pButton pRipple type="button" label="Start Match"
             *ngIf="!selectedMatch.completed && !selectedMatch.started" (click)="startMatch(selectedMatch)"
             class="p-button-outlined"></button>
+          <button pButton pRipple type="button" *ngIf="!selectedMatch.started && !selectedMatch.abandoned" label="Abandon Match"
+           (click)="abandonMatch(selectedMatch)"
+          class="p-button-outlined"></button>
+
+         
         </ng-container>
       </div>
     </p-card>

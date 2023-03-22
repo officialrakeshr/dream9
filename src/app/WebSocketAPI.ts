@@ -5,7 +5,7 @@ import { WebsocketComponent } from './websocket/websocket.component';
 
 export class WebSocketAPI {
     webSocketEndPoint: string = `${environment.baseUrl}/websocket/ws`;
-    topic1: string = "/topic/greetings";
+    topic1: string = "/topic/reloadPage";
     topic2: string = "/topic/pushMessage";
     stompClient: any;
     websocketComponent: WebsocketComponent;
@@ -52,7 +52,12 @@ export class WebSocketAPI {
     }
 
     onMessageReceived(message:any) {
-        console.log("Message Recieved from Server 1:: " + message);
+        if(sessionStorage.getItem('role')==="player"){
+            alert("Admin requested a  page refresh. Your screen will be refreshed.");
+            window.location.reload();
+        }else{
+            window.location.reload();
+        }
     }
     onMessageReceived2(message:any) {
         console.log(message.body)
