@@ -26,10 +26,6 @@ export class RankComponent implements OnInit {
   constructor(private scoreService:ScoreService,public store: Store<AppState>,private messageService: MessageService,) { }
 
   ngOnInit(): void {
-    this.scoreService.userMatchDetails().subscribe((o)=>{
-      this.tournament = o;
-    })
-    
     this.refreshScore();
     (this.store.select(selectMsg) as Observable<any>).subscribe(o=>{
       if(o["msg"] == '' || o["read"]==true) return;

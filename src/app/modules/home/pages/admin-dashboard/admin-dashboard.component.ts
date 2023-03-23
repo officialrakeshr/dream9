@@ -79,29 +79,29 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   enableDream9(selectedMatch: Tournament) {
-    let conf= confirm(`Do yo want to enable Fantastic 12 for this match ${selectedMatch.matchNo}?`)
+    let conf= confirm(`Do yo want to enable "Fantastic 12" for this match ${selectedMatch.matchNo}?`)
     if(conf){
       selectedMatch = { ...selectedMatch, enable11: true };
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
-        this.sendMessage(`Fantastic 12 enabled for the match no: ${selectedMatch.matchNo}`);
+        this.sendMessage(`"Fantastic 12" enabled for the match no: ${selectedMatch.matchNo}`);
         this.reloadUser();
       });
     }
     
   }
   closeDream9(selectedMatch: Tournament) {
-    let conf= confirm(`Do yo want to close Fantastic 12 for this match ${selectedMatch.matchNo}?`)
+    let conf= confirm(`Do yo want to close "Fantastic 12" for this match ${selectedMatch.matchNo}?`)
     if(conf){
       selectedMatch = { ...selectedMatch, enable11: false };
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
-        this.sendMessage(`Fantastic 12 closed for the match no: ${selectedMatch.matchNo}`);
+        this.sendMessage(`"Fantastic 12" closed for the match no: ${selectedMatch.matchNo}`);
         this.reloadUser();
       });
     }
   }
 
   startMatch(selectedMatch: Tournament) {
-    let conf= confirm(`Do yo want to start this match ${selectedMatch.matchNo}?. This will close Fantastic12 session of this match.`)
+    let conf= confirm(`Do yo want to start this match ${selectedMatch.matchNo}?. This will close "Fantastic12" session of this match.`)
     if(conf){
       selectedMatch = { ...selectedMatch, enable11: false, started: true };
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {

@@ -549,6 +549,6 @@ export class DashboardComponent implements OnInit {
     
   }
   canDeactivate() {
-    return true;
+    return true
   }
 }

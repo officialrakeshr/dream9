@@ -36,7 +36,11 @@ export class FixtureComponent implements OnInit {
   }
   goToPlayerDashboard(matchNo:string,enable11:boolean): void { 
     if(!enable11){
-      alert("This match is not enabled");
+      this.showMessage(
+        "Error",
+        "",
+        "This match is not enabled."
+      );
       return;
     }
     this.router.navigateByUrl(`/home/playerDashboard/${matchNo}`)
