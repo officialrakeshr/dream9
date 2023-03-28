@@ -10,7 +10,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { WebSocketAPI } from './WebSocketAPI';
 import { WebsocketComponent } from './websocket/websocket.component';
 import { MessageService } from 'primeng/api';
+import { UserService } from './@core/services/user/user.service';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({checkProperties:true})
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -26,18 +29,18 @@ export class AppComponent implements OnDestroy {
     this.user = o;
   }));
   
-  constructor(private store: Store<AppState>,private route: ActivatedRoute, private router: Router,private messageService: MessageService,) {
+  constructor(private store: Store<AppState>,private route: ActivatedRoute, private router: Router,private messageService: MessageService,private api: UserService) {
     window.addEventListener("beforeunload", (event) => {
       event.preventDefault();
       event.returnValue = "Unsaved modifications";
       return event;
    });
    if(environment.production){
-    // DisableDevtool({disableMenu:true,clearLog:true,ondevtoolopen:()=>{
-    //   window.location.assign(
-    //     "https://en.wikipedia.org/wiki/Anonymous_(hacker_group)"
-    //   );
-    //  }})
+    DisableDevtool({disableMenu:true,clearLog:true,ondevtoolopen:()=>{
+      this.api.attemptHack().subscribe(o=>{
+        alert("This is a prohibited action. Hacking actions will be logged and take necessary actions against the user.");
+      })
+     }})
    }
    this.webSocketAPI = new WebSocketAPI(new WebsocketComponent(store));
    this.connect();
