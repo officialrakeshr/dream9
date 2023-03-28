@@ -30,17 +30,17 @@ export class AppComponent implements OnDestroy {
   }));
   
   constructor(private store: Store<AppState>,private route: ActivatedRoute, private router: Router,private messageService: MessageService,private api: UserService) {
-    window.addEventListener("beforeunload", (event) => {
-      event.preventDefault();
-      event.returnValue = "Unsaved modifications";
-      return event;
-   });
    if(environment.production){
     DisableDevtool({disableMenu:true,clearLog:true,ondevtoolopen:()=>{
-      this.api.attemptHack().subscribe(o=>{
+      if(this.user && this.user.role!=null){
+        this.api.attemptHack().subscribe(o=>{
+          alert("This is a prohibited action. Hacking actions will be logged and take necessary actions against the user.");
+          window.location.assign("https://en.wikipedia.org/wiki/Anonymous_(hacker_group)")
+        })
+      }else {
         alert("This is a prohibited action. Hacking actions will be logged and take necessary actions against the user.");
         window.location.assign("https://en.wikipedia.org/wiki/Anonymous_(hacker_group)")
-      })
+      }
      }})
    }
    this.webSocketAPI = new WebSocketAPI(new WebsocketComponent(store));
