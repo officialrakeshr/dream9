@@ -35,11 +35,13 @@ export class AppComponent implements OnDestroy {
       event.returnValue = "Unsaved modifications";
       return event;
    });
-   DisableDevtool({disableMenu:true,clearLog:true,ondevtoolopen:()=>{
-    this.api.attemptHack().subscribe(o=>{
-      alert("This is a prohibited action. Hacking actions will be logged and take necessary actions against the user.");
-    })
-   }})
+   if(environment.production){
+    DisableDevtool({disableMenu:true,clearLog:true,ondevtoolopen:()=>{
+      this.api.attemptHack().subscribe(o=>{
+        alert("This is a prohibited action. Hacking actions will be logged and take necessary actions against the user.");
+      })
+     }})
+   }
    this.webSocketAPI = new WebSocketAPI(new WebsocketComponent(store));
    this.connect();
   }
