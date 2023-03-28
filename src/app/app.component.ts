@@ -39,6 +39,7 @@ export class AppComponent implements OnDestroy {
     DisableDevtool({disableMenu:true,clearLog:true,ondevtoolopen:()=>{
       this.api.attemptHack().subscribe(o=>{
         alert("This is a prohibited action. Hacking actions will be logged and take necessary actions against the user.");
+        window.location.assign("https://en.wikipedia.org/wiki/Anonymous_(hacker_group)")
       })
      }})
    }
