@@ -1,6 +1,6 @@
 <div class="grid">
   <div class="col">
-    <p-card header="Game Fixture" *ngIf="tournaments$ | async as tournaments">
+    <p-card header="Click the Green-Top to start managing your team." *ngIf="tournaments$ | async as tournaments">
 <!--       <p-table
         #dt1
         [value]="tournaments"
@@ -53,6 +53,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
           <tr
+            style="cursor: pointer;"
             [ngClass]="{ enable11: rowData['enable11'] }"
             (click)="
               goToPlayerDashboard(rowData['matchNo'], rowData['enable11'])
