@@ -5,7 +5,7 @@
         Match Date: {{ lockTime | date : "dd-MMMM-yyyy h:mm a" }}
         <br />
         <ng-container *ngIf="countDownTime$ | async as date">
-          <div id="happyNewYear-div">
+          <div id="happyNewYear-div" *ngIf="date[2]>-1 || date[3] > -1 || date[1]> -1 || date[0]> -1">
             <div>
               <span class="days">{{ date[0] }}</span>
               <div class="smalltext">Days</div>
