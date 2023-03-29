@@ -75,9 +75,12 @@
           </tr> -->
           <tr class="team-summary-tr" *ngIf="substititions$ | async as sub">
             <td>Substitutions</td>
-            <td>
-              {{ sub.used }} / {{ sub.total > 10 ? "Unlimted" : sub.total }}
+            <td *ngIf="sub.total > 10">
+              Unlimited
             </td>
+            <td *ngIf="sub.total < 10">
+              Used: <b>{{ sub.used }}</b> - ( Free: <b>{{ sub.total }}</b>, Extra: <b>{{sub.used-sub.total}}</b> )
+             </td>
             <td class="checkbox">
               {{ sub.total >= sub.used ? " &#10003;" : "" }}
             </td>

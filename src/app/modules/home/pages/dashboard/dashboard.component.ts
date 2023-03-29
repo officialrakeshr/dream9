@@ -85,6 +85,7 @@ export class DashboardComponent implements OnInit {
   subLimitReached: boolean = false;
   openBonusRolePopup: boolean = false;
   bonusRoles: any[] = [];
+  totalNegPoints: number = 0;
   constructor(
     private filterService: FilterService,
     private messageService: MessageService,
@@ -129,6 +130,7 @@ export class DashboardComponent implements OnInit {
     return this.scoreService.getSubstitutionStatus(matchNo).pipe(tap(o=>{
       this.enableReset= o.total < 10;
       this.subLimitReached = o.total <= o.used;
+      this.totalNegPoints = (o.total - o.used-1)*-25;
     }));
   }
 
@@ -457,7 +459,7 @@ export class DashboardComponent implements OnInit {
         item.name +
         "' with '" +
         copyRow.name +
-        "' ? "+  (this.subLimitReached ? "( This substitution will cost you 25points from your total points. )" :'')
+        "' ? "+  (this.subLimitReached ?`. This substitution will cost you 25 points. Total ${this.totalNegPoints} points ( ${this.totalNegPoints/25} extra substitution x 25) will be reduced during the match score caculation.` :'')
     );
     if (c) {
       this.selectedPlayers.splice(this.substituteIndex, 1);
