@@ -155,7 +155,9 @@
 </p-dialog>
 
 <p-dialog header="Rank" [(visible)]="rankModall" [modal]="true">
-  <p-table responsiveLayout="scroll" [value]="rank" styleClass="p-datatable-gridlines">
+  <p-table responsiveLayout="scroll" [value]="rank" [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
+  styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="true"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
     <ng-template pTemplate="caption">
       League Player Ranking <button id="refreshbtn" (click)="refreshScore()">Refresh Score</button>
     </ng-template>
