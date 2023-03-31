@@ -24,8 +24,8 @@
             </div>
           </div>
           <br>
-          <span *ngIf="saveWarning" style="color:red"><b>Please save your team changes before the timer runs out. Only
-              {{ date[3] }} seconds remaining.</b></span>
+          <!-- <span *ngIf="saveWarning" style="color:red"><b>Please save your team changes before the timer runs out. Only
+              {{ date[3] }} seconds remaining.</b></span> -->
         </ng-container>
       </div>
     </p-card>
@@ -79,7 +79,7 @@
               Unlimited
             </td>
             <td *ngIf="sub.total < 10">
-              Used: <b>{{ sub.used }}</b> - ( Free: <b>{{ sub.total }}</b>, Extra: <b>{{sub.used-sub.total}}</b> )
+              Used: <b>{{ sub.used }}</b> - ( Free: <b>{{ sub.total }}</b>, Extra: <b>{{sub.used-sub.total>0 ? sub.used-sub.total : 0}}</b> )
              </td>
             <td class="checkbox">
               {{ sub.total >= sub.used ? " &#10003;" : "" }}
