@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
+import * as _ from 'lodash';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
 import { Observable, timer } from 'rxjs';
@@ -41,13 +42,21 @@ export class RankComponent implements OnInit {
   refreshScore(){
     let i=0;
     this.scoreService.findAllRank().subscribe((o:Points[])=>{
-      o.sort((a,b)=>{
+      let a = o.sort((a,b)=>{
         return b.total - a.total;
-      }).map((p:Points)=>{
-        p.rank_no = ++i;
-        return p;
       })
-      this.rank = o;
+      let groupByPoints = _.groupBy(a, "total");
+      let temp: Points[] =[];
+      for (const key of _.keys(groupByPoints).sort((a,b)=>Number(b)-Number(a))) {
+        if (groupByPoints.hasOwnProperty(key)) {
+          let rank = ++i;
+          groupByPoints[key].forEach(o=>{
+            o.rank_no = rank;
+            temp.push(o);
+          })
+        }
+      }
+      this.rank = temp;
       this.lastUpdatedTime = moment().format("DD-MM-YYYY HH:mm:ss A")
     })
   }

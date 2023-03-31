@@ -29,16 +29,18 @@ export class AppComponent implements OnDestroy {
     this.user = o;
   }));
   
-  constructor(private store: Store<AppState>,private route: ActivatedRoute, private router: Router,private messageService: MessageService,private api: UserService) {
+  constructor(private store: Store<AppState>,private router: Router,private api: UserService) {
    if(environment.production){
     DisableDevtool({disableMenu:true,clearLog:true,ondevtoolopen:()=>{
-      if(this.user && this.user.role!=null){
-        this.api.attemptHack().subscribe(o=>{
+      if(this.user && this.user.role!=null && this.user.role!=''){
+        this.api.attemptHack().subscribe(()=>{
           alert("This is a prohibited action. Hacking actions will be logged and take necessary actions against the user.");
+          this.disconnect();
           window.location.assign("https://en.wikipedia.org/wiki/Anonymous_(hacker_group)")
         })
       }else {
         alert("This is a prohibited action. Hacking actions will be logged and take necessary actions against the user.");
+        this.disconnect();
         window.location.assign("https://en.wikipedia.org/wiki/Anonymous_(hacker_group)")
       }
      }})
