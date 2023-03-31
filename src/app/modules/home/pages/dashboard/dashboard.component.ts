@@ -135,9 +135,15 @@ export class DashboardComponent implements OnInit {
   }
 
   resetToPreviousDay(matchNo:string){
-    return this.scoreService.resetToPreviousDay(matchNo).subscribe(o=>{
-      window.location.reload();
-    })
+    // confirm
+    let confi = confirm("Are you sure you want to reset to the previous day?");
+    if(confi){
+      return this.scoreService.resetToPreviousDay(matchNo).subscribe(o=>{
+        window.location.reload();
+      })
+    }
+    return null;
+    
   }
   ngOnInit(): void {
     let matchNo = this.route.snapshot.paramMap.get("matchNo") || "1";

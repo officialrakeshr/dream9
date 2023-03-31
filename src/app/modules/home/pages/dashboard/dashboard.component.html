@@ -79,7 +79,7 @@
               Unlimited
             </td>
             <td *ngIf="sub.total < 10">
-              Free Limit: <b>{{sub.total}}</b> ******* Total Used: <b>{{ sub.used }}</b> - (Free: <b>{{ sub.total-sub.used>=0 ? sub.used : sub.total }}</b>, Extra: <b>{{sub.used-sub.total>0 ? sub.used-sub.total : 0}}</b> )
+              Free Limit: <b>{{sub.total}}</b> ** Total Used: <b>{{ sub.used }}</b> - (Free: <b>{{ sub.total-sub.used>=0 ? sub.used : sub.total }}</b>, Extra: <b>{{sub.used-sub.total>0 ? sub.used-sub.total : 0}}</b> )
              </td>
             <td class="checkbox">
               {{ sub.total >= sub.used ? " &#10003;" : "" }}
