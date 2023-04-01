@@ -114,7 +114,7 @@ export class ScorebookComponent implements OnInit {
   }
 
   endInnings(selectedMatch: Tournament) {
-    selectedMatch = { ...selectedMatch, completed: true };
+    selectedMatch = { ...selectedMatch, completed: true, started: false };
     this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
       this.router.navigate(['./home/adminDashboard'])
     });

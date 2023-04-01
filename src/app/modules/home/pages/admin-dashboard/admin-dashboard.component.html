@@ -15,7 +15,7 @@
           (click)="createMatchModal = !createMatchModal"
         ></p-button> -->
         <h5>Match Number : {{selectedMatch? selectedMatch.matchNo : ''}}</h5>
-        <h6 *ngIf="selectedMatch != null">F12_enable: {{selectedMatch? selectedMatch.enable11 : 'NA'}}&nbsp;::&nbsp;Started: {{selectedMatch? selectedMatch.started : 'NA'}}&nbsp;::&nbsp;Completed: {{selectedMatch? selectedMatch.completed : 'NA'}}&nbsp;::&nbsp;Abandoned {{selectedMatch? selectedMatch.abandoned : 'NA'}}</h6>
+        <h6 *ngIf="selectedMatch != null">F12_enable: {{selectedMatch? selectedMatch.enable11 : 'NA'}}&nbsp;::&nbsp;Started: {{selectedMatch? selectedMatch.started : 'NA'}}&nbsp;::&nbsp;Completed: {{selectedMatch? selectedMatch.completed : 'NA'}}&nbsp;::&nbsp;Abandoned: {{selectedMatch? selectedMatch.abandoned : 'NA'}}</h6>
         <p-dropdown [options]="(tournaments$ | async) || []" [(ngModel)]="selectedMatch" #match
           (onChange)="getMatchDetails(match.value)" placeholder="Select a Match" optionLabel="matchNo">
           <ng-template pTemplate="selectedItem">

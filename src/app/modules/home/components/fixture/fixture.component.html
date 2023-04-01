@@ -94,9 +94,21 @@
       </p-table>
       <br />
     </p-card>
-    <p-card header="Match Point Details" *ngIf="yourTeamSetUp$| async as teamsetup">
+    <p-card *ngIf="yourTeamSetUp$| async as teamsetup">
 
-      <p-table [value]="teamsetup">
+      <p-table [value]="teamsetup" #dt
+      [rows]="3" [showCurrentPageReport]="true" [rowsPerPageOptions]="[3,5,10,25,50]"
+      [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [filterDelay]="0" [globalFilterFields]="['matchNo']">
+        <ng-template pTemplate="caption">
+        <div class="table-header">
+          Match Point Details
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" #input (input)="dt.filterGlobal(input.value, 'contains')" placeholder="Match No" />
+            </span>
+        </div>
+        </ng-template>
         <ng-template pTemplate="header">
             <tr>
                 <th>Match No</th>
@@ -112,12 +124,13 @@
                 <th>Player 10(P)</th>
                 <th>Player 11(P)</th>
                 <th>Player 12(P)</th>
+                <th>Extra Sub(P)</th>
                 <th>Total Points</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-car>
             <tr>
-                <td>{{car.matchNo}}</td>
+                <td>Match {{car.matchNo}}</td>
                 <td>{{car.battinghero}}<b>({{car.battingheroPoint}})</b></td>
                 <td>{{car.bowlinghero}}<b>({{car.bowlingheroPoint}})</b></td>
                 <td>{{car.captain}}<b>({{car.captainPoint}})</b></td>
@@ -130,11 +143,12 @@
                 <td>{{car.player10}}<b>({{car.player10Point}})</b></td>
                 <td>{{car.player11}}<b>({{car.player11Point}})</b></td>
                 <td>{{car.player12}}<b>({{car.player12Point}})</b></td>
+                <td><b>{{car.overSubNegativePoints}}</b></td>
                 <td><b>{{car.total}}</b></td>
             </tr>
         </ng-template>
     </p-table>
-    <h3>Total Score : {{totalPoints}}</h3>
+    <h3>Total League Score : {{totalPoints}}</h3>
     </p-card>
   </div>
 </div>

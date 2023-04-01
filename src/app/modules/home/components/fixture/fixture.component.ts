@@ -27,7 +27,10 @@ export class FixtureComponent implements OnInit {
       return o.filter(p=>p.enable11);
     }));
 
-    this.yourTeamSetUp$ = this.scoreService.scoreSplitForPlayers().pipe(tap(o=>{
+    this.yourTeamSetUp$ = this.scoreService.scoreSplitForPlayers().pipe(map(p=>{
+      //sort list by matchno
+      return p.sort((a,b)=>Number(b.matchNo)-Number(a.matchNo));
+    }),tap(o=>{
       this.totalPoints 
       o.forEach(p => {
         this.totalPoints = this.totalPoints + p.total;
