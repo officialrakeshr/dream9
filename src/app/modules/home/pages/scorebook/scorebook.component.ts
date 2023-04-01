@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { filter, switchMap } from 'rxjs';
 import { BattingSession, BowlingSession, MatchDetails, Player, Tournament } from 'src/app/@core/models/Player.model';
@@ -21,6 +21,7 @@ export class ScorebookComponent implements OnInit {
   matchDetails: MatchDetails | undefined;
   tournament: Tournament = {} as any;
   allPlayers: Player[] = [] as any;
+  matchNo = this.route.snapshot.paramMap.get("matchNo") || "1";
   dummyPlayer: Player[] = [
     {
       name: "-Select-",
@@ -29,7 +30,7 @@ export class ScorebookComponent implements OnInit {
       id: null,
     },
   ] as any;
-  constructor(private scoreService: ScoreService, private router: Router) {}
+  constructor(private scoreService: ScoreService, private router: Router,private route: ActivatedRoute,) {}
   yesOrNo = [
     { name: "Yes", value: true },
     { name: "No", value: false },
@@ -59,7 +60,7 @@ export class ScorebookComponent implements OnInit {
       this.bowlingDetailsTeam2.push({ ...dummyBowlerObj });
     }
     this.scoreService
-      .getStartedTournament()
+      .getMatchDetailsByMatchNo(this.matchNo)
       .pipe(
         filter(p=>p!=null),
         switchMap((o: Tournament) => {

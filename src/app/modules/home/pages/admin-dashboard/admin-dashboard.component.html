@@ -2,11 +2,8 @@
   <div class="col-12">
     <p-card header="Match Details">
       <div class="match-det">
-        <p-button label="Enrol Fantastic12 Players" styleClass="p-button-link"
-          (click)="enrolPlayerModal = !enrolPlayerModal"></p-button>
         <p-button label="Player Rank" styleClass="p-button-link"
           (click)="rankModall = !rankModall"></p-button>
-        <p-button label="Score Book" styleClass="p-button-link" [routerLink]="['../scorebook']"></p-button>
         <p-button label="Broadcast" styleClass="p-button-link" (click)="broadcastMsg = !broadcastMsg"></p-button>
         <p-button label="Reload Users" styleClass="p-button-link" (click)="reloadUser(true)"></p-button>
         <!--         <p-button
@@ -33,6 +30,8 @@
         </p-dropdown>
         <br>
         <ng-container *ngIf="matchDetails$ | async as matchDetails">
+          <br>
+          <p-button *ngIf="selectedMatch? selectedMatch.started: false" label="Score Book" styleClass="p-button-link" [routerLink]="['../scorebook',selectedMatch.matchNo]" ></p-button>
           <br>
           <div class="flex flex-wrap justify-content-center card-container blue-container gap-3">
             <p-table [value]="matchDetails.team1.players" styleClass="p-datatable-gridlines">

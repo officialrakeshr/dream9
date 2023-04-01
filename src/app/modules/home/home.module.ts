@@ -25,7 +25,7 @@ import { FixtureComponent } from './components/fixture/fixture.component';
     CoreModule,
     RouterModule.forChild([{ path: 'playerDashboard/:matchNo', component: DashboardComponent , canActivate:[PlayerGuard], canDeactivate:[CanDeactivateGuard] },
     { path: 'adminDashboard', component: AdminDashboardComponent, canActivate:[AdminGuard], canDeactivate:[CanDeactivateGuard] },
-    { path: 'scorebook', component: ScorebookComponent ,canActivate:[AdminGuard] , canDeactivate:[CanDeactivateGuard] },
+    { path: 'scorebook/:matchNo', component: ScorebookComponent ,canActivate:[AdminGuard] , canDeactivate:[CanDeactivateGuard] },
     { path: 'rank', component: RankComponent, canDeactivate:[CanDeactivateGuard]},
     { path: 'fixture', component: FixtureComponent, canActivate:[PlayerGuard], canDeactivate:[CanDeactivateGuard]}]),
   ],
