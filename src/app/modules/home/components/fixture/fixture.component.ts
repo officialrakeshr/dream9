@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { Tournament } from 'src/app/@core/models/Player.model';
+import { Points } from 'src/app/@core/models/points';
 import { AppState } from 'src/app/@core/redux/app.state';
 import { addPushMessage } from 'src/app/@core/redux/login/login.action';
 import { selectMsg } from 'src/app/@core/redux/login/login.selector';
@@ -16,12 +17,21 @@ import { ScoreService } from 'src/app/@core/services/score/score.service';
 })
 export class FixtureComponent implements OnInit {
   tournaments$: Observable<Tournament[]> = null as any;
+  yourTeamSetUp$: Observable<Points[]> = null as any;
+  totalPoints: number = 0;
 
   constructor(private scoreService: ScoreService, private route: ActivatedRoute, private router: Router,public store: Store<AppState>,private messageService: MessageService,) { }
  
   ngOnInit(): void {
     this.tournaments$ = this.scoreService.getTournaments().pipe(map(o=>{
       return o.filter(p=>p.enable11);
+    }));
+
+    this.yourTeamSetUp$ = this.scoreService.scoreSplitForPlayers().pipe(tap(o=>{
+      this.totalPoints 
+      o.forEach(p => {
+        this.totalPoints = this.totalPoints + p.total;
+      })
     }));
 
     (this.store.select(selectMsg) as Observable<any>).subscribe(o=>{

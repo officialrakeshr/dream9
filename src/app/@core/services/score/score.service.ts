@@ -141,4 +141,9 @@ export class ScoreService {
   public reloadPlayerScreen() {
     return this.http.get<any>(`${environment.baseUrl}/websocket/reloadPage`);
   }
+
+  public scoreSplitForPlayers():Observable<Points[]>{
+    let  url = `${environment.baseUrl}/cricket/scoreSplitForPlayers`
+    return this.http.get<any>(url)
+  }
 }

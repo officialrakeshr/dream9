@@ -1,5 +1,6 @@
 <div class="grid">
   <div class="col">
+    <button>Show Team setup</button>
     <p-card header="Click the Green-Top to start managing your team." *ngIf="tournaments$ | async as tournaments">
 <!--       <p-table
         #dt1
@@ -93,6 +94,48 @@
         </ng-template>
       </p-table>
       <br />
+    </p-card>
+    <p-card header="Match Point Details" *ngIf="yourTeamSetUp$| async as teamsetup">
+
+      <p-table [value]="teamsetup">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Match No</th>
+                <th>Bat-hero(P)</th>
+                <th>Bow-Hero(P)</th>
+                <th>Captain(P)</th>
+                <th>VCaptain(P)</th>
+                <th>Player 5(P)</th>
+                <th>Player 6(P)</th>
+                <th>Player 7(P)</th>
+                <th>Player 8(P)</th>
+                <th>Player 9(P)</th>
+                <th>Player 10(P)</th>
+                <th>Player 11(P)</th>
+                <th>Player 12(P)</th>
+                <th>Total Points</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-car>
+            <tr>
+                <td>{{car.matchNo}}</td>
+                <td>{{car.battinghero}}<b>({{car.battingheroPoint}})</b></td>
+                <td>{{car.bowlinghero}}<b>({{car.bowlingheroPoint}})</b></td>
+                <td>{{car.captain}}<b>({{car.captainPoint}})</b></td>
+                <td>{{car.vcaptain}}<b>({{car.vcaptainPoint}})</b></td>
+                <td>{{car.player5}}<b>({{car.player5Point}})</b></td>
+                <td>{{car.player6}}<b>({{car.player6Point}})</b></td>
+                <td>{{car.player7}}<b>({{car.player7Point}})</b></td>
+                <td>{{car.player8}}<b>({{car.player8Point}})</b></td>
+                <td>{{car.player9}}<b>({{car.player9Point}})</b></td>
+                <td>{{car.player10}}<b>({{car.player10Point}})</b></td>
+                <td>{{car.player11}}<b>({{car.player11Point}})</b></td>
+                <td>{{car.player12}}<b>({{car.player12Point}})</b></td>
+                <td><b>{{car.total}}</b></td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <h3>Total Score : {{totalPoints}}</h3>
     </p-card>
   </div>
 </div>
