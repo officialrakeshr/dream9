@@ -94,6 +94,7 @@ export class AdminDashboardComponent implements OnInit {
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
         this.sendMessage(`"Fantastic 12" enabled for the match no: ${selectedMatch.matchNo}`);
         this.reloadUser();
+        window.location.reload();
       });
     }
     
@@ -105,6 +106,7 @@ export class AdminDashboardComponent implements OnInit {
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
         this.sendMessage(`"Fantastic 12" closed for the match no: ${selectedMatch.matchNo}`);
         this.reloadUser();
+        window.location.reload();
       });
     }
   }
@@ -116,6 +118,7 @@ export class AdminDashboardComponent implements OnInit {
       this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
         this.sendMessage(`Match ${selectedMatch.matchNo} started!`);
         this.reloadUser();
+        window.location.reload();
       });
     }
   }
@@ -127,6 +130,7 @@ export class AdminDashboardComponent implements OnInit {
       this.scoreService.abandonMatch(selectedMatch).subscribe((o) => {
         this.sendMessage(`Match ${selectedMatch.matchNo} abandoned!`);
         this.reloadUser();
+        window.location.reload();
       });
     }
   }

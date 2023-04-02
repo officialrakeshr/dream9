@@ -192,10 +192,10 @@ export class DashboardComponent implements OnInit {
             return p;
           })
           .sort((a, b) => {
-            if (a.name < b.name) {
+            if (a.team < b.team) {
               return -1;
             }
-            if (a.name > b.name) {
+            if (a.team > b.team) {
               return 1;
             }
             return 0;

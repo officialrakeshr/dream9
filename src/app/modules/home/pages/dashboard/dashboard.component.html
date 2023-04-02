@@ -117,9 +117,9 @@
         </ng-template>
         <ng-template pTemplate="header" let-columns>
           <tr>
-            <th *ngFor="let col of columns">
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
               <div class="p-d-flex p-jc-between p-ai-center">
-                {{ col.header }}
+                {{ col.header }}<p-sortIcon [field]="col.field"></p-sortIcon>
               </div>
             </th>
           </tr>
@@ -154,8 +154,8 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th>Player</th>
-            <th>Team</th>
+            <th pSortableColumn="name">Player <p-sortIcon field="name"></p-sortIcon></th>
+            <th pSortableColumn="team">Team <p-sortIcon field="team"></p-sortIcon></th>
             <!-- <th>Role</th> -->
             <th *ngIf="(selectedPlayers.length == 12 )">
               Action
