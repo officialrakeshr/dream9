@@ -55,9 +55,10 @@ export class WebSocketAPI {
         if(sessionStorage.getItem('role')==="player"){
             alert("Admin requested a  page refresh. Your screen will be refreshed.");
             window.location.reload();
-        }else{
-            window.location.reload();
         }
+        // else{
+        //     window.location.reload();
+        // }
     }
     onMessageReceived2(message:any) {
         console.log(message.body)
