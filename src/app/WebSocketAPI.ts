@@ -7,6 +7,7 @@ export class WebSocketAPI {
     webSocketEndPoint: string = `${environment.baseUrl}/websocket/ws`;
     topic1: string = "/topic/reloadPage";
     topic2: string = "/topic/pushMessage";
+    topic3: string = "/topic/logoutAll";
     stompClient: any;
     websocketComponent: WebsocketComponent;
     constructor(websocketComponent: WebsocketComponent){
@@ -23,6 +24,9 @@ export class WebSocketAPI {
             });
             _this.stompClient.subscribe(_this.topic2, function (sdkEvent: any) {
                 _this.onMessageReceived2(sdkEvent);
+            });
+            _this.stompClient.subscribe(_this.topic3, function (sdkEvent: any) {
+                _this.onMessageReceived3(sdkEvent);
             });
             //_this.stompClient.reconnect_delay = 2000;
         }, this.errorCallBack.bind(this));
@@ -60,8 +64,21 @@ export class WebSocketAPI {
         //     window.location.reload();
         // }
     }
+    onMessageReceived3(message:any) {
+        if(sessionStorage.getItem('role')==="player"){
+            alert("Admin requested a logout");
+            this._disconnect();
+            sessionStorage.clear();
+            window.location.reload();
+        }
+        // else{
+        //     window.location.reload();
+        // }
+    }
+
     onMessageReceived2(message:any) {
         console.log(message.body)
         this.websocketComponent.alertThis(message.body);
     }
+
 }
