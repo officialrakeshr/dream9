@@ -142,6 +142,10 @@ export class ScoreService {
     return this.http.get<any>(`${environment.baseUrl}/websocket/reloadPage`);
   }
 
+  public logoutAll() {
+    return this.http.get<any>(`${environment.baseUrl}/websocket/logoutAll`);
+  }
+
   public scoreSplitForPlayers():Observable<Points[]>{
     let  url = `${environment.baseUrl}/cricket/scoreSplitForPlayers`
     return this.http.get<any>(url)

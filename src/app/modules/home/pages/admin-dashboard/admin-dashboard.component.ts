@@ -141,6 +141,18 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
+  lotoutUser(propt?:boolean){
+    if(propt){
+      let conf= confirm(`Do yo want to log-off user ?`)
+      if(conf==true){
+        this.scoreService.logoutAll().subscribe();
+      }
+    }else{
+      this.scoreService.logoutAll().subscribe();
+    }
+  }
+  
+
   createANewMatch(team1:string,team2:string,match:string) {
     let conf= confirm(`Do yo want to a new match ?`)
     if(conf){
