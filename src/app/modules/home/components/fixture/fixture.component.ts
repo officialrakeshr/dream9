@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
 import { map, Observable, tap } from 'rxjs';
 import { Tournament } from 'src/app/@core/models/Player.model';
@@ -19,13 +20,24 @@ export class FixtureComponent implements OnInit {
   tournaments$: Observable<Tournament[]> = null as any;
   yourTeamSetUp$: Observable<Points[]> = null as any;
   totalPoints: number = 0;
+  next7Matches: Tournament[] = null as any;
+  openFixture: boolean = false;
 
   constructor(private scoreService: ScoreService, private route: ActivatedRoute, private router: Router,public store: Store<AppState>,private messageService: MessageService,) { }
  
   ngOnInit(): void {
-    this.tournaments$ = this.scoreService.getTournaments().pipe(map(o=>{
+    this.tournaments$ = this.scoreService.getTournaments().pipe(tap(t=>{
+      let today = moment();
+      let sevenDays = moment().add(7, 'days');
+      //moment(`${o.matchdate}<>${o.matchtime}`,"MMMM D, YYYY<>h:mm A", true)
+      this.next7Matches = t.filter(l=>{
+        let m= moment(`${l.matchdate}<>${l.matchtime}`,"MMMM D, YYYY<>h:mm A", true);
+        return m.isAfter(today) && m.isBefore(sevenDays) && l.completed == false
+      });
+    }),map(o=>{
       return o.filter(p=>p.enable11);
     }));
+    
 
     this.yourTeamSetUp$ = this.scoreService.scoreSplitForPlayers().pipe(map(p=>{
       //sort list by matchno

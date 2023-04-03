@@ -1,6 +1,7 @@
 <div class="grid">
   <div class="col">
     <p-card header="Click the Green-Top to start managing your team." *ngIf="tournaments$ | async as tournaments">
+      <h4 *ngIf="tournaments.length==0">No match enabled for team setting</h4>
 <!--       <p-table
         #dt1
         [value]="tournaments"
@@ -13,7 +14,7 @@
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
         [globalFilterFields]="['players']"
       > -->
-      <p-table
+      <p-table *ngIf="!(tournaments.length==0)"
         #dt1
         [value]="tournaments"
         dataKey="Player"
@@ -94,9 +95,10 @@
       </p-table>
       <br />
     </p-card>
+    <button pButton pRipple type="button" class="long_btn" (click)="openFixture=!openFixture">Click Here -> Fixture for the next 7 days</button>
     <p-card *ngIf="yourTeamSetUp$| async as teamsetup">
 
-      <p-table [value]="teamsetup" #dt
+      <p-table [value]="teamsetup" #dt *ngIf="teamsetup.length>0"
       [rows]="3" [showCurrentPageReport]="true" [rowsPerPageOptions]="[3,5,10,25,50]"
       [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
       [filterDelay]="0" [globalFilterFields]="['matchNo']">
@@ -153,3 +155,48 @@
   </div>
 </div>
 <p-toast></p-toast>
+<p-dialog header="Fixture for the next 7 days" [modal]="true"  [draggable]="false" [resizable]="false"
+[(visible)]="openFixture">
+  <p-table
+  #dt5
+  [value]="next7Matches"
+  dataKey="Player"
+  styleClass="p-datatable-sm p-datatable-gridlines"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Match No</th>
+      <th>Team 1</th>
+      <th>Team 2</th>
+      <th>Date</th>
+      <th>Venue</th>
+      <th>Time</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+    <tr
+      style="cursor: pointer;"
+      [ngClass]="{ enable11: rowData['enable11'] }"
+    >
+      <td>
+        {{ rowData["matchNo"] }}
+      </td>
+      <td>
+        <span>{{ rowData["team1"] }}</span>
+      </td>
+      <td>
+        <span>{{ rowData["team2"] }}</span>
+      </td>
+      <td>
+        {{ rowData["matchdate"] }}
+      </td>
+      <td>
+        {{ rowData["venue"] }}
+      </td>
+      <td>
+        {{ rowData["matchtime"] }}
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+</p-dialog>
