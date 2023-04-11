@@ -150,4 +150,9 @@ export class ScoreService {
     let  url = `${environment.baseUrl}/cricket/scoreSplitForPlayers`
     return this.http.get<any>(url)
   }
+
+  public createNewPlayer(team:string,name:string):Observable<Player>{
+    let  url = `${environment.baseUrl}/cricket/createPlayer`
+    return this.http.post<any>(url,{"name":name,"team":team})
+  }
 }

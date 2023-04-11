@@ -7,11 +7,11 @@
         <p-button label="Broadcast" styleClass="p-button-link" (click)="broadcastMsg = !broadcastMsg"></p-button>
         <p-button label="Reload Users" styleClass="p-button-link" (click)="reloadUser(true)"></p-button>
         <p-button label="Log-out Users" styleClass="p-button-link" (click)="lotoutUser(true)"></p-button>
-        <!--         <p-button
-          label="Create a match"
+        <p-button
+          label="Add A IPL Player"
           styleClass="p-button-link"
           (click)="createMatchModal = !createMatchModal"
-        ></p-button> -->
+        ></p-button>
         <h5>Match Number : {{selectedMatch? selectedMatch.matchNo : ''}}</h5>
         <h6 *ngIf="selectedMatch != null">F12_enable: {{selectedMatch? selectedMatch.enable11 : 'NA'}}&nbsp;::&nbsp;Started: {{selectedMatch? selectedMatch.started : 'NA'}}&nbsp;::&nbsp;Completed: {{selectedMatch? selectedMatch.completed : 'NA'}}&nbsp;::&nbsp;Abandoned: {{selectedMatch? selectedMatch.abandoned : 'NA'}}</h6>
         <p-dropdown [options]="(tournaments$ | async) || []" [(ngModel)]="selectedMatch" #match
@@ -25,7 +25,7 @@
           </ng-template>
           <ng-template let-country pTemplate="item">
             <div class="country-item">
-              <div>{{country.matchNo +' : '+ country.team1 +' VS '+ country.team2}}</div>
+              <div ngClass="{'game-enable':country.enable11,'game-started':country.started,'game-completed':country.completed}">{{country.matchNo +' : '+ country.team1 +' VS '+ country.team2}}</div>
             </div>
           </ng-template>
         </p-dropdown>
@@ -180,8 +180,29 @@
     </ng-template>
   </p-table>
 </p-dialog>
+<p-dialog header="Add A IPL Player" [(visible)]="createMatchModal" [modal]="true">
+  <ng-container *ngIf="listTeams && listTeams.length > 0">
+    <div class="grid p-fluid">
+      <div class="field col-12">
+        <label for="integeronly">Team*</label>
+        <p-dropdown [options]="listTeams" [(ngModel)]="playerNew.team" optionLabel="name" optionValue="name"
+          [filter]="true" filterBy="name"></p-dropdown>
+      </div>
+      <div class="field col-12">
+        <label for="minmaxfraction">Player Name*</label>
+        <input pInputText type="string" [(ngModel)]="playerNew.name" />
+      </div>
+    </div>
 
-<p-dialog header="Create A Match" [(visible)]="createMatchModal" [modal]="true" [style]="{ height: '100vh' }">
+    <p-button label="Add to {{playerNew.team}} Squad" (click)="
+        createNewPlayer(
+          playerNew.team,
+          playerNew.name
+        )
+      "></p-button>
+  </ng-container>
+</p-dialog>
+<!-- <p-dialog header="Create A Match" [(visible)]="createMatchModal" [modal]="true" [style]="{ height: '100vh' }">
   <ng-container *ngIf="listTeams && listTeams.length > 0">
     <div class="grid p-fluid">
       <div class="field col-12 md:col-4">
@@ -208,7 +229,7 @@
         )
       "></p-button>
   </ng-container>
-</p-dialog>
+</p-dialog> -->
 <p-dialog header="Broadcast a Message" [(visible)]="broadcastMsg">
   <textarea [rows]="5" [cols]="50" pInputTextarea [(ngModel)]="pushMessage"></textarea>
   <br>

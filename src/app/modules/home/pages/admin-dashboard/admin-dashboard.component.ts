@@ -5,7 +5,7 @@ import * as _ from "lodash";
 import * as moment from "moment";
 import { MessageService } from "primeng/api";
 import { map, Observable, tap } from "rxjs";
-import { MatchDetails, Team, Tournament } from "src/app/@core/models/Player.model";
+import { MatchDetails, Player, Team, Tournament } from "src/app/@core/models/Player.model";
 import { Points } from "src/app/@core/models/points";
 import { ScoreService } from "src/app/@core/services/score/score.service";
 import { UserService } from "src/app/@core/services/user/user.service";
@@ -34,6 +34,10 @@ export class AdminDashboardComponent implements OnInit {
   matchDetails$: Observable<MatchDetails> | undefined;
   currentMatchRankings:any;
   lastUpdatedTime: string | undefined;
+  playerNew: Player = {
+    name: "",
+    team: "",
+  } as any;
   newMatchObj:Tournament={
     matchNo: '',
     team1: '',
@@ -267,5 +271,16 @@ export class AdminDashboardComponent implements OnInit {
   }
   canDeactivate(): boolean {
     return true;
+  }
+
+  createNewPlayer(team:string="", playername: string=""){
+    if(team ==="" || playername ==="") return ;
+    let confirm = window.confirm(`Are you sure you want to create a new IPL player?: ${playername} - ${team}`);
+    if(confirm){
+      this.scoreService.createNewPlayer(team.trim(),playername.trim()).subscribe(o=>{
+        alert("Done")
+      })
+    }
+    
   }
 }
