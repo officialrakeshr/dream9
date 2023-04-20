@@ -9,6 +9,14 @@ import { Points } from '../../models/points';
   providedIn: 'root'
 })
 export class ScoreService {
+  getScoreCardByMatchNo(matchNo: string) {
+    let  url = `${environment.baseUrl}/cricket/getScoreCardByMatchNo?matchNo=${matchNo}`
+    return this.http.get<any>(url);
+  }
+  getOverDetailsByMatchNo(matchNo: string) {
+    let  url = `${environment.baseUrl}/cricket/getOverDetailsByMatchNo?matchNo=${matchNo}`
+    return this.http.get<any>(url);
+  }
   public updateMatchDetails(matchDetails: MatchDetails) {
     let  url = `${environment.baseUrl}/cricket/updateMatchDetails`
     return this.http.put<any>(url,matchDetails)

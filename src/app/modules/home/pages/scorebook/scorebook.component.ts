@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { filter, switchMap } from 'rxjs';
+import * as _ from 'lodash';
+import { filter, forkJoin, switchMap } from 'rxjs';
 import { BattingSession, BowlingSession, MatchDetails, Player, Tournament } from 'src/app/@core/models/Player.model';
 import { ScoreService } from 'src/app/@core/services/score/score.service';
 
@@ -30,6 +31,7 @@ export class ScorebookComponent implements OnInit {
       id: null,
     },
   ] as any;
+  playerPoolForCricInfo: Player[] = [] as any;
   constructor(private scoreService: ScoreService, private router: Router,private route: ActivatedRoute,) {}
   yesOrNo = [
     { name: "Yes", value: true },
@@ -74,6 +76,7 @@ export class ScorebookComponent implements OnInit {
       )
       .pipe(filter(o=>o!=null))
       .subscribe((match) => {
+        this.playerPoolForCricInfo = [...match.team1.players.filter((o) => o.active == "active"),...match.team2.players.filter((o) => o.active == "active")];
         match.team1.players = [
           ...this.dummyPlayer,
           ...match.team1.players.filter((o) => o.active == "active"),
@@ -85,7 +88,73 @@ export class ScorebookComponent implements OnInit {
         this.matchDetails = match;
       });
   }
+  populateScoresFromCricInfo(){
+    this.battingDetailsTeam1 =[];
+      this.bowlingDetailsTeam1=[];
+      this.battingDetailsTeam2=[];
+      this.bowlingDetailsTeam2=[];
+    forkJoin([this.scoreService.getScoreCardByMatchNo(this.matchNo), this.scoreService.getOverDetailsByMatchNo(this.matchNo)]).subscribe(datas=>{
+      let grouped= datas[1].inningOvers.map((o: { stats: any; })=>{
+        return _.groupBy(o.stats,(p: { bowlers: { id: any; }[]; })=>{
+          return p.bowlers[0].id
+        })
+      })
+      var bowlerDetails=[];
+      for (var key in grouped) {
+        let d = grouped[key] as any[];
+        for(var p in d){
+          let ineligibleDot =0;
+          let bowler ='';
+          for(var over of d[p]){
+            bowler=over.bowlers[0].longName;
+            for(var ball of over.balls){
+              if(ball.batsmanRuns == 0 && (ball.byes>0 || ball.legbyes>0)){
+                ineligibleDot++;
+              }
+            }
+          }
+          bowlerDetails.push({bowlerId:Number(p),bowlerName:bowler, ineligibleDots: ineligibleDot })
+        }
+      }
 
+
+      let inningsData = datas[0];
+      this.stateOptions = [];
+      this.battingTeam = "team1";
+      for(let inning of inningsData.innings){
+        if(inning.inningNumber==1){
+          this.stateOptions.push({ label: inning.team.longName, value: "team1" });
+          for(let batmen of inning.inningBatsmen){
+            if(batmen.runs!=null){
+              this.battingDetailsTeam1.push(this.cricInfoBatterToFantasticBatter(batmen) as any);
+            }
+          }
+          for(let bowler of inning.inningBowlers){
+            if(bowler.conceded!=null){
+              let ineligbleDots = bowlerDetails.find(o=>o.bowlerId == bowler.player.id)?.ineligibleDots
+              bowler.dots = bowler.dots-(ineligbleDots||0);
+              this.bowlingDetailsTeam1.push(this.cricInfoBowlerToFantasticBowler(bowler) as any);
+            }
+          }
+        }else{
+          this.stateOptions.push({ label: inning.team.longName, value: "team2" });
+          for(let batmen of inning.inningBatsmen){
+            if(batmen.runs!=null){
+              this.battingDetailsTeam2.push(this.cricInfoBatterToFantasticBatter(batmen) as any);
+            }
+          }
+          for(let bowler of inning.inningBowlers){
+            if(bowler.conceded!=null){
+              let ineligbleDots = bowlerDetails.find(o=>o.bowlerId == bowler.player.id)?.ineligibleDots
+              bowler.dots = bowler.dots-(ineligbleDots||0);
+              this.bowlingDetailsTeam2.push(this.cricInfoBowlerToFantasticBowler(bowler) as any);
+            }
+          }
+        }
+      }
+    })
+
+  }
   updateScore(battingTeam: string) {
     let data = null;
     if (battingTeam == "team1") {
@@ -128,4 +197,40 @@ export class ScorebookComponent implements OnInit {
       this.bowlingDetailsTeam2.find((o) => Object.values(o).find(b=>b!=null) != null)
     );
   }
+
+  cricInfoBatterToFantasticBatter(batmen:any){
+    return  {
+      batterName: this.playerNameToObject(batmen.player.longName),
+      runs: batmen.runs,
+      balls: batmen.balls,
+      fours: batmen.fours,
+      sixes: batmen.sixes,
+      out: batmen.isOut,
+      catchOrStumpedBy: this.playerNameToObject((batmen.dismissalFielders!= null && batmen.dismissalFielders.length==1 && batmen.dismissalFielders[0].player != null) ? batmen.dismissalFielders[0].player.longName: null),
+    }
+  }
+
+  cricInfoBowlerToFantasticBowler(bowler:any){
+    return {
+      bowlerName: this.playerNameToObject(bowler.player.longName),
+      overs: bowler.overs,
+      dots: bowler.dots,
+      runs: bowler.conceded,
+      wickets: bowler.wickets,
+    }
+  }
+
+  playerNameToIdConverter(cricName:string,): number | null {
+    let id = this.playerPoolForCricInfo.find((o) => o.name ==cricName)?.id;
+    return id || null;
+  }
+  playerNameToObject(cricName:string): Player | undefined {
+    if(cricName==null) return;
+     console.log(cricName);
+     return this.playerPoolForCricInfo.find((o) => {
+       let split = cricName.replace("-"," ").split(' ');
+       let split2 = o.name.replace("-"," ").split(' ');
+       return (o.name.includes(split[split.length-1]) && o.name.includes(split[split.length-2]) )|| (cricName.includes(split2[split2.length-1]) && cricName.includes(split2[split2.length-2]) ); ;
+     });
+   }
 }
