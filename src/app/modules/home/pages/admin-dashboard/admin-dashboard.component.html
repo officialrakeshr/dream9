@@ -192,12 +192,18 @@
         <label for="minmaxfraction">Player Name*</label>
         <input pInputText type="string" [(ngModel)]="playerNew.name" />
       </div>
+      <div class="field col-12">
+        <label for="minmaxfraction">CricInfo Player Name</label>
+        <input pInputText type="string" [(ngModel)]="playerNew.alias" />
+      </div>
     </div>
-
+    Note: Blank CricInfo Player Name will be replaced with player's name
+    <br>
     <p-button label="Add to {{playerNew.team}} Squad" (click)="
         createNewPlayer(
           playerNew.team,
-          playerNew.name
+          playerNew.name,
+          playerNew.alias
         )
       "></p-button>
   </ng-container>

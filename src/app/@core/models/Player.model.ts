@@ -25,6 +25,7 @@ export interface Player {
     name: string;
     team: string;
     active: string;
+    alias?:string;
 }
 
 export interface Team {

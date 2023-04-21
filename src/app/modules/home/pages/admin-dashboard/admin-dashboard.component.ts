@@ -142,10 +142,10 @@ export class AdminDashboardComponent implements OnInit {
     if(propt){
       let conf= confirm(`Do yo want to reload user screens ?`)
       if(conf==true){
-        this.scoreService.reloadPlayerScreen().subscribe();
+        this.scoreService.reloadPlayerScreen().subscribe(o=>alert("Done"));
       }
     }else{
-      this.scoreService.reloadPlayerScreen().subscribe();
+      this.scoreService.reloadPlayerScreen().subscribe(o=>alert("Done"));
     }
   }
 
@@ -153,10 +153,10 @@ export class AdminDashboardComponent implements OnInit {
     if(propt){
       let conf= confirm(`Do yo want to log-off user ?`)
       if(conf==true){
-        this.scoreService.logoutAll().subscribe();
+        this.scoreService.logoutAll().subscribe(o=>alert("Done"));
       }
     }else{
-      this.scoreService.logoutAll().subscribe();
+      this.scoreService.logoutAll().subscribe(o=>alert("Done"));
     }
   }
   
@@ -273,11 +273,14 @@ export class AdminDashboardComponent implements OnInit {
     return true;
   }
 
-  createNewPlayer(team:string="", playername: string=""){
+  createNewPlayer(team:string="", playername: string="", alias:string=""){
     if(team ==="" || playername ==="") return ;
+    if(alias ===""){
+      alias = playername;
+    }
     let confirm = window.confirm(`Are you sure you want to create a new IPL player?: ${playername} - ${team}`);
     if(confirm){
-      this.scoreService.createNewPlayer(team.trim(),playername.trim()).subscribe(o=>{
+      this.scoreService.createNewPlayer(team.trim(),playername.trim(),alias.trim()).subscribe(o=>{
         alert("Done")
       })
     }
