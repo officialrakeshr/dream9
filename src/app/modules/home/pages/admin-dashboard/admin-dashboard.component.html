@@ -120,7 +120,10 @@
           <button pButton pRipple type="button" label="Start Match"
             *ngIf="!selectedMatch.completed && !selectedMatch.started" (click)="startMatch(selectedMatch)"
             class="p-button-outlined"></button>
-          <button pButton pRipple type="button" *ngIf="!selectedMatch.started && !selectedMatch.abandoned" label="Abandon Match"
+          <button pButton pRipple type="button" label="Revert Completed"
+            *ngIf="selectedMatch.completed" (click)="backToStartedMatch(selectedMatch)"
+            class="p-button-outlined"></button>
+          <button pButton pRipple type="button" *ngIf="!selectedMatch.started && !selectedMatch.abandoned && !selectedMatch.completed" label="Abandon Match"
            (click)="abandonMatch(selectedMatch)"
           class="p-button-outlined"></button>
 

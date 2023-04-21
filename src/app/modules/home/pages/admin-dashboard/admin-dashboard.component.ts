@@ -114,7 +114,16 @@ export class AdminDashboardComponent implements OnInit {
       });
     }
   }
-
+//
+backToStartedMatch(selectedMatch: Tournament) {
+  let conf= confirm(`Do yo want to revert complete status of this match ${selectedMatch.matchNo}?.This will make the status of the match - STARTED`)
+  if(conf){
+    selectedMatch = { ...selectedMatch,completed:false, enable11: false, started: true };
+    this.scoreService.updateTournament(selectedMatch).subscribe((o) => {
+      window.location.reload();
+    });
+  }
+}
   startMatch(selectedMatch: Tournament) {
     let conf= confirm(`Do yo want to start this match ${selectedMatch.matchNo}?. This will close "Fantastic12" session of this match.`)
     if(conf){
