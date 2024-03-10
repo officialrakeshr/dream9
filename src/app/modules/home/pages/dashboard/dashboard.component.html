@@ -3,6 +3,7 @@
     <p-card header="Match Details - Match : {{ tournament.matchNo }}">
       <div class="match-det">
         Match Date: {{ lockTime | date : "dd-MMMM-yyyy h:mm a" }}
+        <br/>Time Zone: {{timeZoneAbbreviation}}
         <br />
         <ng-container *ngIf="countDownTime$ | async as date">
           <div id="happyNewYear-div" *ngIf="date[2]>-1 || date[3] > -1 || date[1]> -1 || date[0]> -1">
@@ -119,7 +120,7 @@
           <tr>
             <th *ngFor="let col of columns" [pSortableColumn]="col.field">
               <div class="p-d-flex p-jc-between p-ai-center">
-                {{ col.header }}<p-sortIcon [field]="col.field"></p-sortIcon>
+                {{ col.header }}<p-sortIcon *ngIf="col.field!='imageUrl'" [field]="col.field"></p-sortIcon>
               </div>
             </th>
           </tr>
@@ -128,7 +129,7 @@
           <tr (click)="selectPlayer(rowData, rowIndex)">
             <td *ngFor="let col of column">
               <!-- <div *ngIf="col.field=='Team'"><img width="50" alt="{{rowData[col.field]}}roundbig.png" src="../../../../../assets/images/team_logos/{{rowData[col.field]}}roundbig.png"/></div> -->
-              <div style="text-align: center">{{ rowData[col.field] }}</div>
+              <div style="text-align: center"><span  *ngIf="col.field!='imageUrl'">{{ rowData[col.field] }}</span><img *ngIf="col.field=='imageUrl'" width="48" height="48" src="https://img1.hscicdn.com/image/upload/f_auto,t_h_100/lsci{{rowData.imageUrl}}" onerror="src='https://wassets.hscicdn.com/static/images/player-jersey.svg'"/></div>
             </td>
           </tr>
         </ng-template>
@@ -154,8 +155,10 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="name">Player <p-sortIcon field="name"></p-sortIcon></th>
-            <th pSortableColumn="team">Team <p-sortIcon field="team"></p-sortIcon></th>
+            <th>Player</th>
+            <th></th>
+            <th>Role</th>
+            <th>Team</th>
             <!-- <th>Role</th> -->
             <th *ngIf="(selectedPlayers.length == 12 )">
               Action
@@ -163,10 +166,12 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
-          <tr>
+          <tr class="{{rowData['team']==tournament.team1 || rowData['team']==tournament.team2 ? 'today-team': ''}}">
             <td>
-              {{ rowData["name"] }}&nbsp;<b>{{rowData["assignedRole"]=='captain' ? "(C)" : (rowData["assignedRole"]=='vcaptain' ? "(VC)" : (rowData["assignedRole"]=='battinghero' ? "(Bat-Hero)" : (rowData["assignedRole"]=='bowlinghero' ? "(Bowl-Hero)" : "")) )}}</b>
+              {{ rowData["name"] }}
             </td>
+            <td><img width="48" height="48" src="https://img1.hscicdn.com/image/upload/f_auto,t_h_100/lsci{{rowData.imageUrl}}" onerror="src='https://wassets.hscicdn.com/static/images/player-jersey.svg'"/></td>
+            <td>{{codeToName(rowData.assignedRole)}}</td>
             <td>{{ rowData["team"] }}</td>
             <!--  <td pEditableColumn>
                             <p-cellEditor>

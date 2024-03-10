@@ -30,6 +30,33 @@ export class AppComponent implements OnDestroy {
   }));
   
   constructor(private store: Store<AppState>,private router: Router,private api: UserService) {
+    fetch('http://worldtimeapi.org/api/ip')
+    .then(response => response.json())
+    .then(data => {
+      const serverTime = new Date(data.utc_datetime);
+      const clientTime = new Date();
+      
+      // Calculate the time difference between server and client
+      const timeDifference = Math.abs(serverTime.getTime() - clientTime.getTime());
+      
+      // Define the maximum allowed time difference (in milliseconds)
+      const maxTimeDifference = 30000; // 30 seconds
+
+      if (timeDifference <= maxTimeDifference) {
+          console.log("Server and client time are within acceptable range.");
+          // Proceed with further actions
+      } else {
+          if(confirm("Warning: Changing your system time may result in restricted access or other consequences. Please correct the system time, close the application window, and try again!")){
+            window.location.reload();
+          }else {
+            window.location.reload();
+          };
+          // Take appropriate action (e.g., display error message, block action)
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
    if(environment.production){
     DisableDevtool({disableMenu:true, clearLog:true,ondevtoolopen:()=>{
       if(sessionStorage.getItem("role")=="admin") return;

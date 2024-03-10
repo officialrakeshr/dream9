@@ -72,6 +72,20 @@ export class DashboardComponent implements OnInit {
     { value: "player12", name: "Player 12", inactive: false },
     // { value: 'allrounder', name: 'All-Rounder', inactive: false },
   ];
+   sortOrder = [
+    "captain", 
+    "vcaptain", 
+    "battinghero", 
+    "bowlinghero", 
+    "player5", 
+    "player6", 
+    "player7", 
+    "player8", 
+    "player9", 
+    "player10", 
+    "player11", 
+    "player12"
+];
   lockTime: Date = null as any
   roleCount: number = 0;
   substitutePopup: boolean = false;
@@ -86,6 +100,7 @@ export class DashboardComponent implements OnInit {
   openBonusRolePopup: boolean = false;
   bonusRoles: any[] = [];
   totalNegPoints: number = 0;
+  timeZoneAbbreviation = 'IST';
   constructor(
     private filterService: FilterService,
     private messageService: MessageService,
@@ -153,14 +168,25 @@ export class DashboardComponent implements OnInit {
       if(!p.enable11) this.router.navigate(['./home/fixture']);
     })).subscribe((o) => {
       this.tournament = o;
-      this.lockTime = moment(`${o.matchdate}<>${o.matchtime}`,"MMMM D, YYYY<>h:mm A", true).toDate();
+      // Get the timezone from the system clock
+      const systemTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      // Define the IST date string
+      const indianTime = `${o.matchdate}<>${o.matchtime}`;
+      // Parse the IST date string using Moment.js
+      const istDate = moment.tz(indianTime, "MMMM D, YYYY<>h:mm A", "Asia/Kolkata");
+      // Convert the IST date to the system timezone
+      const systemTimezoneDate = istDate.clone().tz(systemTimeZone);
+      let temp = moment.tz(moment.tz.guess()).zoneAbbr() as any;
+
+      this.timeZoneAbbreviation = isNaN(temp) ? temp : 'GMT'+temp;
+      this.lockTime = systemTimezoneDate.toDate();
       
       /* if(moment(moment(`${o.matchdate}<>${o.matchtime}`,"MMMM D, YYYY<>h:mm A", true)).diff(moment(),'seconds')<0){
         alert("Match Started...")
         this.router.navigate(['./home/fixture'])
       } */
       this.countDownTime$ = interval(1000).pipe(map(d=>{
-        let inseconds = moment(moment(`${o.matchdate}<>${o.matchtime}`,"MMMM D, YYYY<>h:mm A", true)).diff(moment(),'seconds');
+        let inseconds = moment(systemTimezoneDate).diff(moment(),'seconds');
       if(inseconds<60){
         this.saveWarning = true;
       }else  this.saveWarning = false;
@@ -168,7 +194,7 @@ export class DashboardComponent implements OnInit {
           alert("Match Started...")
           this.router.navigate(['./home/fixture'])
         } */
-        let duration = moment.duration(moment(`${o.matchdate}<>${o.matchtime}`,"MMMM D, YYYY<>h:mm A", true).diff(moment())) as any;
+        let duration = moment.duration(moment(systemTimezoneDate).diff(moment())) as any;
         return [duration._data.days, duration._data.hours, duration._data.minutes, duration._data.seconds];
       }))
       this.getPlayerList();
@@ -192,13 +218,7 @@ export class DashboardComponent implements OnInit {
             return p;
           })
           .sort((a, b) => {
-            if (a.team < b.team) {
-              return -1;
-            }
-            if (a.team > b.team) {
-              return 1;
-            }
-            return 0;
+            return this.sortOrder.indexOf(a.assignedRole||"") - this.sortOrder.indexOf(b.assignedRole||"");
           });
 
         this.dt1.clear();
@@ -216,6 +236,7 @@ export class DashboardComponent implements OnInit {
       this.playerList = o.filter((p) => p.active == "active");
       this.cols = [
         { field: "name", header: "Player", filter: [] },
+        { field: "imageUrl", header: "", filter: [] },
         { field: "team", header: "Team", filter: [] },
       ];
       for (let col of this.cols) {
@@ -246,13 +267,7 @@ export class DashboardComponent implements OnInit {
       this.updateSquadHistory(this.selectedPlayers);
       this.selectedPlayers.push(data);
       this.selectedPlayers.sort((a, b) => {
-        if (a.name < b.name) {
-          return -1;
-        }
-        if (a.name > b.name) {
-          return 1;
-        }
-        return 0;
+        return this.sortOrder.indexOf(a.assignedRole||"") - this.sortOrder.indexOf(b.assignedRole||"");
       });
       this.dt1.clear();
       this.reset();
@@ -474,14 +489,8 @@ export class DashboardComponent implements OnInit {
 
       this.selectedPlayers.push(copyRow);
       this.selectedPlayers.sort((a, b) => {
-        if (a.name < b.name) {
-          return -1;
-        }
-        if (a.name > b.name) {
-          return 1;
-        }
-        return 0;
-      });
+            return this.sortOrder.indexOf(a.assignedRole||"") - this.sortOrder.indexOf(b.assignedRole||"");
+          });
       this.dt1.clear();
       this.reset();
       this.calculateCounts();
@@ -553,7 +562,9 @@ export class DashboardComponent implements OnInit {
     this.bonusRoles.push({role: "Batting hero", value: "battinghero", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "battinghero")?.id});
     this.bonusRoles.push({role: "Bowling hero", value: "bowlinghero", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "bowlinghero")?.id});
     }
-    
+    this.selectedPlayers.sort((a, b) => {
+      return this.sortOrder.indexOf(a.assignedRole||"") - this.sortOrder.indexOf(b.assignedRole||"");
+    });
   }
   canDeactivate() {
     return true
