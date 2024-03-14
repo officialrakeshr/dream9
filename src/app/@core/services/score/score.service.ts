@@ -138,6 +138,11 @@ export class ScoreService {
     return this.http.get<any>(`${environment.baseUrl}/cricket/teams`);
   }
 
+  public updateIPLAllDetailsFromCricInfo() {
+    return this.http.get<any>(`${environment.baseUrl}/cricket/updateIPLAllDetailsFromCricInfo`);
+  }
+
+
   public resetToPreviousDay(matchNo:string):Observable<Boolean> {
     return this.http.get<Boolean>(`${environment.baseUrl}/cricket/resetToPreviousDay/${matchNo}`);
   }

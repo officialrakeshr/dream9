@@ -295,4 +295,11 @@ backToStartedMatch(selectedMatch: Tournament) {
     }
     
   }
+
+  updateIPLAllDetailsFromCricInfo(){
+    this.showMessage("info","","Please wait !!!.. It will take some time");
+    this.scoreService.updateIPLAllDetailsFromCricInfo().subscribe(o=>{
+      this.showMessage("info","",o?"Done":"Something went wrong..");
+    })
+  }
 }
