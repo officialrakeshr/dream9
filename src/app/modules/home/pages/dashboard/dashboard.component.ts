@@ -68,8 +68,8 @@ export class DashboardComponent implements OnInit {
     { value: "player8", name: "Player 8", inactive: false },
     { value: "player9", name: "Player 9", inactive: false },
     { value: "player10", name: "Player 10", inactive: false },
-    { value: "player11", name: "Super Sub 1", inactive: false },
-    { value: "player12", name: "Super Sub 2", inactive: false },
+    { value: "player11", name: "Impact Sub 1", inactive: false },
+    { value: "player12", name: "Impact Sub 2", inactive: false },
     // { value: 'allrounder', name: 'All-Rounder', inactive: false },
   ];
    sortOrder = [
@@ -548,8 +548,8 @@ export class DashboardComponent implements OnInit {
     this.bonusRoles.push({role: "Vice captain", value: "vcaptain", playerList: this.selectedPlayers, selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "vcaptain")?.id});
     this.bonusRoles.push({role: "Batting hero", value: "battinghero", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "battinghero")?.id});
     this.bonusRoles.push({role: "Bowling hero", value: "bowlinghero", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "bowlinghero")?.id});
-    this.bonusRoles.push({role: "Super Sub 1", value: "player11", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "player11")?.id});
-    this.bonusRoles.push({role: "Super Sub 2", value: "player12", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "player12")?.id});
+    this.bonusRoles.push({role: "Impact Sub 1", value: "player11", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "player11")?.id});
+    this.bonusRoles.push({role: "Impact Sub 2", value: "player12", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "player12")?.id});
   }
   changeRole(role: any){
     let selectedPlayerIndex = this.selectedPlayers.findIndex(o=>o.id == role.selectedPlayer)
@@ -563,8 +563,8 @@ export class DashboardComponent implements OnInit {
     this.bonusRoles.push({role: "Vice captain", value: "vcaptain", playerList: this.selectedPlayers, selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "vcaptain")?.id});
     this.bonusRoles.push({role: "Batting hero", value: "battinghero", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "battinghero")?.id});
     this.bonusRoles.push({role: "Bowling hero", value: "bowlinghero", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "bowlinghero")?.id});
-    this.bonusRoles.push({role: "Super Sub 1", value: "player11", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "player11")?.id});
-    this.bonusRoles.push({role: "Super Sub 2", value: "player12", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "player12")?.id});
+    this.bonusRoles.push({role: "Impact Sub 1", value: "player11", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "player11")?.id});
+    this.bonusRoles.push({role: "Impact Sub 2", value: "player12", playerList: this.selectedPlayers , selectedPlayer: this.selectedPlayers.find(o=>o.assignedRole == "player12")?.id});
     }
     this.selectedPlayers.sort((a, b) => {
       return this.sortOrder.indexOf(a.assignedRole||"") - this.sortOrder.indexOf(b.assignedRole||"");
