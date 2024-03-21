@@ -57,8 +57,8 @@ export class AppComponent implements OnDestroy {
     .catch(error => {
       console.error('Error:', error);
     });
-   if(environment.production && sessionStorage.getItem("role")!="admin"){
-      DisableDevtool({disableMenu:true, clearLog:true,ondevtoolopen:()=>{
+   if(environment.production){
+      DisableDevtool({disableMenu:sessionStorage.getItem("role")!="admin", clearLog:sessionStorage.getItem("role")!="admin",ondevtoolopen:()=>{
         if(sessionStorage.getItem("role")!="admin"){
           if(this.user && this.user.role!=null && this.user.role!=''){
             this.api.attemptHack().subscribe(()=>{
