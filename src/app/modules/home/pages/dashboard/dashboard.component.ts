@@ -236,7 +236,7 @@ export class DashboardComponent implements OnInit {
       this.playerList = o.filter((p) => p.active == "active");
       this.cols = [
         { field: "name", header: "Player", filter: [] },
-        { field: "imageUrl", header: "", filter: [] },
+       // { field: "imageUrl", header: "", filter: [] },
         { field: "team", header: "Team", filter: [] },
       ];
       for (let col of this.cols) {
