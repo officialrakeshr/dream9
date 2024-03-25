@@ -11,6 +11,8 @@ export interface Tournament {
     matchNo: string;
     team1: string;
     team2: string;
+    team1Id:any;
+    team2Id:any;
     completed:boolean;
     enable11:boolean;
     started:boolean;
@@ -26,6 +28,7 @@ export interface Player {
     team: string;
     active: string;
     alias?:string;
+    teamId?:string;
 }
 
 export interface Team {

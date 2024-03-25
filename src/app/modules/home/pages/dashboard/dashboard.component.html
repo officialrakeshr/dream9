@@ -166,7 +166,7 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
-          <tr class="{{rowData['team']==tournament.team1 || rowData['team']==tournament.team2 ? 'today-team': ''}}">
+          <tr class="{{rowData['teamId']==tournament.team1Id || rowData['teamId']==tournament.team2Id ? 'today-team': ''}}">
             <td>
               {{ rowData["name"] }}
             </td>
