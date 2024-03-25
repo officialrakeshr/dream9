@@ -210,7 +210,7 @@
       <br />
       <button [disabled]="selectedPlayers.length != 12" pButton pRipple type="button" class="long_btn"
         (click)="assignBonusRoles()">
-        Choose Roles & Continue</button><br /><br />
+        Choose Roles & Click Submit</button><br /><br />
       <button pButton pRipple type="button" class="long_btn" *ngIf="enableReset"
         (click)="resetToPreviousDay(matchNo)">Reset</button><br /><br />
       <!-- <button  pButton pRipple type="button" class="long_btn" [disabled]="checkUndo()"
@@ -238,7 +238,7 @@
     </ng-template>
   </p-table>
   <button pButton pRipple type="button" class="long_btn" (click)="openBonusRolePopup=false;submitXI(selectedPlayers)">
-    Continue</button>
+    Submit</button>
 </p-dialog>
 <p-dialog header="Available Players: Substitution" [(visible)]="substitutePopup">
   <p-table #dt2 [columns]="cols" [value]="players" responsiveLayout="scroll" dataKey="Player" [rows]="10"
