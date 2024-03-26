@@ -487,7 +487,7 @@ export class DashboardComponent implements OnInit {
         item.name +
         "' with '" +
         copyRow.name +
-        "' ? "+  (this.subLimitReached ?`. This substitution will cost you 25 points. Total ${this.totalNegPoints} points ( ${this.totalNegPoints/25} extra substitution x 25) will be reduced during the match score caculation.` :'')
+        "' ? "+  (this.subLimitReached ?`. This substitution will give you negative points according to the Fantastic12 rules. Deductions will be reflected after match score calculation.` :'')
     );
     if (c) {
       this.selectedPlayers.splice(this.substituteIndex, 1);
