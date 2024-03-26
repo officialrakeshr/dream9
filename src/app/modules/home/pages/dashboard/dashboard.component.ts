@@ -420,48 +420,55 @@ export class DashboardComponent implements OnInit {
     });
   }
   submitXI(selectedPlayers: Player[]) {
-    const roles = this.roleList
-      .filter((o) => o.value != "")
-      .map((o) => o.value);
-    let data = {
-      matchNo: this.tournament.matchNo,
-      username: "",
-      rank_no: 0,
-      total: 0,
-      captain: 0,
-      vcaptain: 0,
-      battinghero: 0,
-      bowlinghero: 0,
-      player5: 0,
-      player6: 0,
-      player7: 0,
-      player8: 0,
-      player9: 0,
-      player10: 0,
-      player11: 0,
-      player12: 0,
-      captainPoint: 0,
-      vcaptainPoint: 0,
-      battingHeroPoint: 0,
-      bowlingHeroPoint: 0,
-      player5Point: 0,
-      player6Point: 0,
-      player7Point: 0,
-      player8Point: 0,
-      player9Point: 0,
-      player10Point: 0,
-      player11Point: 0,
-      player12Point: 0,
-    } as any;
-    roles.forEach((role) => {
-      data[role] = this.findFirstRolePlayer(role)?.id;
-    });
-    this.scoreService.updateDream9Details(data).subscribe((o) => {
-      if (o) {
-        this.showMessage("success","","Done.");
-        this.substititions$ = this.getSubstitution(this.matchNo);
-      }
-    });
+    let rolesMsg = this.bonusRoles.map(o => {
+      return "" + o.role + " : " + (o.playerList.find((p: Player) => p.id == o.selectedPlayer)?.name || "") + "\n" 
+    })
+    console.log(rolesMsg.join(''))
+    if (confirm("Proceed with this roles ? "+ "\n" +"*************************"+ "\n" + rolesMsg.join(''))) {
+      const roles = this.roleList
+        .filter((o) => o.value != "")
+        .map((o) => o.value);
+      let data = {
+        matchNo: this.tournament.matchNo,
+        username: "",
+        rank_no: 0,
+        total: 0,
+        captain: 0,
+        vcaptain: 0,
+        battinghero: 0,
+        bowlinghero: 0,
+        player5: 0,
+        player6: 0,
+        player7: 0,
+        player8: 0,
+        player9: 0,
+        player10: 0,
+        player11: 0,
+        player12: 0,
+        captainPoint: 0,
+        vcaptainPoint: 0,
+        battingHeroPoint: 0,
+        bowlingHeroPoint: 0,
+        player5Point: 0,
+        player6Point: 0,
+        player7Point: 0,
+        player8Point: 0,
+        player9Point: 0,
+        player10Point: 0,
+        player11Point: 0,
+        player12Point: 0,
+      } as any;
+      roles.forEach((role) => {
+        data[role] = this.findFirstRolePlayer(role)?.id;
+      });
+      this.scoreService.updateDream9Details(data).subscribe((o) => {
+        if (o) {
+          this.showMessage("success", "", "Done.");
+          this.substititions$ = this.getSubstitution(this.matchNo);
+        }
+      });
+    }
+
   }
   substitute(rowIndex: number) {
     if(this.selectedPlayers.some(o=> o.assignedRole == "")){
