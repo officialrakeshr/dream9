@@ -101,6 +101,7 @@ export class DashboardComponent implements OnInit {
   bonusRoles: any[] = [];
   totalNegPoints: number = 0;
   timeZoneAbbreviation = 'IST';
+  currentExtraSub: number = 0;
   constructor(
     private filterService: FilterService,
     private messageService: MessageService,
@@ -146,6 +147,7 @@ export class DashboardComponent implements OnInit {
       this.enableReset= o.total < 10;
       this.subLimitReached = o.total <= o.used;
       this.totalNegPoints = (o.total - o.used-1)*-25;
+      this.currentExtraSub =  o.used - o.total;
     }));
   }
 
@@ -478,6 +480,48 @@ export class DashboardComponent implements OnInit {
     this.substitutePopup = true;
     this.substituteIndex = rowIndex;
   }
+  overSubNegativeCalc(extraSub: number): number {
+    let returnVal = 0.0;
+    if (extraSub < 1) {
+        // Return 0 for values less than 1
+        returnVal = 0.0;
+    } else if (extraSub > 9) {
+        // Return the value times -250 for values greater than 9
+        returnVal = -250.0 * extraSub;
+    } else {
+        // Calculate the return value based on the switch cases
+        switch (extraSub) {
+            case 1:
+                returnVal = -25.0;
+                break;
+            case 2:
+                returnVal = -100.0;
+                break;
+            case 3:
+                returnVal = -225.0;
+                break;
+            case 4:
+                returnVal = -400.0;
+                break;
+            case 5:
+                returnVal = -625.0;
+                break;
+            case 6:
+                returnVal = -900.0;
+                break;
+            case 7:
+                returnVal = -1400.0;
+                break;
+            case 8:
+                returnVal = -1600.0;
+                break;
+            case 9:
+                returnVal = -1800.0;
+                break;
+        }
+    }
+    return returnVal;
+  }
   substitutePlayer(rowData: Player, rowIndex: number) {
     this.substitutePopup = false;
     let copyRow = _.cloneDeep(rowData);
@@ -487,7 +531,7 @@ export class DashboardComponent implements OnInit {
         item.name +
         "' with '" +
         copyRow.name +
-        "' ? "+  (this.subLimitReached ?`. This substitution will give you negative points according to the Fantastic12 rules. Deductions will be reflected after match score calculation.` :'')
+        "' ? "+  (this.subLimitReached ?`. This substitution will give you negative points according to the Fantastic12 rules - for ${this.currentExtraSub+1} extra substitutions (including current substitution) : ${this.overSubNegativeCalc(this.currentExtraSub+1)} points. Deductions will be reflected after match score calculation.` :'')
     );
     if (c) {
       this.selectedPlayers.splice(this.substituteIndex, 1);
