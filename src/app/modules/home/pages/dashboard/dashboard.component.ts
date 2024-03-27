@@ -110,7 +110,6 @@ export class DashboardComponent implements OnInit {
     private route: ActivatedRoute,
     public store: Store<AppState>
   ) {
-
   }
 
   checkUndo() {

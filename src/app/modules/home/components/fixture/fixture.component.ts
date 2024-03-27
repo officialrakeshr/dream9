@@ -23,7 +23,7 @@ export class FixtureComponent implements OnInit {
   next7Matches: Tournament[] = null as any;
   openFixture: boolean = false;
 
-  constructor(private scoreService: ScoreService, private route: ActivatedRoute, private router: Router,public store: Store<AppState>,private messageService: MessageService,) { }
+  constructor(private scoreService: ScoreService, private route: ActivatedRoute, private router: Router,public store: Store<AppState>,private messageService: MessageService,) {     alert("Kindly refer the rules before planning your team...")}
  
   ngOnInit(): void {
     this.tournaments$ = this.scoreService.getTournaments().pipe(tap(t=>{
