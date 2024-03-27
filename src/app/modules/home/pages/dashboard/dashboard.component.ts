@@ -531,7 +531,7 @@ export class DashboardComponent implements OnInit {
         item.name +
         "' with '" +
         copyRow.name +
-        "' ? "+  (this.subLimitReached ?`. If yes kindly note that including this change  an additional ${this.currentExtraSub+1} substitutions have been made by you in total for this match. Consequently, a total of ${this.overSubNegativeCalc(this.currentExtraSub+1) * -1} points will be deducted from your overall score for the match upon completion of scoring. For further details, please consult the guidelines outlined in the "Fantastic 12 Rules.` :'')
+        "' ? "+  (this.subLimitReached ?`. If yes kindly note that including this change  an additional ${this.currentExtraSub+1} substitutions have been made by you in total for this match. Consequently, a total of ${this.overSubNegativeCalc(this.currentExtraSub+1) * -1} points will be deducted from your overall score for the match upon completion of scoring. For further details, please consult the guidelines outlined in the "Fantastic 12" Rules.` :'')
     );
     if (c) {
       this.selectedPlayers.splice(this.substituteIndex, 1);
