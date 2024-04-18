@@ -240,7 +240,7 @@
   <button pButton pRipple type="button" class="long_btn" (click)="openBonusRolePopup=false;submitXI(selectedPlayers)">
     Submit</button>
 </p-dialog>
-<p-dialog header="Available Players: Substitution" [(visible)]="substitutePopup">
+<p-dialog header="Available Players: Substitution" [(visible)]="substitutePopup" [modal]="true">
   <p-table #dt2 [columns]="cols" [value]="players" responsiveLayout="scroll" dataKey="Player" [rows]="10"
     [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" styleClass="p-datatable-sm p-datatable-gridlines"
     [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"

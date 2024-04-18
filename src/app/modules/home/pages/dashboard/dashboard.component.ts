@@ -425,7 +425,7 @@ export class DashboardComponent implements OnInit {
       return "" + o.role + " : " + (o.playerList.find((p: Player) => p.id == o.selectedPlayer)?.name || "") + "\n" 
     })
     console.log(rolesMsg.join(''))
-    if (confirm("Proceed with this roles ? "+ "\n" +"*************************"+ "\n" + rolesMsg.join(''))) {
+    if (confirm("Proceed with this roles ? "+ "\n" +"*************************"+ "\n" + rolesMsg.join('')+"***********"+new Date().getDate()+new Date().getTime()+"**************")) {
       const roles = this.roleList
         .filter((o) => o.value != "")
         .map((o) => o.value);
@@ -464,8 +464,9 @@ export class DashboardComponent implements OnInit {
       });
       this.scoreService.updateDream9Details(data).subscribe((o) => {
         if (o) {
-          this.showMessage("success", "", "Done.");
+          window.alert("Player roles have been successfully updated. Your browser window will refresh shortly. Please verify your changes after the page refreshes.");
           this.substititions$ = this.getSubstitution(this.matchNo);
+          window.location.reload();
         }
       });
     }
@@ -585,8 +586,9 @@ export class DashboardComponent implements OnInit {
       });
       this.scoreService.updateSubstitutionsAndConfig(data).subscribe((o) => {
         if (o) {
-          this.showMessage("success","","Done.");
+          window.alert("The substitution has been completed successfully. Your browser window will refresh shortly. Please verify your changes after the page refreshes.");
           this.substititions$ = this.getSubstitution(this.matchNo);
+          window.location.reload();
         } 
       });
     }
