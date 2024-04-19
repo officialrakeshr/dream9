@@ -625,4 +625,8 @@ export class DashboardComponent implements OnInit {
   canDeactivate() {
     return true
   }
+
+  pageReload(){
+    window.location.reload();
+  }
 }

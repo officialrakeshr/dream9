@@ -67,3 +67,14 @@ tr.today-team td{
   color:blue;
   font-weight:bold;
 }
+
+.button-container-flex {
+  display: flex;
+  justify-content: space-between; /* This will evenly space the buttons */
+}
+
+.button-container-flex button {
+  flex-grow: 1;
+  margin: 0 10px;
+  /* Additional button styles */
+}
