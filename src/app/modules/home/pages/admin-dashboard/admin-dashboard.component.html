@@ -2,7 +2,7 @@
   <div class="col-12">
     <p-card header="Match Details">
       <div class="match-det">
-        <p-button label="Player Rank" styleClass="p-button-link"
+        <p-button label="Match vise Rank" styleClass="p-button-link"
           (click)="rankModall = !rankModall"></p-button>
         <p-button label="Broadcast" styleClass="p-button-link" (click)="broadcastMsg = !broadcastMsg"></p-button>
         <p-button label="Reload Users" styleClass="p-button-link" (click)="reloadUser(true)"></p-button>
@@ -162,31 +162,31 @@
     "></button>
 </p-dialog>
 
-<p-dialog header="Rank" [(visible)]="rankModall" [modal]="true">
-  <p-table responsiveLayout="scroll" [value]="rank" [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
+
+<p-dialog header="Match Toppers" [(visible)]="rankModall" [modal]="true">
+  <ng-container *ngIf="matchToppers$|async as data">
+    <p-table responsiveLayout="scroll" [value]="data" [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
   styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="true"
   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
     <ng-template pTemplate="caption">
-      League Player Ranking <button id="refreshbtn" (click)="refreshScore()">Refresh Score</button>
+      Match Vice Toppers
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
+        <th>Match No</th>
         <th>Name</th>
-        <th>Rank</th>
-        <th>Total Score</th>
+        <th>Score</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-product>
       <tr>
+        <td>{{ product.matchNo }}</td>
         <td>{{ product.username }}</td>
-        <td>{{ product.rank_no }}</td>
         <td>{{ product.total }}</td>
       </tr>
     </ng-template>
-    <ng-template pTemplate="summary">
-      Last updated time : {{lastUpdatedTime}}. For the most recent results, click <i>Refresh Score</i> button.
-    </ng-template>
   </p-table>
+  </ng-container>
 </p-dialog>
 <p-dialog header="Add A IPL Player" [(visible)]="createMatchModal" [modal]="true">
   <ng-container *ngIf="listTeams && listTeams.length > 0">

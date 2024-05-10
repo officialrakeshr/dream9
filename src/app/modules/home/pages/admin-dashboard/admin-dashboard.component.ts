@@ -48,6 +48,7 @@ export class AdminDashboardComponent implements OnInit {
   } as any;
   listTeams: Team[] = [] as any;
   rank: Points[] = null as any;
+  matchToppers$: Observable<Points[]> = null as any;
   constructor(
     private scoreService: ScoreService,
     private userService: UserService,
@@ -61,6 +62,7 @@ export class AdminDashboardComponent implements OnInit {
       this.listTeams=o["teams"];
      });
      this.refreshScore();
+     this.matchToppers$ = this.scoreService.findGameToppers();
   }
 
   getMatchDetails(optionValue: any) {

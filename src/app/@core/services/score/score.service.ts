@@ -168,4 +168,8 @@ export class ScoreService {
     let  url = `${environment.baseUrl}/cricket/createPlayer`
     return this.http.post<any>(url,{"name":name,"team":team, "alias":alias})
   }
+  public findGameToppers():Observable<Points[]>{
+    let  url = `${environment.baseUrl}/cricket/findGameToppers`
+    return this.http.get<any>(url)
+  }
 }

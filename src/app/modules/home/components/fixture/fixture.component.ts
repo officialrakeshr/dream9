@@ -22,10 +22,13 @@ export class FixtureComponent implements OnInit {
   totalPoints: number = 0;
   next7Matches: Tournament[] = null as any;
   openFixture: boolean = false;
-
+  matchToppers$: Observable<Points[]> = null as any;
+  rankModall = false;
   constructor(private scoreService: ScoreService, private route: ActivatedRoute, private router: Router,public store: Store<AppState>,private messageService: MessageService,) {     alert("Please refer to the rules before planning your team.")}
  
   ngOnInit(): void {
+    this.matchToppers$ = this.scoreService.findGameToppers();
+    this.rankModall = false;
     this.tournaments$ = this.scoreService.getTournaments().pipe(tap(t=>{
       let today = moment();
       let sevenDays = moment().add(7, 'days');
