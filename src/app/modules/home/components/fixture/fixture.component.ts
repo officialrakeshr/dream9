@@ -24,7 +24,7 @@ export class FixtureComponent implements OnInit {
   openFixture: boolean = false;
   matchToppers$: Observable<Points[]> = null as any;
   rankModall = false;
-  constructor(private scoreService: ScoreService, private route: ActivatedRoute, private router: Router,public store: Store<AppState>,private messageService: MessageService,) {     alert("Please refer to the rules before planning your team.")}
+  constructor(private scoreService: ScoreService, private route: ActivatedRoute, private router: Router,public store: Store<AppState>,private messageService: MessageService,) {}
  
   ngOnInit(): void {
     this.matchToppers$ = this.scoreService.findGameToppers();
@@ -70,6 +70,9 @@ export class FixtureComponent implements OnInit {
         "This match is not enabled."
       );
       return;
+    }
+   else if(matchNo=='101'){
+      alert("Please note that you will receive unlimited free substitutions for the first playoff match.")
     }
     this.router.navigateByUrl(`/home/playerDashboard/${matchNo}`)
   }
