@@ -10,11 +10,11 @@ import { UserService } from "../services/user/user.service";
 
 @Injectable()
 export class AdminGuard implements CanActivate {
-  constructor(private _router: Router, private api: UserService) {}
+  constructor(private api: UserService) {}
 
   canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    _route: ActivatedRouteSnapshot,
+    _state: RouterStateSnapshot
   ): Observable<boolean> {
     return this.api.adminAccess().pipe(
       map(() => true),

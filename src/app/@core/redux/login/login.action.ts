@@ -5,3 +5,8 @@ export const addUser = createAction(
   '[Login Page] Add User',
   props<{ payload: User }>()
 );
+
+export const addPushMessage = createAction(
+  '[App] addPushMessage',
+  props<{ payload: any }>()
+);

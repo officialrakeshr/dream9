@@ -31,6 +31,7 @@ export class JwtInterceptor implements HttpInterceptor {
           (evt) => {
             if (evt instanceof HttpResponse) {
               sessionStorage.setItem('token', evt.body?.accessToken);
+              sessionStorage.setItem('username', evt.headers.get('name')||'');
             }
           },
           () => alert('Oops !!! Wrong credentials.')

@@ -15,17 +15,19 @@ import { PlayerGuard } from 'src/app/@core/guards/player-guard';
 import { AdminGuard } from 'src/app/@core/guards/admin-guard';
 import { CanDeactivateGuard } from 'src/app/@core/guards/deactivate-guard';
 import { RankComponent } from './pages/rank/rank.component';
+import { FixtureComponent } from './components/fixture/fixture.component';
 
 @NgModule({
-  declarations: [DashboardComponent, StatComponent, CountDownComponent, AdminDashboardComponent, ScorebookComponent, RankComponent],
+  declarations: [DashboardComponent, StatComponent, CountDownComponent, AdminDashboardComponent, ScorebookComponent, RankComponent, FixtureComponent],
   imports: [
     CommonModule,
     PrimengModule,
     CoreModule,
-    RouterModule.forChild([{ path: 'playerDashboard', component: DashboardComponent , canActivate:[PlayerGuard] , canDeactivate: [CanDeactivateGuard] },
-    { path: 'adminDashboard', component: AdminDashboardComponent, canActivate:[AdminGuard], canDeactivate: [CanDeactivateGuard]  },
-    { path: 'scorebook', component: ScorebookComponent ,canActivate:[AdminGuard], canDeactivate: [CanDeactivateGuard]  },
-    { path: 'rank', component: RankComponent ,  canDeactivate: [CanDeactivateGuard] }]),
+    RouterModule.forChild([{ path: 'playerDashboard/:matchNo', component: DashboardComponent , canActivate:[PlayerGuard], canDeactivate:[CanDeactivateGuard] },
+    { path: 'adminDashboard', component: AdminDashboardComponent, canActivate:[AdminGuard], canDeactivate:[CanDeactivateGuard] },
+    { path: 'scorebook/:matchNo', component: ScorebookComponent ,canActivate:[AdminGuard] , canDeactivate:[CanDeactivateGuard] },
+    { path: 'rank', component: RankComponent, canDeactivate:[CanDeactivateGuard]},
+    { path: 'fixture', component: FixtureComponent, canActivate:[PlayerGuard], canDeactivate:[CanDeactivateGuard]}]),
   ],
   providers:[
     {

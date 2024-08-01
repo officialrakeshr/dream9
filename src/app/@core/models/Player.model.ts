@@ -11,9 +11,15 @@ export interface Tournament {
     matchNo: string;
     team1: string;
     team2: string;
+    team1Id:any;
+    team2Id:any;
     completed:boolean;
     enable11:boolean;
     started:boolean;
+    matchdate: string;
+    venue: string;
+    matchtime:string;
+    abandoned:boolean;
 }
 
 export interface Player {
@@ -21,6 +27,8 @@ export interface Player {
     name: string;
     team: string;
     active: string;
+    alias?:string;
+    teamId?:string;
 }
 
 export interface Team {
@@ -65,4 +73,12 @@ export interface Team{
     name:string;
 }
 
+export interface Substitute {
+    lookUp: string;
+    matchNo: string;
+    username: string;
+    total: number;
+    free: number;
+    used: number;
+}
 

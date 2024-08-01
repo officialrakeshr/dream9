@@ -1,18 +1,20 @@
 <div class="grid">
   <div class="col-12">
-    <p-card header="Score Book Details"*ngIf="tournament==null || tournament.completed">
+    <p-card header="Score Book Details"*ngIf="tournament==null || tournament.completed || matchDetails==null">
       <div >
         <h3>No Active Match Found</h3>
         <p-button label="Admin dashboard" styleClass="p-button-link" [routerLink]="['../adminDashboard']" ></p-button>
       </div>
     </p-card>
     
-    <p-card header="Score Book Details" *ngIf="tournament!=null && !tournament.completed">
-      
+    <p-card header="Score Book Details" *ngIf="tournament!=null && !tournament.completed && matchDetails!=null">
+      <p-button label="Populate Score board from CRICINFO" styleClass="p-button-link" (click)="populateScoresFromCricInfo()" ></p-button>
       <p-button label="Admin dashboard" styleClass="p-button-link" [routerLink]="['../adminDashboard']" ></p-button>
-        <h5>Batting Team</h5>
-        <p-selectButton [options]="stateOptions" [(ngModel)]="battingTeam" optionLabel="label" optionValue="value"></p-selectButton>
-        <br>
+        <div class="battingTeam" >
+          <h5 *ngIf="matchDetails!=null">Batting Team</h5>
+          <p-selectButton [options]="stateOptions" [(ngModel)]="battingTeam" optionLabel="label" optionValue="value"></p-selectButton>
+          <br>
+        </div>
       <div
         class="flex flex-wrap justify-content-center card-container blue-container gap-3"
       >

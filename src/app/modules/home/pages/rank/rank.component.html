@@ -1,21 +1,22 @@
 <div class="grid">
   <div class="col-12">
-    <p-card header="Fantastic 9 " >
-      <a *ngIf="tournament?.enable11" [routerLink]="['../playerDashboard']">Dream 9 Dashboard</a>
-      <h3 *ngIf="!tournament?.started && !tournament?.enable11">Please try again after some time. Contact admin for more assistance.</h3>
-      <h3 *ngIf="!tournament?.started && tournament?.enable11">Match not started.</h3>
-      <p-table responsiveLayout="stack" [breakpoint]="'760px'" *ngIf="tournament?.started"
-        [value]="rank"
-        styleClass="p-datatable-gridlines"
-        [tableStyle]="{ 'min-width': '50rem' }"
+    <p-card header="Fantastic 12 " >
+      <p-table [value]="rank" [rowHover]="true" #dt
+      [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" responsiveLayout="scroll"
+      [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [filterDelay]="0" [globalFilterFields]="['username','rank_no','total']"
       >
         <ng-template pTemplate="caption">
-          Match No: {{ tournament?.matchNo }} - {{ tournament?.team1 }} vs {{ tournament?.team2 }} - Prediction Game Ranking <button *ngIf="!tournament?.completed" (click)="refreshScore()">Refresh Score</button>
+          League Player Ranking 
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" #sear (input)="dt.filterGlobal(sear.value, 'contains')" placeholder="Name, Rank, Total" />
+          </span>
+          &nbsp;<button id="refreshbtn" (click)="refreshScore()">Refresh Score</button>&nbsp;
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
             <th>Name</th>
-            <th>Phone No.</th>
             <th>Rank</th>
             <th>Total Score</th>
           </tr>
@@ -23,7 +24,6 @@
         <ng-template pTemplate="body" let-product>
           <tr>
             <td>{{ product.username }}</td>
-            <td>{{ product.phone }}</td>
             <td>{{ product.rank_no }}</td>
             <td>{{ product.total }}</td>
           </tr>
@@ -35,3 +35,4 @@
     </p-card>
   </div>
 </div>
+<p-toast></p-toast>

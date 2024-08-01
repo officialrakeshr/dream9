@@ -21,4 +21,5 @@ export interface Points {
   player7Point: number;
   player8Point: number;
   player9Point: number;
+  overSubNegativePoints:number;
 }

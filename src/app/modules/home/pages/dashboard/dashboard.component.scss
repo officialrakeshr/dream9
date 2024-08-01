@@ -20,16 +20,61 @@ button.long_btn{
 }
 
 @media screen and (max-width: 1200px) {
-    tr { 
-      display: flex; 
-      flex-direction: row;
-      flex-wrap: wrap;
-      margin: 0.5em 0;
-      border: 1px solid rgba(3,3,3,0.2);
-    }
-    td, th {
-      flex: 1 1 150px;
-      border: 0.5px solid rgba(3,3,3,0.2);
-    }
-
+  tr { 
+    border: 1px solid rgba(3,3,3,0.2);
   }
+  td, th {
+    border: 0.5px solid rgba(3,3,3,0.2);
+  }
+
+}
+
+.team-img{
+  vertical-align:middle;
+}
+
+#happyNewYear-div {
+  font-family: sans-serif;
+  color: #000000;
+  display: inline-block;
+  font-weight: 100;
+  text-align: center;
+  font-size: 20px;
+}
+
+#happyNewYear-div > div {
+  padding: 5px;
+  border-radius: 3px;
+  background: #2d2c72;
+  display: inline-block;
+  margin: 2px;
+}
+
+#happyNewYear-div div > span {
+  padding: 15px;
+  border-radius: 3px;
+  background: #ffffff;
+  display: inline-block;
+}
+
+.smalltext {
+  padding-top: 5px;
+  font-size: 10px;
+  color:#ffffff
+}
+
+tr.today-team td{
+  color:blue;
+  font-weight:bold;
+}
+
+.button-container-flex {
+  display: flex;
+  justify-content: space-between; /* This will evenly space the buttons */
+}
+
+.button-container-flex button {
+  flex-grow: 1;
+  margin: 0 10px;
+  /* Additional button styles */
+}

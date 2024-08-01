@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     sessionStorage.clear();
     localStorage.clear();
     setTimeout(() => {
-      this.store.dispatch(addUser({ payload: { username: '', token: '' } }))
+      this.store.dispatch(addUser({ payload: { username: '', token: '' , role:'', displayname:'' } }))
     }, 0)
   }
   handleChange(evt:any){
@@ -32,9 +32,10 @@ export class LoginComponent implements OnInit {
   validateToken(user: string, password:string) {
     this.api.login(user,password).subscribe(o=>{
       this.store.dispatch(
-        addUser({ payload: { username: user, token: o.accessToken } })
+        addUser({ payload: { username: user, token: o.accessToken , displayname:sessionStorage.getItem('username')||'', role:'admin' } })
       );
       this.api.adminAccess().subscribe(o=>{
+        sessionStorage.setItem('role','admin');
         this.router.navigate(['./home/adminDashboard'])
       })
     })
@@ -43,16 +44,11 @@ export class LoginComponent implements OnInit {
   validateTokenUser(user:string){
     this.api.login(user,user.toUpperCase()).subscribe(o=>{
       this.store.dispatch(
-        addUser({ payload: { username: user, token: o.accessToken } })
+        addUser({ payload: { username: user, token: o.accessToken ,displayname:sessionStorage.getItem('username')||'',role:'player' } })
       );
       this.api.employeeAccess().subscribe(o=>{
-        this.api.userMatchAvailable().subscribe(o=>{
-          if(o){
-            this.router.navigate(['./home/playerDashboard'])
-          }else {
-            this.router.navigate(['./home/rank'])
-          }
-        })
+        sessionStorage.setItem('role','player');
+        this.router.navigate(['./home/fixture'])
       })
     })
   }

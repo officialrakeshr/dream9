@@ -56,4 +56,8 @@ export class UserService {
   public registerUser(data:any) {
     return this.http.post<boolean>(`${environment.baseUrl}/api/auth/signup`,data);
   }
+
+  public attemptHack() {
+    return this.http.get<boolean>(`${environment.baseUrl}/cricket/attemptHack`);
+  }
 }

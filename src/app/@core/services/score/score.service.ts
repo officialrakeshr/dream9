@@ -9,11 +9,19 @@ import { Points } from '../../models/points';
   providedIn: 'root'
 })
 export class ScoreService {
+  getScoreCardByMatchNo(matchNo: string) {
+    let  url = `${environment.baseUrl}/cricket/getScoreCardByMatchNo?matchNo=${matchNo}`
+    return this.http.get<any>(url);
+  }
+  getOverDetailsByMatchNo(matchNo: string) {
+    let  url = `${environment.baseUrl}/cricket/getOverDetailsByMatchNo?matchNo=${matchNo}`
+    return this.http.get<any>(url);
+  }
   public updateMatchDetails(matchDetails: MatchDetails) {
     let  url = `${environment.baseUrl}/cricket/updateMatchDetails`
     return this.http.put<any>(url,matchDetails)
     .pipe(
-      tap(() => alert("Success")),
+      tap(() => alert("Done.")),
    );
   }
 
@@ -22,9 +30,9 @@ export class ScoreService {
     return this.http.get<Points>(url);
   }
 
-  public findAllRank():Observable<Points> {
-    let  url = `${environment.baseUrl}/cricket/findAllRankForPlayers`
-    return this.http.get<Points>(url);
+  public findAllRank():Observable<Points[]> {
+    let  url = `${environment.baseUrl}/cricket/findLeagueRankForPlayers`
+    return this.http.get<Points[]>(url);
   }
 
   public findAllRankByMatchAdmin(matchNo:string):Observable<any> {
@@ -46,7 +54,15 @@ export class ScoreService {
     let  url = `${environment.baseUrl}/cricket/updateTournament`
     return this.http.put<any>(url,tournament)
     .pipe(
-      tap(() => alert("Success")),
+      tap(() => alert("Done.")),
+   );
+  }
+
+  public abandonMatch(tournament: Tournament):Observable<Tournament> {
+    let  url = `${environment.baseUrl}/cricket/abandonMatch`
+    return this.http.put<any>(url,tournament)
+    .pipe(
+      tap(() => alert("Done.")),
    );
   }
 
@@ -91,10 +107,29 @@ export class ScoreService {
     }));
   }
 
+  public updateSubstitutionsAndConfig(a:Points):Observable<Boolean>{
+    let  url = `${environment.baseUrl}/cricket/updateSubstitutionsAndConfig`
+    return this.http.post<Boolean>(url,a).pipe( catchError(_err => {
+      return of({} as any)
+    }));
+  }
+
+  public getDream9playerConfig(matchNo:string):Observable<Player[]>{
+    let  url = `${environment.baseUrl}/cricket/getDream9playerConfig/${matchNo}`;
+    return this.http.get<Player[]>(url);
+  }
+
+  public getSubstitutionStatus(matchNo:string):Observable<any>{
+    let  url = `${environment.baseUrl}/cricket/getSubstitutionStatus/${matchNo}`;
+    return this.http.get<any>(url);
+  }
+
   public userMatchDetails() {
     return this.http.get<Tournament>(`${environment.baseUrl}/api/homekeep/userMatchDetails`);
   }
-
+  public getMatchDetailsByMatchNo(matchNo:string):Observable<Tournament> {
+    return this.http.get<Tournament>(`${environment.baseUrl}/cricket/tournaments/${matchNo}`);
+  }
   public createNewMatch(tournament:Tournament) {
     return this.http.post<Tournament>(`${environment.baseUrl}/cricket/createNewMatch`, tournament);
   }
@@ -103,4 +138,38 @@ export class ScoreService {
     return this.http.get<any>(`${environment.baseUrl}/cricket/teams`);
   }
 
+  public updateIPLAllDetailsFromCricInfo() {
+    return this.http.get<any>(`${environment.baseUrl}/cricket/updateIPLAllDetailsFromCricInfo`);
+  }
+
+
+  public resetToPreviousDay(matchNo:string):Observable<Boolean> {
+    return this.http.get<Boolean>(`${environment.baseUrl}/cricket/resetToPreviousDay/${matchNo}`);
+  }
+
+  public broadcastMessage(message:string) {
+    return this.http.get<any>(`${environment.baseUrl}/websocket/pushMessage?msg=${message}`);
+  }
+
+  public reloadPlayerScreen() {
+    return this.http.get<any>(`${environment.baseUrl}/websocket/reloadPage`);
+  }
+
+  public logoutAll() {
+    return this.http.get<any>(`${environment.baseUrl}/websocket/logoutAll`);
+  }
+
+  public scoreSplitForPlayers():Observable<Points[]>{
+    let  url = `${environment.baseUrl}/cricket/scoreSplitForPlayers`
+    return this.http.get<any>(url)
+  }
+
+  public createNewPlayer(team:string,name:string, alias:string):Observable<Player>{
+    let  url = `${environment.baseUrl}/cricket/createPlayer`
+    return this.http.post<any>(url,{"name":name,"team":team, "alias":alias})
+  }
+  public findGameToppers():Observable<Points[]>{
+    let  url = `${environment.baseUrl}/cricket/findGameToppers`
+    return this.http.get<any>(url)
+  }
 }

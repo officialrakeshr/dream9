@@ -1,50 +1,179 @@
 <div class="grid">
-    <div class="col-12">
-        <p-card header="Match Details">
-            <div class="match-det">
-                <span><b>Match No : </b> {{tournament.matchNo}}</span>	&#9734;
-                <span><b>Match : </b> {{tournament.team1}} vs {{tournament.team2}}</span>	&#9734;
-                <!-- <span><b>Venue : </b> Play Ground, Test</span>	&#9734;
-                <span><b>Time : </b> 19:30</span> &#9734;&nbsp;&nbsp;&nbsp;&nbsp; -->
+  <div class="col-12 md:col-6 lg:col-6">
+    <p-card header="Match Details - Match : {{ tournament.matchNo }}">
+      <div class="match-det">
+        Match Date: {{ lockTime | date : "dd-MMMM-yyyy h:mm a" }}
+        <br/>Time Zone: {{timeZoneAbbreviation}}
+        <br />
+        <ng-container *ngIf="countDownTime$ | async as date">
+          <div id="happyNewYear-div" *ngIf="date[2]>-1 || date[3] > -1 || date[1]> -1 || date[0]> -1">
+            <div>
+              <span class="days">{{ date[0] }}</span>
+              <div class="smalltext">Days</div>
             </div>
-        </p-card>
-    </div>
+            <div>
+              <span class="hours">{{ date[1] }}</span>
+              <div class="smalltext">Hours</div>
+            </div>
+            <div>
+              <span class="minutes">{{ date[2] }}</span>
+              <div class="smalltext">Minutes</div>
+            </div>
+            <div>
+              <span class="seconds">{{ date[3] }}</span>
+              <div class="smalltext">Seconds</div>
+            </div>
+          </div>
+          <br>
+          <!-- <span *ngIf="saveWarning" style="color:red"><b>Please save your team changes before the timer runs out. Only
+              {{ date[3] }} seconds remaining.</b></span> -->
+        </ng-container>
+      </div>
+    </p-card>
+  </div>
+  <div class="col-12 md:col-6 lg:col-6">
+    <p-card header="Team Summary">
+      <span><img class="team-img" [src]="'./assets/images/team_logos/' + tournament.team1 + '.png'"
+          width="50" />&nbsp;<b>{{ tournament.team1 }}</b> vs
+        <img class="team-img" [src]="'./assets/images/team_logos/' + tournament.team2 + '.png'" width="50" />&nbsp;<b>{{
+          tournament.team2 }}</b></span>
+      <table class="team-summary-table">
+        <tbody>
+          <tr class="team-summary-tr">
+            <td>Team Size</td>
+            <td>{{ teamSize }} / {{ teamSizeLimit }}</td>
+            <td class="checkbox">
+              {{ teamSize == teamSizeLimit ? " &#10003;" : "" }}
+            </td>
+          </tr>
+          <!-- <tr class="team-summary-tr">
+            <td>Captain</td>
+            <td>{{ captainCount }} / {{ captainCountLimit }}</td>
+            <td class="checkbox">
+              {{ captainCount == captainCountLimit ? " &#10003;" : "" }}
+            </td>
+          </tr>
+          <tr class="team-summary-tr">
+            <td>Vice Captain</td>
+            <td>{{ viseCaptainCount }} / {{ viseCaptainCountLimit }}</td>
+            <td class="checkbox">
+              {{ viseCaptainCount == viseCaptainCountLimit ? " &#10003;" : "" }}
+            </td>
+          </tr>
+          <tr class="team-summary-tr">
+            <td>Batting Hero</td>
+            <td>{{ battingHeroCount }} / {{ battingHeroLimit }}</td>
+            <td class="checkbox">
+              {{ battingHeroCount == battingHeroLimit ? " &#10003;" : "" }}
+            </td>
+          </tr>
+          <tr class="team-summary-tr">
+            <td>Bowling Hero</td>
+            <td>{{ bowlingHeroCount }} / {{ bowlingHeroLimit }}</td>
+            <td class="checkbox">
+              {{ bowlingHeroCount == bowlingHeroLimit ? " &#10003;" : "" }}
+            </td>
+          </tr> -->
+          <tr class="team-summary-tr" *ngIf="substititions$ | async as sub">
+            <td>Substitutions</td>
+            <td *ngIf="sub.total > 10">
+              Unlimited
+            </td>
+            <td *ngIf="sub.total < 10">
+              Free Limit: <b>{{sub.total}}</b> ** Total Used: <b>{{ sub.used }}</b>  (Free: <b>{{ sub.total-sub.used>=0 ? sub.used : sub.total }}</b>, Extra: <b>{{sub.used-sub.total>0 ? sub.used-sub.total : 0}}</b> )
+             </td>
+            <td class="checkbox">
+              {{ sub.total >= sub.used ? " &#10003;" : "" }}
+            </td>
+          </tr>
+          <!--<tr class="team-summary-tr">
+                        <td>Substitute</td>
+                        <td *ngIf="subCountLimit">{{subCountUsed}}/{{subCountLimit}}</td>
+                        <td *ngIf="!subCountLimit">&#8734;</td>
+                        <td class="checkbox">{{subCountUsed==subCountLimit?' &#10003;':''}}</td>
+                    </tr> -->
+        </tbody>
+      </table>
+    </p-card>
+  </div>
 </div>
 <div class="grid">
-    <div class="col">
-        <p-card header="Your Fantastic 9 Players">
-            <p-table #dt1 [value]="selectedPlayers" dataKey="Player" [rows]="9" [showCurrentPageReport]="true"
-                [rowsPerPageOptions]="[5,9]" styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="true"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                [globalFilterFields]="['players']">
-                <ng-template pTemplate="caption">
-                    <div class="p-d-flex">
-                        <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
-                            (click)="dt1.clear();search.value=''"></button>&nbsp;
-                        <span class="p-input-icon-left p-ml-auto">
-                            <i class="pi pi-search"></i>
-                            <input pInputText #search type="text" (input)="dt1.filterGlobal(search.value, 'contains')"
-                                placeholder="Search keyword" />
-                        </span>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>
-                            Player
-                        </th>
-                        <th>
-                            Role
-                        </th>
-                        <th>Action</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
-                    <tr>
-                        <td>
-                            {{rowData['name']}}
-                        </td>
-                       <!--  <td pEditableColumn>
+  <div class="col" *ngIf="!(teamSize == teamSizeLimit)">
+    <p-card header="Available Players">
+      <p-table #dt2 [columns]="cols" [value]="players" responsiveLayout="scroll" dataKey="Player" [rows]="10"
+        [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
+        styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['name', 'team']">
+        <ng-template pTemplate="caption">
+          <div class="p-d-flex">
+            <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+              (click)="dt2.clear(); search.value = ''"></button>&nbsp;
+            <span class="p-input-icon-left p-ml-auto">
+              <i class="pi pi-search"></i>
+              <input pInputText #search type="text" (input)="dt2.filterGlobal(search.value, 'contains')"
+                placeholder="Search keyword" />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+              <div class="p-d-flex p-jc-between p-ai-center">
+                {{ col.header }}<p-sortIcon *ngIf="col.field!='imageUrl'" [field]="col.field"></p-sortIcon>
+              </div>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-column="columns" let-rowIndex="rowIndex">
+          <tr (click)="selectPlayer(rowData, rowIndex)">
+            <td *ngFor="let col of column">
+              <!-- <div *ngIf="col.field=='Team'"><img width="50" alt="{{rowData[col.field]}}roundbig.png" src="../../../../../assets/images/team_logos/{{rowData[col.field]}}roundbig.png"/></div> -->
+              <div style="text-align: center"><span  *ngIf="col.field!='imageUrl'">{{ rowData[col.field] }}</span><!--<img *ngIf="col.field=='imageUrl'" width="48" height="48" src="https://img1.hscicdn.com/image/upload/f_auto,t_h_100/lsci{{rowData.imageUrl}}" onerror="src='https://wassets.hscicdn.com/static/images/player-jersey.svg'"/>--></div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+  <div class="col">
+    <p-card header="Your Fantastic 12 Players">
+      <p-table #dt1 [value]="selectedPlayers" dataKey="Player" [rows]="12" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[5, 12]" styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['name', 'team']">
+        <ng-template pTemplate="caption">
+          <div class="p-d-flex">
+            <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+              (click)="dt1.clear(); search.value = ''"></button>&nbsp;
+            <span class="p-input-icon-left p-ml-auto">
+              <i class="pi pi-search"></i>
+              <input pInputText #search type="text" (input)="dt1.filterGlobal(search.value, 'contains')"
+                placeholder="Search keyword" />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Player</th>
+            <!--<th></th>-->
+            <th>Role</th>
+            <th>Team</th>
+            <!-- <th>Role</th> -->
+            <th *ngIf="(selectedPlayers.length == 12 )">
+              Action
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+          <tr class="{{rowData['teamId']==tournament.team1Id || rowData['teamId']==tournament.team2Id ? 'today-team': ''}}">
+            <td>
+              {{ rowData["name"] }}
+            </td>
+            <!--<td><img width="48" height="48" src="https://img1.hscicdn.com/image/upload/f_auto,t_h_100/lsci{{rowData.imageUrl}}" onerror="src='https://wassets.hscicdn.com/static/images/player-jersey.svg'"/></td>-->
+            <td>{{codeToName(rowData.assignedRole)}}</td>
+            <td>{{ rowData["team"] }}</td>
+            <!--  <td pEditableColumn>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <p-dropdown [options]="rowData.roleList" [(ngModel)]="rowData.assignedRole"
@@ -56,97 +185,98 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td> -->
-                        <td>
-                            <p-dropdown [options]="rowData.roleList" [(ngModel)]="rowData.assignedRole"
-                                        (onClick)="processDropDown(rowData.roleList)" optionDisabled="inactive"
-                                        optionLabel="name" optionValue="value" [style]="{'width':'100%'}"></p-dropdown>
-                        </td>
-                        <td>
-                            <p-button label="Remove" styleClass="p-button-link" (click)="remove(rowIndex)"></p-button>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-            <br>
-            <button [disabled]="selectedPlayers.length==0 || roleCount!=9" pButton pRipple type="button" class="long_btn" (click)="submitXI(selectedPlayers)">Submit</button><br><br>
-            <!-- <button  pButton pRipple type="button" class="long_btn">Reset</button><br><br> -->
-            <button  pButton pRipple type="button" class="long_btn" [disabled]="checkUndo()"
-                (click)="undo()">Undo</button>
-
-        </p-card>
-    </div>
-    <div class="col">
-        <p-card header="Team Summary">
-            <table class="team-summary-table">
-                <tbody>
-                    <tr class="team-summary-tr">
-                        <td>Team Size</td>
-                        <td>{{teamSize}}/{{teamSizeLimit}}</td>
-                        <td class="checkbox">{{teamSize==teamSizeLimit?' &#10003;':''}}</td>
-                    </tr>
-                    <tr class="team-summary-tr">
-                        <td>Captain</td>
-                        <td>{{captainCount}}/{{captainCountLimit}}</td>
-                        <td class="checkbox">{{captainCount==captainCountLimit?' &#10003;':''}}</td>
-                    </tr>
-                    <tr class="team-summary-tr">
-                        <td>Vice Captain</td>
-                        <td>{{viseCaptainCount}}/{{viseCaptainCountLimit}}</td>
-                        <td class="checkbox">{{viseCaptainCount==viseCaptainCountLimit?' &#10003;':''}}</td>
-                    </tr>
-                    <!-- <tr class="team-summary-tr">
-                        <td>All-Rounder</td>
-                        <td>{{AllRoundersCount}}/{{AllRoundersCountLimit}}</td>
-                        <td class="checkbox">{{AllRoundersCount==AllRoundersCountLimit?' &#10003;':''}}</td>
-                    </tr>
-                    <tr class="team-summary-tr">
-                        <td>Substitute</td>
-                        <td *ngIf="subCountLimit">{{subCountUsed}}/{{subCountLimit}}</td>
-                        <td *ngIf="!subCountLimit">&#8734;</td>
-                        <td class="checkbox">{{subCountUsed==subCountLimit?' &#10003;':''}}</td>
-                    </tr> -->
-                </tbody>
-            </table>
-        </p-card>
-    </div>
-    <div class="col">
-        <p-card header="Available Players">
-            <p-table #dt2 [columns]="cols" [value]="players" responsiveLayout="scroll" dataKey="Player" [rows]="10"
-                [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]"
-                styleClass="p-datatable-sm p-datatable-gridlines" [paginator]="true"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                [globalFilterFields]="['name','team']">
-                <ng-template pTemplate="caption">
-                    <div class="p-d-flex">
-                        <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
-                            (click)="dt2.clear();search.value=''"></button>&nbsp;
-                        <span class="p-input-icon-left p-ml-auto">
-                            <i class="pi pi-search"></i>
-                            <input pInputText #search type="text" (input)="dt2.filterGlobal(search.value, 'contains')"
-                                placeholder="Search keyword" />
-                        </span>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="header" let-columns>
-                    <tr>
-                        <th *ngFor="let col of columns">
-                            <div class="p-d-flex p-jc-between p-ai-center">
-                                {{col.header}}
-                                <p-columnFilter type="text" [field]="col.header" display="menu"></p-columnFilter>
-                            </div>
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-rowData let-column="columns" let-rowIndex="rowIndex">
-                    <tr (click)="selectPlayer(rowData,rowIndex)">
-                        <td *ngFor="let col of column">
-                            <!-- <div *ngIf="col.field=='Team'"><img width="50" alt="{{rowData[col.field]}}roundbig.png" src="../../../../../assets/images/team_logos/{{rowData[col.field]}}roundbig.png"/></div> -->
-                            <div style="text-align: center;">{{rowData[col.field]}}</div>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </p-card>
-    </div>
+            <!-- <td>
+              <p-dropdown [disabled]="true"
+                [options]="rowData.roleList"
+                [(ngModel)]="rowData.assignedRole"
+                (onClick)="processDropDown(rowData.roleList)"
+                optionDisabled="inactive"
+                optionLabel="name"
+                optionValue="value"
+                [style]="{ width: '100%' }"
+              ></p-dropdown>
+            </td> -->
+            <td *ngIf="(selectedPlayers.length ==  12)">
+              <p-button label="Substitute" [disabled]="!(selectedPlayers.length ==  12)" styleClass="p-button-link"
+                (click)="
+                  (selectedPlayers.length ==  12)
+                    ? substitute(rowIndex)
+                    : null
+                "></p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <br />
+      <button [disabled]="selectedPlayers.length != 12" pButton pRipple type="button" class="long_btn"
+        (click)="assignBonusRoles()">
+        Choose Roles & Click Submit</button><br /><br />
+      <button pButton pRipple type="button" class="long_btn" *ngIf="enableReset"
+        (click)="resetToPreviousDay(matchNo)">Reset</button><br /><br />
+      <!-- <button  pButton pRipple type="button" class="long_btn" [disabled]="checkUndo()"
+                (click)="undo()">Undo</button> -->
+    </p-card>
+  </div>
 </div>
 <p-toast></p-toast>
+<p-dialog header="Pick Roles" [modal]="true"  [draggable]="false" [resizable]="false" [closable]="false"
+  [(visible)]="openBonusRolePopup">
+  <p-table [value]="bonusRoles">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Role</th>
+        <th>Player</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-role>
+      <tr>
+        <td>{{role.role}}</td>
+        <td> <p-dropdown appendTo="body" [options]="role.playerList" [(ngModel)]="role.selectedPlayer"
+            optionDisabled="!active" optionLabel="name" optionValue="id" (onChange)="changeRole(role)"
+            [style]="{ width: '100%' }"></p-dropdown></td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <br/>
+  <div class="button-container-flex">
+    <button pButton pRipple label="Cancel" class="p-button-secondary" (click)="openBonusRolePopup=false;pageReload()"></button>
+    <button pButton pRipple label="Submit" class="p-button-primary" (click)="openBonusRolePopup=false;submitXI(selectedPlayers)"></button>
+  </div>
+
+</p-dialog>
+<p-dialog header="Available Players: Substitution" [(visible)]="substitutePopup" [modal]="true">
+  <p-table #dt2 [columns]="cols" [value]="players" responsiveLayout="scroll" dataKey="Player" [rows]="10"
+    [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" styleClass="p-datatable-sm p-datatable-gridlines"
+    [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [globalFilterFields]="['name', 'team']">
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex">
+        <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+          (click)="dt2.clear(); search.value = ''"></button>&nbsp;
+        <span class="p-input-icon-left p-ml-auto">
+          <i class="pi pi-search"></i>
+          <input pInputText #search type="text" (input)="dt2.filterGlobal(search.value, 'contains')"
+            placeholder="Search keyword" />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns">
+          <div class="p-d-flex p-jc-between p-ai-center">
+            {{ col.header }}
+            <p-columnFilter type="text" [field]="col.header" display="menu"></p-columnFilter>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-column="columns" let-rowIndex="rowIndex">
+      <tr (click)="substitutePlayer(rowData, rowIndex)">
+        <td *ngFor="let col of column">
+          <!-- <div *ngIf="col.field=='Team'"><img width="50" alt="{{rowData[col.field]}}roundbig.png" src="../../../../../assets/images/team_logos/{{rowData[col.field]}}roundbig.png"/></div> -->
+          <div style="text-align: center">{{ rowData[col.field] }}</div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
